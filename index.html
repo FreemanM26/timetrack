@@ -137,6 +137,12 @@ tr:hover td{background:#fafaf8}
 </head>
 <body>
 
+<div id="loading-overlay" style="position:fixed;inset:0;background:rgba(245,244,240,.95);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem">
+  <div style="width:48px;height:48px;border:3px solid #EEEDFE;border-top-color:#534AB7;border-radius:50%;animation:spin .8s linear infinite"></div>
+  <div id="loading-msg" style="font-size:14px;font-weight:500;color:#534AB7">Loading...</div>
+</div>
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+
 <div id="login-screen" class="">
   <div class="login-box">
     <div class="logo">🕐</div>
@@ -2436,6 +2442,9 @@ async function delHol(id){
 }
 
 // On startup — load all data from Supabase then init login
+// Wait for DOM to be fully ready before starting
+document.addEventListener('DOMContentLoaded', function() {
+
 // Check if running from file:// protocol (won't work with Supabase)
 if(window.location.protocol === 'file:'){
   document.getElementById('loading-overlay').classList.remove('hidden');
@@ -2451,6 +2460,7 @@ if(window.location.protocol === 'file:'){
   loadAllData();
 }
 
+
 // Clear any stale rendered content
 (function cleanStale(){
   const toClear=["calhdrs","caldays","cal-team-grid","tclog","tcweek",
@@ -2462,14 +2472,12 @@ if(window.location.protocol === 'file:'){
   const tctotal=document.getElementById("tctotal");if(tctotal)tctotal.textContent="";
 })();
 
+}); // end DOMContentLoaded
+
 </script>
 
 
 
-<div id="loading-overlay" class="hidden" style="position:fixed;inset:0;background:rgba(245,244,240,.95);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem">
-  <div style="width:48px;height:48px;border:3px solid #EEEDFE;border-top-color:#534AB7;border-radius:50%;animation:spin .8s linear infinite"></div>
-  <div id="loading-msg" style="font-size:14px;font-weight:500;color:#534AB7">Loading...</div>
-</div>
-<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+
 
 </body></html>
