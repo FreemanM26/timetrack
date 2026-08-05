@@ -151,10 +151,10 @@ tr:hover td{background:#fafaf8}
     <label class="lbl" for="lnsel">Your name</label>
     <select id="lnsel" class="fc"><option value="">— Select your name —</option></select>
     <label class="lbl" for="lnpin">PIN</label>
-    <input type="password" id="lnpin" class="fc" placeholder="Enter your PIN" maxlength="6" autocomplete="new-password">
+    <input type="password" id="lnpin" class="fc" placeholder="Enter your PIN" autocomplete="new-password">
     <button class="btn-login" onclick="doLogin()">Sign in</button>
     <div class="lerr" id="lnerr"></div>
-    <div class="lhint">Test PINs — employees: <strong>1234</strong> &nbsp;|&nbsp; admins: <strong>0000</strong><br><span style="font-size:10px">(Eileen Dover ★ and Ima Hogg ★ are admins)</span></div>
+    
   </div>
 </div>
 
@@ -392,7 +392,7 @@ tr:hover td{background:#fafaf8}
               <div><div class="stl" style="margin-top:0">Hire date</div><input type="date" id="efhire" class="fc" style="margin:0;width:100%"></div>
               <div><div class="stl" style="margin-top:0">Email</div><input type="email" id="efemail" class="fc" style="margin:0;width:100%"></div>
               <div><div class="stl" style="margin-top:0">Phone</div><input type="tel" id="efphone" class="fc" style="margin:0;width:100%"></div>
-              <div><div class="stl" style="margin-top:0">PIN (4–6 digits)</div><input type="text" id="efpin" class="fc" maxlength="6" style="margin:0;width:100%"></div>
+              <div><div class="stl" style="margin-top:0">PIN (4+ characters)</div><input type="text" id="efpin" class="fc" maxlength="20" style="margin:0;width:100%"></div>
               <div><div class="stl" style="margin-top:0">PTO days / year</div><input type="number" id="efpto" class="fc" value="15" min="0" style="margin:0;width:100%"></div>
               <div><div class="stl" style="margin-top:0">Role</div><select id="efrole" class="fc" style="margin:0;width:100%"><option value="employee">Employee</option><option value="admin">Admin</option></select></div>
             </div>
@@ -2359,7 +2359,7 @@ async function saveEmp(){
   const last=document.getElementById("eflast").value.trim();
   const pin=document.getElementById("efpin").value.trim();
   if(!first||!last){alert("First and last name required.");return}
-  if(!pin||!/^\d{4,6}$/.test(pin)){alert("PIN must be 4–6 digits.");return}
+  if(!pin||pin.length<4){alert("PIN must be at least 4 characters.");return}
   const data={first,last,name:first+" "+last,
     team:document.getElementById("efdept").value,
     title:document.getElementById("eftitle").value,
