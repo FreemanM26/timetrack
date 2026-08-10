@@ -171,6 +171,7 @@ tr:hover td{background:#fafaf8}
     <button class="nb" onclick="showTab('whosin',this)">👥 Who's In</button>
     <button class="nb" onclick="showTab('mypto',this)">🏖 My PTO</button>
     <button class="nb" onclick="showTab('mileage',this)">🚗 Mileage</button>
+    <button class="nb" onclick="showTab('myclio',this)">⚖️ My Clio</button>
     <button id="navadmin" class="nb adm hidden" onclick="showTab('admin',this)">🛡 Admin</button>
     <button class="nb" onclick="showTab('orgchart',this)">🏢 Org Chart</button>
   </nav>
@@ -299,6 +300,21 @@ tr:hover td{background:#fafaf8}
       </div>
     </div>
 
+
+    <!-- MY CLIO HOURS -->
+    <div id="Tmyclio" class="hidden">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:1rem">
+        <div>
+          <div style="font-size:17px;font-weight:700">My Clio Hours</div>
+          <div style="font-size:12px;color:#888;margin-top:2px">Your billed hours in Clio vs time clocked in TimeTrack</div>
+        </div>
+        <select id="clio-my-period" onchange="renderClioEmployee()" class="fc" style="margin:0;width:auto;font-size:12px"></select>
+      </div>
+      <div id="clio-my-content">
+        <p style="font-size:13px;color:#888">Loading...</p>
+      </div>
+    </div>
+
     <!-- ADMIN -->
     <div id="Tadmin" class="hidden">
       <div id="adminlock" class="lock hidden">
@@ -324,6 +340,7 @@ tr:hover td{background:#fafaf8}
           <button class="pt" onclick="aTab('emps',this)">Employees</button>
           <button class="pt" onclick="aTab('hols',this)">Holidays</button>
           <button class="pt" onclick="aTab('mileageadmin',this)">🚗 Mileage</button>
+          <button class="pt" onclick="aTab('clio',this)">⚖️ Clio</button>
         </div>
 
         <div id="Aapprovals" class="hidden">
@@ -452,6 +469,30 @@ tr:hover td{background:#fafaf8}
           </div>
         </div>
 
+
+        <!-- Admin Clio Comparison -->
+        <div id="Aclio" class="hidden">
+          <div class="card" style="padding:.75rem 1.25rem;display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:.75rem">
+            <div style="display:flex;align-items:center;gap:10px;flex:1">
+              <span style="font-size:22px">⚖️</span>
+              <div>
+                <div style="font-size:13px;font-weight:700">Clio Time Comparison</div>
+                <div id="clio-status" style="font-size:12px;color:#888">Checking connection...</div>
+              </div>
+            </div>
+            <select id="clio-period" onchange="renderClioAdmin()" class="fc" style="margin:0;width:auto;font-size:12px"></select>
+            <button id="clio-connect-btn" class="btn bp" onclick="connectClio()" style="font-size:12px;padding:6px 14px">Connect to Clio</button>
+            <button class="btn" onclick="renderClioAdmin()" style="font-size:12px;padding:6px 14px">↻ Refresh</button>
+          </div>
+          <div id="Aclio-content">
+            <div class="card" style="padding:0;overflow:hidden;overflow-x:auto">
+              <div id="clio-table-wrap" style="padding:1rem">
+                <p style="font-size:13px;color:#888">Loading...</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -476,6 +517,358 @@ tr:hover td{background:#fafaf8}
 
 const SUPABASE_URL = "https://ejxkytxessjsqutmnhss.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVqeGt5dHhlc3Nqc3F1dG1uaHNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODU0OTk2ODAsImV4cCI6MjEwMTA3NTY4MH0.N1umv2R6MWdZlgc9Arm2q6ViiCb-kTmhEFuVQ4rRQGQ";
+
+// ---- CLIO INTEGRATION ----
+const CLIO_CLIENT_ID = "kF5Ai7xBoQomNfPxzWriiZLimMcVL8srrArMoxPc";
+const CLIO_REDIRECT_URI = "https://freemanm26.github.io/timetrack";
+const CLIO_AUTH_URL = "https://app.clio.com/oauth/authorize";
+const CLIO_TOKEN_URL = "https://app.clio.com/oauth/token";
+const CLIO_API_BASE = "https://app.clio.com/api/v4";
+
+let clioAccessToken = null;
+let clioTokenExpiry = null;
+
+// Check if we have a stored Clio token in sessionStorage
+function loadClioToken(){
+  const stored = sessionStorage.getItem("clio_token");
+  const expiry = sessionStorage.getItem("clio_expiry");
+  if(stored && expiry && Date.now() < parseInt(expiry)){
+    clioAccessToken = stored;
+    clioTokenExpiry = parseInt(expiry);
+    return true;
+  }
+  return false;
+}
+
+function saveClioToken(token, expiresIn){
+  clioAccessToken = token;
+  clioTokenExpiry = Date.now() + (expiresIn * 1000);
+  sessionStorage.setItem("clio_token", token);
+  sessionStorage.setItem("clio_expiry", clioTokenExpiry.toString());
+}
+
+function clioConnected(){
+  return clioAccessToken && Date.now() < clioTokenExpiry;
+}
+
+// Initiate Clio OAuth flow
+function connectClio(){
+  const state = Math.random().toString(36).substring(2);
+  sessionStorage.setItem("clio_state", state);
+  sessionStorage.setItem("clio_return_tab", "admin");
+  const params = new URLSearchParams({
+    response_type: "code",
+    client_id: CLIO_CLIENT_ID,
+    redirect_uri: CLIO_REDIRECT_URI,
+    scope: "activities.read users.read matters.read",
+    state: state
+  });
+  window.location.href = CLIO_AUTH_URL + "?" + params.toString();
+}
+
+// Handle OAuth callback (code in URL params)
+async function handleClioCallback(){
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get("code");
+  const state = params.get("state");
+  const storedState = sessionStorage.getItem("clio_state");
+  if(!code || state !== storedState) return false;
+
+  // Exchange code for token via Supabase Edge Function proxy
+  // Since we can't expose client_secret in frontend, we use a simple proxy
+  // For now we store the code and handle via a workaround
+  try {
+    // Use Supabase to store the auth code and retrieve token
+    // This avoids exposing client_secret in the HTML
+    const resp = await fetch("https://ejxkytxessjsqutmnhss.supabase.co/functions/v1/clio-auth", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + SUPABASE_KEY
+      },
+      body: JSON.stringify({ code, redirect_uri: CLIO_REDIRECT_URI })
+    });
+    
+    if(resp.ok){
+      const data = await resp.json();
+      saveClioToken(data.access_token, data.expires_in);
+      // Clean URL
+      window.history.replaceState({}, document.title, window.location.pathname);
+      sessionStorage.removeItem("clio_state");
+      return true;
+    }
+  } catch(err) {
+    console.error("Clio token exchange failed:", err);
+  }
+  return false;
+}
+
+// Fetch from Clio API
+async function clioGet(endpoint, params={}){
+  if(!clioConnected()) throw new Error("Not connected to Clio");
+  const url = new URL(CLIO_API_BASE + endpoint);
+  Object.entries(params).forEach(([k,v]) => url.searchParams.append(k,v));
+  const resp = await fetch(url, {
+    headers: { "Authorization": "Bearer " + clioAccessToken }
+  });
+  if(!resp.ok) throw new Error("Clio API error: " + resp.status);
+  return resp.json();
+}
+
+// Get pay period date ranges
+function getPayPeriods(){
+  const periods = [];
+  const today = new Date();
+  for(let i = 0; i < 12; i++){
+    const d = new Date(today);
+    d.setMonth(d.getMonth() - Math.floor(i/2));
+    const month = d.getMonth();
+    const year = d.getFullYear();
+    const monthName = d.toLocaleDateString("en-US", {month:"long", year:"numeric"});
+    if(i % 2 === 0){
+      // Second half (16th-end)
+      const end = new Date(year, month+1, 0);
+      periods.push({
+        label: monthName + " (16–" + end.getDate() + ")",
+        start: `${year}-${String(month+1).padStart(2,"0")}-16`,
+        end: `${year}-${String(month+1).padStart(2,"0")}-${String(end.getDate()).padStart(2,"0")}`
+      });
+    } else {
+      // First half (1st-15th)
+      periods.push({
+        label: monthName + " (1–15)",
+        start: `${year}-${String(month+1).padStart(2,"0")}-01`,
+        end: `${year}-${String(month+1).padStart(2,"0")}-15`
+      });
+    }
+  }
+  return periods;
+}
+
+// Fetch Clio time entries for date range
+async function fetchClioTimeEntries(startDate, endDate){
+  showLoading("Fetching Clio time entries...");
+  try {
+    // Get all activities (time entries) in date range
+    const data = await clioGet("/activities", {
+      "fields": "id,date,quantity,user{id,name,email},matter{id,display_number,description}",
+      "activity_type": "TimeEntry",
+      "created_before": endDate + "T23:59:59Z",
+      "created_after": startDate + "T00:00:00Z",
+      "limit": 200
+    });
+    hideLoading();
+    return data.data || [];
+  } catch(err) {
+    hideLoading();
+    console.error("Clio fetch error:", err);
+    return [];
+  }
+}
+
+// Fetch Clio users
+async function fetchClioUsers(){
+  try {
+    const data = await clioGet("/users", {
+      "fields": "id,name,email,enabled",
+      "limit": 100
+    });
+    return data.data || [];
+  } catch(err) {
+    console.error("Clio users fetch error:", err);
+    return [];
+  }
+}
+
+// Build comparison data
+async function buildClioComparison(startDate, endDate, targetEmpId=null){
+  const [clioEntries, clioUsers] = await Promise.all([
+    fetchClioTimeEntries(startDate, endDate),
+    fetchClioUsers()
+  ]);
+
+  // Match Clio users to TimeTrack employees by email or name
+  const matchedUsers = [];
+  const empsToShow = targetEmpId ? EMP.filter(e=>e.id===targetEmpId) : EMP;
+
+  empsToShow.forEach(emp => {
+    // Try to match by email first, then by name
+    const clioUser = clioUsers.find(u =>
+      (emp.email && u.email && u.email.toLowerCase() === emp.email.toLowerCase()) ||
+      u.name.toLowerCase() === emp.name.toLowerCase()
+    );
+
+    // Get TimeTrack hours for this period
+    const ttEntries = ENTRIES.filter(e =>
+      e.empId === emp.id && e.date >= startDate && e.date <= endDate && e.ci && e.co
+    );
+    const lunchMins = LUNCH.filter(l =>
+      l.empId === emp.id && l.date >= startDate && l.date <= endDate && l.start && l.end
+    ).reduce((s,l) => s + (parseInt(l.end)-parseInt(l.start)), 0);
+
+    const ttMins = ttEntries.reduce((s,e) => {
+      const ci = e.ci.split(":").map(Number);
+      const co = e.co.split(":").map(Number);
+      return s + (co[0]*60+co[1]) - (ci[0]*60+ci[1]);
+    }, 0) - lunchMins;
+    const ttHours = Math.max(0, ttMins/60);
+
+    // Get Clio hours for this period
+    let clioMins = 0;
+    let clioMatters = [];
+    if(clioUser){
+      const userEntries = clioEntries.filter(e => e.user && e.user.id === clioUser.id);
+      clioMins = userEntries.reduce((s,e) => s + (e.quantity || 0), 0); // quantity is in seconds
+      clioMatters = userEntries.map(e => e.matter?.description || e.matter?.display_number || "—");
+    }
+    const clioHours = clioMins / 3600; // convert seconds to hours
+
+    const diff = ttHours - clioHours;
+    matchedUsers.push({
+      emp, clioUser, ttHours, clioHours, diff,
+      matched: !!clioUser,
+      clioMatters: [...new Set(clioMatters)].slice(0,3)
+    });
+  });
+
+  return matchedUsers;
+}
+
+// Render Clio comparison for admins
+async function renderClioAdmin(){
+  const container = document.getElementById("Aclio-content");
+  if(!container) return;
+
+  // Check connection status
+  const connected = clioConnected();
+  const statusEl = document.getElementById("clio-status");
+  const btnEl = document.getElementById("clio-connect-btn");
+  if(statusEl){
+    statusEl.textContent = connected ? "✓ Connected to Clio" : "Not connected";
+    statusEl.style.color = connected ? "#16a34a" : "#dc2626";
+  }
+  if(btnEl){
+    btnEl.textContent = connected ? "Reconnect Clio" : "Connect to Clio";
+    btnEl.style.background = connected ? "#f0fdf4" : "#534AB7";
+    btnEl.style.color = connected ? "#16a34a" : "#fff";
+    btnEl.style.borderColor = connected ? "#86efac" : "#534AB7";
+  }
+
+  if(!connected){
+    document.getElementById("clio-table-wrap").innerHTML =
+      '<p style="font-size:13px;color:#888;padding:1rem">Connect to Clio above to see time comparisons.</p>';
+    return;
+  }
+
+  // Get selected period
+  const sel = document.getElementById("clio-period");
+  const periods = getPayPeriods();
+  if(sel && !sel.children.length){
+    periods.forEach((p,i) => {
+      const o = document.createElement("option");
+      o.value = i; o.textContent = p.label;
+      sel.appendChild(o);
+    });
+  }
+  const periodIdx = parseInt(sel?.value || 0);
+  const period = periods[periodIdx];
+
+  showLoading("Comparing Clio vs TimeTrack hours...");
+  const data = await buildClioComparison(period.start, period.end);
+  hideLoading();
+
+  const rows = data.map(d => {
+    const diff = d.diff;
+    const diffColor = Math.abs(diff) < 0.25 ? "#16a34a" : diff > 0 ? "#854d0e" : "#991b1b";
+    const diffLabel = Math.abs(diff) < 0.25 ? "✓ Matching" :
+      diff > 0 ? `+${diff.toFixed(1)}h untracked` : `${diff.toFixed(1)}h gap`;
+    const pct = d.clioHours > 0 ? Math.round((d.clioHours/d.ttHours)*100) : 0;
+    const barW = Math.min(100, pct);
+    return `<tr>
+      <td><div class="er"><div class="av ${["av0","av1","av2","av3","av4"][(d.emp.id-1)%5]}">${d.emp.name.split(" ").map(w=>w[0]).join("").slice(0,2)}</div>${d.emp.name}</div></td>
+      <td><span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:${TEAM_COLORS[d.emp.team]||"#f0f0f0"};color:${TEAM_TEXT[d.emp.team]||"#666"}">${d.emp.team}</span></td>
+      <td style="font-size:13px;font-weight:600">${d.ttHours.toFixed(1)}h</td>
+      <td style="font-size:13px;font-weight:600">${d.clioHours.toFixed(1)}h</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div style="width:60px;height:6px;background:#f0f0f0;border-radius:3px">
+            <div style="width:${barW}%;height:6px;background:${diffColor};border-radius:3px"></div>
+          </div>
+          <span style="font-size:12px;color:${diffColor};font-weight:600">${diffLabel}</span>
+        </div>
+      </td>
+      <td style="font-size:11px;color:#888">${d.matched ? "✓ Matched" : '<span style="color:#dc2626">⚠ No Clio match</span>'}</td>
+    </tr>`;
+  }).join("");
+
+  const totTT = data.reduce((s,d)=>s+d.ttHours,0);
+  const totClio = data.reduce((s,d)=>s+d.clioHours,0);
+  document.getElementById("clio-table-wrap").innerHTML = `
+    <table>
+      <thead><tr><th>Employee</th><th>Team</th><th>TimeTrack hrs</th><th>Clio hrs</th><th>Comparison</th><th>Status</th></tr></thead>
+      <tbody>${rows}</tbody>
+      <tfoot style="background:#f5f4f0;font-weight:700">
+        <tr><td colspan="2" style="padding:8px 10px">Totals</td>
+          <td style="padding:8px 10px">${totTT.toFixed(1)}h</td>
+          <td style="padding:8px 10px">${totClio.toFixed(1)}h</td>
+          <td colspan="2" style="padding:8px 10px;color:${Math.abs(totTT-totClio)<1?"#16a34a":"#854d0e"}">
+            ${Math.abs(totTT-totClio).toFixed(1)}h difference firm-wide</td>
+        </tr>
+      </tfoot>
+    </table>`;
+}
+
+// Render Clio comparison for individual employee
+async function renderClioEmployee(){
+  if(!CU) return;
+  const container = document.getElementById("clio-my-content");
+  if(!container) return;
+
+  if(!clioConnected()){
+    container.innerHTML = '<div class="card"><p style="font-size:13px;color:#888;text-align:center;padding:1rem">Clio integration not yet connected. Please ask your admin to connect.</p></div>';
+    return;
+  }
+
+  const periods = getPayPeriods();
+  const sel = document.getElementById("clio-my-period");
+  if(sel && !sel.children.length){
+    periods.forEach((p,i)=>{
+      const o=document.createElement("option");o.value=i;o.textContent=p.label;sel.appendChild(o);
+    });
+  }
+  const periodIdx = parseInt(sel?.value || 0);
+  const period = periods[periodIdx];
+
+  showLoading("Loading your Clio hours...");
+  const data = await buildClioComparison(period.start, period.end, CU.id);
+  hideLoading();
+
+  if(!data.length){container.innerHTML='<p style="color:#888;font-size:13px">No data found.</p>';return;}
+  const d = data[0];
+  const diff = d.diff;
+  const diffColor = Math.abs(diff)<0.25?"#16a34a":diff>0?"#854d0e":"#991b1b";
+
+  container.innerHTML = `
+    <div class="metrics" style="margin-bottom:1rem">
+      <div class="metric"><div class="mlbl">TimeTrack hours</div><div class="mval">${d.ttHours.toFixed(1)}h</div></div>
+      <div class="metric"><div class="mlbl">Clio hours</div><div class="mval">${d.clioHours.toFixed(1)}h</div></div>
+      <div class="metric"><div class="mlbl">Difference</div><div class="mval" style="color:${diffColor}">${Math.abs(diff).toFixed(1)}h</div></div>
+      <div class="metric"><div class="mlbl">Clio utilization</div><div class="mval">${d.ttHours>0?Math.round((d.clioHours/d.ttHours)*100):0}%</div></div>
+    </div>
+    <div class="card" style="padding:1rem">
+      <div style="font-size:13px;margin-bottom:.5rem;font-weight:600">Hours breakdown</div>
+      <div style="margin-bottom:.75rem">
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>TimeTrack (clocked in)</span><span style="font-weight:600">${d.ttHours.toFixed(1)}h</span></div>
+        <div style="height:8px;background:#f0f0f0;border-radius:4px"><div style="width:100%;height:8px;background:#534AB7;border-radius:4px"></div></div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Clio (billed/tracked)</span><span style="font-weight:600">${d.clioHours.toFixed(1)}h</span></div>
+        <div style="height:8px;background:#f0f0f0;border-radius:4px"><div style="width:${d.ttHours>0?Math.min(100,Math.round((d.clioHours/d.ttHours)*100)):0}%;height:8px;background:#16a34a;border-radius:4px"></div></div>
+      </div>
+      ${!d.matched?'<p style="font-size:11px;color:#dc2626;margin-top:.75rem">⚠ Your TimeTrack account could not be matched to a Clio user. Please ask your admin to verify your email matches in both systems.</p>':""}
+    </div>`;
+}
+
 
 // ---- SUPABASE DB HELPERS ----
 async function sbGet(table, params=""){
@@ -1501,7 +1894,7 @@ function saveAndDownload(){
   if(appEl){appEl.className="hidden";}
 
   // Reset all tab panels to hidden
-  ["Tclock","Tcal","Twhosin","Tmypto","Tmileage","Tadmin","Torgchart"].forEach(id=>{
+  ["Tclock","Tcal","Twhosin","Tmypto","Tmileage","Tmyclio","Tadmin","Torgchart"].forEach(id=>{
     const el=clone.querySelector("#"+id);
     if(el)el.className="hidden";
   });
@@ -1605,7 +1998,7 @@ function doLogout(){
 }
 
 function showTab(name,btn){
-  ["Tclock","Tcal","Twhosin","Tmypto","Tmileage","Tadmin","Torgchart"].forEach(id=>document.getElementById(id).classList.add("hidden"));
+  ["Tclock","Tcal","Twhosin","Tmypto","Tmileage","Tmyclio","Tadmin","Torgchart"].forEach(id=>document.getElementById(id).classList.add("hidden"));
   document.querySelectorAll(".nb").forEach(b=>b.classList.remove("active"));
   document.getElementById("T"+name).classList.remove("hidden");
   if(btn)btn.classList.add("active");
@@ -1614,6 +2007,7 @@ function showTab(name,btn){
   if(name==="whosin")renderWhosIn();
   if(name==="mypto")renderMyPTO();
   if(name==="mileage"){renderMyMileage();}
+  if(name==="myclio"){renderClioEmployee();}
   if(name==="orgchart"){initOrgChart();renderOrgChart();}
   if(name==="admin"){
     if(!isAdm()){document.getElementById("adminlock").classList.remove("hidden");document.getElementById("adminbody").classList.add("hidden")}
@@ -1880,7 +2274,7 @@ async function submitPTO(){
 
 function aTab(name,btn){
   document.querySelectorAll("#Tadmin .pt").forEach(b=>b.classList.remove("active"));btn.classList.add("active");
-  ["Aapprovals","Atimesheets","Awfh","Aemps","Ahols","Amileageadmin"].forEach(id=>document.getElementById(id).classList.add("hidden"));
+  ["Aapprovals","Atimesheets","Awfh","Aemps","Ahols","Amileageadmin","Aclio"].forEach(id=>document.getElementById(id).classList.add("hidden"));
   document.getElementById("A"+name).classList.remove("hidden");
   if(name==="approvals")renderApprovals();
   if(name==="timesheets")initTS();
@@ -1888,6 +2282,7 @@ function aTab(name,btn){
   if(name==="emps")renderEmps();
   if(name==="hols")renderHols();
   if(name==="mileageadmin")renderAdminMileage();
+  if(name==="clio")renderClioAdmin();
   renderAnnivPanel();
 }
 
@@ -2443,7 +2838,21 @@ async function delHol(id){
 
 // On startup — load all data from Supabase then init login
 // Wait for DOM to be fully ready before starting
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
+  // Load any stored Clio token
+  loadClioToken();
+
+  // Handle Clio OAuth callback
+  if(window.location.search.includes("code=")){
+    showLoading("Connecting to Clio...");
+    const success = await handleClioCallback();
+    hideLoading();
+    if(success){
+      // Token exchange requires a backend — store code and show instructions
+      console.log("Clio OAuth callback received");
+    }
+  }
+
 
 // Check if running from file:// protocol (won't work with Supabase)
 if(window.location.protocol === 'file:'){
