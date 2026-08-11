@@ -897,8 +897,12 @@ async function sbPatch(table, match, body){
               "Content-Type": "application/json", "Prefer": "return=representation"},
     body: JSON.stringify(body)
   });
-  if(!r.ok){ const t=await r.text(); throw new Error(`PATCH ${table} failed: ${t}`); }
-  return r.json();
+  if(!r.ok){ const t=await r.text(); throw new Error(`PATCH ${table} failed: ${r.status} ${t}`); }
+  // Handle 204 No Content (success but no body)
+  if(r.status === 204) return [];
+  const text = await r.text();
+  if(!text) return [];
+  try { return JSON.parse(text); } catch(e) { return []; }
 }
 
 async function sbDelete(table, match){
@@ -2781,6 +2785,7 @@ async function saveEmp(){
   }
 
   try{
+    // Test that we can reach Supabase first
     if(editId){
       await sbPatch("employees",`id=eq.${editId}`,dbData);
       Object.assign(ge(editId),data);
@@ -2792,7 +2797,15 @@ async function saveEmp(){
     }
     document.getElementById("empform").classList.add("hidden");
     renderEmps();initLogin();
-  }catch(err){alert("Could not save employee. Please try again.");console.error(err);}
+    // Show success confirmation
+    const btn=document.querySelector("#empform .btn.bp");
+    if(btn){const orig=btn.textContent;btn.textContent="✓ Saved!";btn.style.background="#16a34a";setTimeout(()=>{btn.textContent=orig;btn.style.background="#534AB7"},2000);}
+  }catch(err){
+    console.error("Save employee error:", err);
+    alert("Could not save employee to database. Error: " + err.message + "
+
+Please check your internet connection and try again.");
+  }
 }
 
 async function deleteEmp(){
