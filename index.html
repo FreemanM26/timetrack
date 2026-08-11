@@ -409,7 +409,7 @@ tr:hover td{background:#fafaf8}
               <div><div class="stl" style="margin-top:0">Hire date</div><input type="date" id="efhire" class="fc" style="margin:0;width:100%"></div>
               <div><div class="stl" style="margin-top:0">Email</div><input type="email" id="efemail" class="fc" style="margin:0;width:100%"></div>
               <div><div class="stl" style="margin-top:0">Phone</div><input type="tel" id="efphone" class="fc" style="margin:0;width:100%"></div>
-              <div><div class="stl" style="margin-top:0">PIN (4+ characters)</div><input type="text" id="efpin" class="fc" maxlength="20" style="margin:0;width:100%"></div>
+              <div><div class="stl" style="margin-top:0">PIN (enter to set/change)</div><input type="text" id="efpin" class="fc" maxlength="20" style="margin:0;width:100%"></div>
               <div><div class="stl" style="margin-top:0">PTO days / year</div><input type="number" id="efpto" class="fc" value="15" min="0" style="margin:0;width:100%"></div>
               <div><div class="stl" style="margin-top:0">Role</div><select id="efrole" class="fc" style="margin:0;width:100%"><option value="employee">Employee</option><option value="admin">Admin</option></select></div>
             </div>
@@ -2738,7 +2738,7 @@ function openEmpForm(id){
     document.getElementById("efhire").value=e.hire||"";
     document.getElementById("efemail").value=e.email||"";
     document.getElementById("efphone").value=e.phone||"";
-    document.getElementById("efpin").value=e.pin||"";
+    document.getElementById("efpin").value=""; // Never pre-fill PIN for security
     document.getElementById("efpto").value=e.ptoTotal;
     document.getElementById("efrole").value=e.role||"employee";
     document.getElementById("efecname").value=e.ecName||"";
@@ -2773,10 +2773,12 @@ async function saveEmp(){
     pto_total:data.ptoTotal,role:data.role,
     ec_name:data.ecName||null,ec_phone:data.ecPhone||null
   };
-  // Only update pin_hash if PIN changed
-  const existingEmp=editId?ge(editId):null;
-  const pinChanged=!existingEmp||(await sha256(data.pin))!==(existingEmp.pin_hash||"");
-  if(pinChanged) dbData.pin_hash=await sha256(data.pin);
+  // Always hash and update PIN when saving (PIN field is never pre-filled)
+  if(data.pin && data.pin.length >= 4){
+    dbData.pin_hash = await sha256(data.pin);
+  } else if(!editId){
+    alert("PIN is required for new employees.");return;
+  }
 
   try{
     if(editId){
