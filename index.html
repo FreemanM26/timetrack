@@ -629,14 +629,14 @@ function getPayPeriods(){
       // Second half (16th-end)
       const end = new Date(year, month+1, 0);
       periods.push({
-        label: monthName + " (16–" + end.getDate() + ")",
+        label: monthName + " (16-" + end.getDate() + ")",
         start: `${year}-${String(month+1).padStart(2,"0")}-16`,
         end: `${year}-${String(month+1).padStart(2,"0")}-${String(end.getDate()).padStart(2,"0")}`
       });
     } else {
       // First half (1st-15th)
       periods.push({
-        label: monthName + " (1–15)",
+        label: monthName + " (1-15)",
         start: `${year}-${String(month+1).padStart(2,"0")}-01`,
         end: `${year}-${String(month+1).padStart(2,"0")}-15`
       });
@@ -719,7 +719,7 @@ async function buildClioComparison(startDate, endDate, targetEmpId=null){
     if(clioUser){
       const userEntries = clioEntries.filter(e => e.user && e.user.id === clioUser.id);
       clioMins = userEntries.reduce((s,e) => s + (e.quantity || 0), 0); // quantity is in seconds
-      clioMatters = userEntries.map(e => e.matter?.description || e.matter?.display_number || "—");
+      clioMatters = userEntries.map(e => (e.matter && e.matter.description) || (e.matter && e.matter.display_number) || "—");
     }
     const clioHours = clioMins / 3600; // convert seconds to hours
 
@@ -770,7 +770,7 @@ async function renderClioAdmin(){
       sel.appendChild(o);
     });
   }
-  const periodIdx = parseInt(sel?.value || 0);
+  const periodIdx = parseInt((sel && sel.value) || 0);
   const period = periods[periodIdx];
 
   showLoading("Comparing Clio vs TimeTrack hours...");
@@ -836,7 +836,7 @@ async function renderClioEmployee(){
       const o=document.createElement("option");o.value=i;o.textContent=p.label;sel.appendChild(o);
     });
   }
-  const periodIdx = parseInt(sel?.value || 0);
+  const periodIdx = parseInt((sel && sel.value) || 0);
   const period = periods[periodIdx];
 
   showLoading("Loading your Clio hours...");
@@ -2267,7 +2267,7 @@ function renderMyPTO(){
   const rows=PTO.filter(r=>r.empId===e.id).sort((a,b)=>b.start.localeCompare(a.start));
   document.getElementById("myrows").innerHTML=rows.length?rows.map(r=>`<tr>
     <td style="font-size:12px">${r.type}</td>
-    <td style="font-size:12px">${fmt(r.start)} – ${fmt(r.end)}</td>
+    <td style="font-size:12px">${fmt(r.start)} - ${fmt(r.end)}</td>
     <td style="font-size:12px">${r.days}d</td>
     <td><span class="badge b-${r.status==="Approved"?"appr":r.status==="Denied"?"deni":"pend"}">${r.status}</span></td>
     <td style="font-size:11px;color:#888">${r.notes||"—"}</td></tr>`).join("")
@@ -2567,7 +2567,7 @@ function renderApprovals(){
     return`<tr>
       <td><div class="er"><div class="av ${avc(e.id)}">${ini(e.name)}</div>${e.name}</div></td>
       <td style="font-size:12px">${r.type}</td>
-      <td style="font-size:12px">${fmt(r.start)} – ${fmt(r.end)}</td>
+      <td style="font-size:12px">${fmt(r.start)} - ${fmt(r.end)}</td>
       <td style="font-size:12px">${r.days}d</td>
       <td><span class="badge b-${r.status==="Approved"?"appr":r.status==="Denied"?"deni":"pend"}">${r.status}</span></td>
       <td style="display:flex;gap:4px;padding:8px 10px">
@@ -2597,7 +2597,7 @@ function initTS(){
       const d=new Date(b);d.setDate(d.getDate()+i*7);
       const e=new Date(d);e.setDate(e.getDate()+4);
       const o=document.createElement("option");o.value=dS(d);
-      o.textContent=d.toLocaleDateString("en-US",{month:"short",day:"numeric"})+" – "+e.toLocaleDateString("en-US",{month:"short",day:"numeric"});
+      o.textContent=d.toLocaleDateString("en-US",{month:"short",day:"numeric"})+" - "+e.toLocaleDateString("en-US",{month:"short",day:"numeric"});
       ws.appendChild(o);if(i===0)o.selected=true;
     }
   }
@@ -2890,7 +2890,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 if(window.location.protocol === 'file:'){
   document.getElementById('loading-overlay').classList.remove('hidden');
   document.getElementById('loading-msg').innerHTML = 
-    '⚠️ <strong>Cannot connect from a local file.</strong><br><br>' +
+    '&#9888; <strong>Cannot connect from a local file.</strong><br><br>' +
     'To use TimeTrack, you need to either:<br>' +
     '1. Upload it to GitHub Pages (recommended)<br>' +
     '2. Or run a local server<br><br>' +
