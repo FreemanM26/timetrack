@@ -1017,6 +1017,15 @@ async function loadAllData(){
     msg.style.color="#dc2626";
   }
 }
+
+function showToast(msg, color){
+  color = color || "#16a34a";
+  var t = document.createElement("div");
+  t.textContent = msg;
+  t.style.cssText = "position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:"+color+";color:#fff;padding:10px 24px;border-radius:8px;font-size:14px;font-weight:600;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,.15);transition:opacity .3s";
+  document.body.appendChild(t);
+  setTimeout(function(){ t.style.opacity="0"; setTimeout(function(){ t.remove(); }, 300); }, 2500);
+}
 const TEAMS=["Crim Team","WC Team","Intake Team","Dragons","Admin Team","PI Team"];
 const TEAM_COLORS={"Crim Team":"#EEEDFE","WC Team":"#E1F5EE","Intake Team":"#FAECE7","Dragons":"#E6F1FB","Admin Team":"#FEF3C7","PI Team":"#FCE7F3"};
 const TEAM_TEXT={"Crim Team":"#3C3489","WC Team":"#085041","Intake Team":"#712B13","Dragons":"#0C447C","Admin Team":"#78350F","PI Team":"#831843"};
@@ -2817,11 +2826,10 @@ async function saveEmp(){
       const saved=rows[0];
       EMP.push({id:saved.id,ptoUsed:0,pin_hash:saved.pin_hash,...data});
     }
-    document.getElementById("empform").classList.add("hidden");
     renderEmps();initLogin();
-    // Show success confirmation
-    const btn=document.querySelector("#empform .btn.bp");
-    if(btn){const orig=btn.textContent;btn.textContent="✓ Saved!";btn.style.background="#16a34a";setTimeout(()=>{btn.textContent=orig;btn.style.background="#534AB7"},2000);}
+    document.getElementById("empform").classList.add("hidden");
+    // Show toast notification
+    showToast("Employee saved successfully!");
   }catch(err){
     console.error("Save employee error:", err);
     alert("Could not save employee. Error: " + err.message + " Please check your connection and try again.");
