@@ -818,10 +818,12 @@ async function buildClioComparison(startDate, endDate, targetEmpId=null){
     let clioMatters = [];
     if(clioUser){
       const userEntries = clioEntries.filter(e => e.user && e.user.id === clioUser.id);
-      clioMins = userEntries.reduce((s,e) => s + (e.quantity || 0), 0); // quantity is in seconds
+      console.log("Entries for", emp.name, ":", userEntries.length);
+      if(userEntries.length > 0) console.log("Sample entry:", JSON.stringify(userEntries[0]));
+      clioMins = userEntries.reduce((s,e) => s + (parseFloat(e.quantity_in_hours) || parseFloat(e.quantity_in_hours) || 0), 0);
       clioMatters = userEntries.map(e => (e.matter && e.matter.description) || (e.matter && e.matter.display_number) || "—");
     }
-    const clioHours = clioMins / 3600; // convert seconds to hours
+    const clioHours = clioMins; // already in hours
 
     const diff = ttHours - clioHours;
     matchedUsers.push({
