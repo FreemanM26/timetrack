@@ -808,42 +808,44 @@ async function renderClioAdmin(){
   const rows = data.map(d => {
     const diff = d.diff;
     const diffColor = Math.abs(diff) < 0.25 ? "#16a34a" : diff > 0 ? "#854d0e" : "#991b1b";
-    const diffLabel = Math.abs(diff) < 0.25 ? "✓ Matching" :
-      diff > 0 ? `+${diff.toFixed(1)}h untracked` : `${diff.toFixed(1)}h gap`;
-    const pct = d.clioHours > 0 ? Math.round((d.clioHours/d.ttHours)*100) : 0;
+    const diffAbs = Math.abs(diff).toFixed(1);
+    const diffLabel = Math.abs(diff) < 0.25 ? "Matching" :
+      diff > 0 ? ("+" + diffAbs + "h untracked") : (diffAbs + "h gap");
+    const pct = d.clioHours > 0 && d.ttHours > 0 ? Math.round((d.clioHours/d.ttHours)*100) : 0;
     const barW = Math.min(100, pct);
-    return `<tr>
-      <td><div class="er"><div class="av ${["av0","av1","av2","av3","av4"][(d.emp.id-1)%5]}">${d.emp.name.split(" ").map(w=>w[0]).join("").slice(0,2)}</div>${d.emp.name}</div></td>
-      <td><span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:${TEAM_COLORS[d.emp.team]||"#f0f0f0"};color:${TEAM_TEXT[d.emp.team]||"#666"}">${d.emp.team}</span></td>
-      <td style="font-size:13px;font-weight:600">${d.ttHours.toFixed(1)}h</td>
-      <td style="font-size:13px;font-weight:600">${d.clioHours.toFixed(1)}h</td>
-      <td>
-        <div style="display:flex;align-items:center;gap:8px">
-          <div style="width:60px;height:6px;background:#f0f0f0;border-radius:3px">
-            <div style="width:${barW}%;height:6px;background:${diffColor};border-radius:3px"></div>
-          </div>
-          <span style="font-size:12px;color:${diffColor};font-weight:600">${diffLabel}</span>
-        </div>
-      </td>
-      <td style="font-size:11px;color:#888">${d.matched ? "✓ Matched" : '<span style="color:#dc2626">⚠ No Clio match</span>'}</td>
-    </tr>`;
+    const avCls = ["av0","av1","av2","av3","av4"][(d.emp.id-1)%5];
+    const initials = d.emp.name.split(" ").map(function(w){return w[0];}).join("").slice(0,2);
+    const tbg = TEAM_COLORS[d.emp.team] || "#f0f0f0";
+    const ttx = TEAM_TEXT[d.emp.team] || "#666";
+    const statusHtml = d.matched ? "Matched" : "No Clio match";
+    const statusColor = d.matched ? "#16a34a" : "#dc2626";
+    return "<tr>"
+      + "<td><div class='er'><div class='av " + avCls + "'>" + initials + "</div>" + d.emp.name + "</div></td>"
+      + "<td><span style='font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:" + tbg + ";color:" + ttx + "'>" + d.emp.team + "</span></td>"
+      + "<td style='font-size:13px;font-weight:600'>" + d.ttHours.toFixed(1) + "h</td>"
+      + "<td style='font-size:13px;font-weight:600'>" + d.clioHours.toFixed(1) + "h</td>"
+      + "<td><div style='display:flex;align-items:center;gap:8px'>"
+      + "<div style='width:60px;height:6px;background:#f0f0f0;border-radius:3px'>"
+      + "<div style='width:" + barW + "%;height:6px;background:" + diffColor + ";border-radius:3px'></div></div>"
+      + "<span style='font-size:12px;color:" + diffColor + ";font-weight:600'>" + diffLabel + "</span></div></td>"
+      + "<td style='font-size:11px;color:" + statusColor + "'>" + statusHtml + "</td>"
+      + "</tr>";
   }).join("");
 
   const totTT = data.reduce((s,d)=>s+d.ttHours,0);
   const totClio = data.reduce((s,d)=>s+d.clioHours,0);
-  document.getElementById("clio-table-wrap").innerHTML = `
-    <table>
-      <thead><tr><th>Employee</th><th>Team</th><th>TimeTrack hrs</th><th>Clio hrs</th><th>Comparison</th><th>Status</th></tr></thead>
-      <tbody>${rows}</tbody>
-      <tfoot style="background:#f5f4f0;font-weight:700">
-        <tr><td colspan="2" style="padding:8px 10px">Totals</td>
-          <td style="padding:8px 10px">${totTT.toFixed(1)}h</td>
-          <td style="padding:8px 10px">${totClio.toFixed(1)}h</td>
-          <td colspan="2" style="padding:8px 10px;color:${Math.abs(totTT-totClio)<1?"#16a34a":"#854d0e"}">
-            ${Math.abs(totTT-totClio).toFixed(1)}h difference firm-wide</td>
-        </tr>
-      </tfoot>
-    </table>`;
+  const totDiff = Math.abs(totTT-totClio);
+  const totColor = totDiff<1 ? "#16a34a" : "#854d0e";
+  document.getElementById("clio-table-wrap").innerHTML =
+    "<table>"
+    + "<thead><tr><th>Employee</th><th>Team</th><th>TimeTrack hrs</th><th>Clio hrs</th><th>Comparison</th><th>Status</th></tr></thead>"
+    + "<tbody>" + rows + "</tbody>"
+    + "<tfoot style='background:#f5f4f0;font-weight:700'>"
+    + "<tr><td colspan='2' style='padding:8px 10px'>Totals</td>"
+    + "<td style='padding:8px 10px'>" + totTT.toFixed(1) + "h</td>"
+    + "<td style='padding:8px 10px'>" + totClio.toFixed(1) + "h</td>"
+    + "<td colspan='2' style='padding:8px 10px;color:" + totColor + "'>" + totDiff.toFixed(1) + "h difference firm-wide</td>"
+    + "</tr></tfoot></table>";
 }
 
 // Render Clio comparison for individual employee
@@ -3022,42 +3024,44 @@ async function renderClioAdmin(){
   const rows = data.map(d => {
     const diff = d.diff;
     const diffColor = Math.abs(diff) < 0.25 ? "#16a34a" : diff > 0 ? "#854d0e" : "#991b1b";
-    const diffLabel = Math.abs(diff) < 0.25 ? "✓ Matching" :
-      diff > 0 ? `+${diff.toFixed(1)}h untracked` : `${diff.toFixed(1)}h gap`;
-    const pct = d.clioHours > 0 ? Math.round((d.clioHours/d.ttHours)*100) : 0;
+    const diffAbs = Math.abs(diff).toFixed(1);
+    const diffLabel = Math.abs(diff) < 0.25 ? "Matching" :
+      diff > 0 ? ("+" + diffAbs + "h untracked") : (diffAbs + "h gap");
+    const pct = d.clioHours > 0 && d.ttHours > 0 ? Math.round((d.clioHours/d.ttHours)*100) : 0;
     const barW = Math.min(100, pct);
-    return `<tr>
-      <td><div class="er"><div class="av ${["av0","av1","av2","av3","av4"][(d.emp.id-1)%5]}">${d.emp.name.split(" ").map(w=>w[0]).join("").slice(0,2)}</div>${d.emp.name}</div></td>
-      <td><span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:${TEAM_COLORS[d.emp.team]||"#f0f0f0"};color:${TEAM_TEXT[d.emp.team]||"#666"}">${d.emp.team}</span></td>
-      <td style="font-size:13px;font-weight:600">${d.ttHours.toFixed(1)}h</td>
-      <td style="font-size:13px;font-weight:600">${d.clioHours.toFixed(1)}h</td>
-      <td>
-        <div style="display:flex;align-items:center;gap:8px">
-          <div style="width:60px;height:6px;background:#f0f0f0;border-radius:3px">
-            <div style="width:${barW}%;height:6px;background:${diffColor};border-radius:3px"></div>
-          </div>
-          <span style="font-size:12px;color:${diffColor};font-weight:600">${diffLabel}</span>
-        </div>
-      </td>
-      <td style="font-size:11px;color:#888">${d.matched ? "✓ Matched" : '<span style="color:#dc2626">⚠ No Clio match</span>'}</td>
-    </tr>`;
+    const avCls = ["av0","av1","av2","av3","av4"][(d.emp.id-1)%5];
+    const initials = d.emp.name.split(" ").map(function(w){return w[0];}).join("").slice(0,2);
+    const tbg = TEAM_COLORS[d.emp.team] || "#f0f0f0";
+    const ttx = TEAM_TEXT[d.emp.team] || "#666";
+    const statusHtml = d.matched ? "Matched" : "No Clio match";
+    const statusColor = d.matched ? "#16a34a" : "#dc2626";
+    return "<tr>"
+      + "<td><div class='er'><div class='av " + avCls + "'>" + initials + "</div>" + d.emp.name + "</div></td>"
+      + "<td><span style='font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:" + tbg + ";color:" + ttx + "'>" + d.emp.team + "</span></td>"
+      + "<td style='font-size:13px;font-weight:600'>" + d.ttHours.toFixed(1) + "h</td>"
+      + "<td style='font-size:13px;font-weight:600'>" + d.clioHours.toFixed(1) + "h</td>"
+      + "<td><div style='display:flex;align-items:center;gap:8px'>"
+      + "<div style='width:60px;height:6px;background:#f0f0f0;border-radius:3px'>"
+      + "<div style='width:" + barW + "%;height:6px;background:" + diffColor + ";border-radius:3px'></div></div>"
+      + "<span style='font-size:12px;color:" + diffColor + ";font-weight:600'>" + diffLabel + "</span></div></td>"
+      + "<td style='font-size:11px;color:" + statusColor + "'>" + statusHtml + "</td>"
+      + "</tr>";
   }).join("");
 
   const totTT = data.reduce((s,d)=>s+d.ttHours,0);
   const totClio = data.reduce((s,d)=>s+d.clioHours,0);
-  document.getElementById("clio-table-wrap").innerHTML = `
-    <table>
-      <thead><tr><th>Employee</th><th>Team</th><th>TimeTrack hrs</th><th>Clio hrs</th><th>Comparison</th><th>Status</th></tr></thead>
-      <tbody>${rows}</tbody>
-      <tfoot style="background:#f5f4f0;font-weight:700">
-        <tr><td colspan="2" style="padding:8px 10px">Totals</td>
-          <td style="padding:8px 10px">${totTT.toFixed(1)}h</td>
-          <td style="padding:8px 10px">${totClio.toFixed(1)}h</td>
-          <td colspan="2" style="padding:8px 10px;color:${Math.abs(totTT-totClio)<1?"#16a34a":"#854d0e"}">
-            ${Math.abs(totTT-totClio).toFixed(1)}h difference firm-wide</td>
-        </tr>
-      </tfoot>
-    </table>`;
+  const totDiff = Math.abs(totTT-totClio);
+  const totColor = totDiff<1 ? "#16a34a" : "#854d0e";
+  document.getElementById("clio-table-wrap").innerHTML =
+    "<table>"
+    + "<thead><tr><th>Employee</th><th>Team</th><th>TimeTrack hrs</th><th>Clio hrs</th><th>Comparison</th><th>Status</th></tr></thead>"
+    + "<tbody>" + rows + "</tbody>"
+    + "<tfoot style='background:#f5f4f0;font-weight:700'>"
+    + "<tr><td colspan='2' style='padding:8px 10px'>Totals</td>"
+    + "<td style='padding:8px 10px'>" + totTT.toFixed(1) + "h</td>"
+    + "<td style='padding:8px 10px'>" + totClio.toFixed(1) + "h</td>"
+    + "<td colspan='2' style='padding:8px 10px;color:" + totColor + "'>" + totDiff.toFixed(1) + "h difference firm-wide</td>"
+    + "</tr></tfoot></table>";
 }
 
 // Render Clio comparison for individual employee
