@@ -664,25 +664,58 @@ async function fetchClioTimeEntries(startDate, endDate, clioUserIds){
     const dateRange = startDate + ".." + endDate;
     let allEntries = [];
 
-    // Fetch entries per user to avoid hitting limits across all 53 firm users
+    // Fetch entries per user with delay to avoid Clio rate limits (50 req/min)
+    const delay = ms => new Promise(res => setTimeout(res, ms));
+
     for(let i = 0; i < clioUserIds.length; i++){
       const userId = clioUserIds[i];
       showLoading("Fetching Clio hours (" + (i+1) + " of " + clioUserIds.length + ")...");
+      // Add delay between users to avoid rate limiting (Clio allows 50 req/min)
+      if(i > 0) await delay(1500);
       let page = 1;
       let hasMore = true;
       while(hasMore){
-        const data = await clioGet("/activities", {
-          "fields": "id,date,quantity_in_hours,user{id,name,email},matter{id,display_number,description}",
-          "type": "TimeEntry",
-          "date[]": dateRange,
-          "user_id": String(userId),
-          "limit": 200,
-          "page": page
-        });
-        const entries = data.data || [];
-        allEntries = allEntries.concat(entries);
-        hasMore = entries.length === 200 && page < 10;
-        page++;
+        try {
+          const data = await clioGet("/activities", {
+            "fields": "id,date,quantity_in_hours,user{id,name,email},matter{id,display_number,description}",
+            "type": "TimeEntry",
+            "date[]": dateRange,
+            "user_id": String(userId),
+            "limit": 200,
+            "page": page
+          });
+          const entries = data.data || [];
+          allEntries = allEntries.concat(entries);
+          hasMore = entries.length === 200 && page < 10;
+          page++;
+          if(hasMore) await delay(1200); // delay between pages too
+        } catch(pageErr) {
+          // If rate limited, wait 25 seconds and retry once
+          if(pageErr.message.includes("429") || pageErr.message.includes("Rate")){
+            showLoading("Clio rate limit hit — waiting 25 seconds...");
+            await delay(25000);
+            try {
+              const retryData = await clioGet("/activities", {
+                "fields": "id,date,quantity_in_hours,user{id,name,email},matter{id,display_number,description}",
+                "type": "TimeEntry",
+                "date[]": dateRange,
+                "user_id": String(userId),
+                "limit": 200,
+                "page": page
+              });
+              const retryEntries = retryData.data || [];
+              allEntries = allEntries.concat(retryEntries);
+              hasMore = retryEntries.length === 200 && page < 10;
+              page++;
+            } catch(retryErr) {
+              console.error("Retry failed for user", userId, retryErr.message);
+              hasMore = false;
+            }
+          } else {
+            console.error("Page fetch error:", pageErr.message);
+            hasMore = false;
+          }
+        }
       }
     }
 
