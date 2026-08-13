@@ -657,19 +657,32 @@ function getPayPeriods(){
 async function fetchClioTimeEntries(startDate, endDate){
   showLoading("Fetching Clio time entries...");
   try {
-    // Clio v4 date range filter uses date[]= with start..end
     const dateRange = startDate + ".." + endDate;
-    const data = await clioGet("/activities", {
-      "fields": "id,date,quantity_in_hours,user{id,name,email},matter{id,display_number,description}",
-      "type": "TimeEntry",
-      "date[]": dateRange,
-      "limit": 200,
-      "order": "date(asc)"
-    });
-    console.log("Clio activities date range:", dateRange);
-    console.log("Clio activities count:", (data.data||[]).length, "of", data.meta && data.meta.records);
+    let allEntries = [];
+    let page = 1;
+    let hasMore = true;
+
+    while(hasMore){
+      showLoading("Fetching Clio time entries (page " + page + ")...");
+      const data = await clioGet("/activities", {
+        "fields": "id,date,quantity_in_hours,user{id,name,email},matter{id,display_number,description}",
+        "type": "TimeEntry",
+        "date[]": dateRange,
+        "limit": 200,
+        "page": page,
+        "order": "date(asc)"
+      });
+      const entries = data.data || [];
+      allEntries = allEntries.concat(entries);
+      console.log("Clio page " + page + ": " + entries.length + " entries (total so far: " + allEntries.length + ")");
+      // Stop if we got fewer than 200 (last page) or more than 5 pages (safety limit)
+      hasMore = entries.length === 200 && page < 5;
+      page++;
+    }
+
+    console.log("Clio activities total:", allEntries.length, "for", dateRange);
     hideLoading();
-    return data.data || [];
+    return allEntries;
   } catch(err) {
     hideLoading();
     console.error("Clio activities fetch error:", err.message);
@@ -721,12 +734,14 @@ async function buildClioComparison(startDate, endDate, targetEmpId=null){
   console.log("Clio users:", clioUsers.length);
 
   empsToShow.forEach(emp => {
-    // Try to match by email first, then by name
+    // Match by email only (more reliable than name)
     const clioUser = clioUsers.find(u =>
-      (emp.email && u.email && u.email.toLowerCase().trim() === emp.email.toLowerCase().trim()) ||
+      emp.email && u.email && u.email.toLowerCase().trim() === emp.email.toLowerCase().trim()
+    ) || clioUsers.find(u =>
+      // Fallback: exact full name match only
       u.name.toLowerCase().trim() === emp.name.toLowerCase().trim()
     );
-    if(clioUser) console.log("MATCHED:", emp.name, "->", clioUser.name);
+    if(clioUser) console.log("MATCHED:", emp.name, "->", clioUser.name, clioUser.email);
     else console.log("NO MATCH:", emp.name, emp.email);
 
     // Get TimeTrack hours for this period
