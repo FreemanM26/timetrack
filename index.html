@@ -658,30 +658,32 @@ function getPayPeriods(){
 }
 
 // Fetch Clio time entries for date range
-async function fetchClioTimeEntries(startDate, endDate){
+async function fetchClioTimeEntries(startDate, endDate, clioUserIds){
   showLoading("Fetching Clio time entries...");
   try {
     const dateRange = startDate + ".." + endDate;
     let allEntries = [];
-    let page = 1;
-    let hasMore = true;
 
-    while(hasMore){
-      showLoading("Fetching Clio time entries (page " + page + ")...");
-      const data = await clioGet("/activities", {
-        "fields": "id,date,quantity_in_hours,user{id,name,email},matter{id,display_number,description}",
-        "type": "TimeEntry",
-        "date[]": dateRange,
-        "limit": 200,
-        "page": page,
-        "order": "date(asc)"
-      });
-      const entries = data.data || [];
-      allEntries = allEntries.concat(entries);
-      console.log("Clio page " + page + ": " + entries.length + " entries (total so far: " + allEntries.length + ")");
-      // Stop if we got fewer than 200 (last page) or more than 5 pages (safety limit)
-      hasMore = entries.length === 200 && page < 5;
-      page++;
+    // Fetch entries per user to avoid hitting limits across all 53 firm users
+    for(let i = 0; i < clioUserIds.length; i++){
+      const userId = clioUserIds[i];
+      showLoading("Fetching Clio hours (" + (i+1) + " of " + clioUserIds.length + ")...");
+      let page = 1;
+      let hasMore = true;
+      while(hasMore){
+        const data = await clioGet("/activities", {
+          "fields": "id,date,quantity_in_hours,user{id,name,email},matter{id,display_number,description}",
+          "type": "TimeEntry",
+          "date[]": dateRange,
+          "user_id": String(userId),
+          "limit": 200,
+          "page": page
+        });
+        const entries = data.data || [];
+        allEntries = allEntries.concat(entries);
+        hasMore = entries.length === 200 && page < 10;
+        page++;
+      }
     }
 
     console.log("Clio activities total:", allEntries.length, "for", dateRange);
@@ -724,10 +726,20 @@ async function fetchClioUsers(){
 
 // Build comparison data
 async function buildClioComparison(startDate, endDate, targetEmpId=null){
-  const [clioEntries, clioUsers] = await Promise.all([
-    fetchClioTimeEntries(startDate, endDate),
-    fetchClioUsers()
-  ]);
+  // Fetch users first, then fetch time entries only for matched users
+  const clioUsers = await fetchClioUsers();
+
+  // Find Clio user IDs for our tracked employees
+  const trackedEmails = empsToShow.map(e => e.email.toLowerCase().trim()).filter(Boolean);
+  const matchedClioUsers = clioUsers.filter(u => 
+    u.email && trackedEmails.includes(u.email.toLowerCase().trim())
+  );
+  const clioUserIds = matchedClioUsers.map(u => u.id);
+  console.log("Fetching time for", clioUserIds.length, "matched Clio users");
+
+  const clioEntries = clioUserIds.length > 0 
+    ? await fetchClioTimeEntries(startDate, endDate, clioUserIds)
+    : [];
 
   // Match Clio users to TimeTrack employees by email or name
   const matchedUsers = [];
