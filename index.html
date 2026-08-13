@@ -673,7 +673,10 @@ async function fetchClioUsers(){
       "fields": "id,name,email,enabled",
       "limit": 100
     });
-    return data.data || [];
+    const users = data.data || [];
+    console.log("Clio users returned:", users.length);
+    users.forEach(u => console.log("  Clio user:", u.name, "|", u.email));
+    return users;
   } catch(err) {
     console.error("Clio users fetch error:", err);
     return [];
@@ -691,12 +694,18 @@ async function buildClioComparison(startDate, endDate, targetEmpId=null){
   const matchedUsers = [];
   const empsToShow = targetEmpId ? EMP.filter(e=>e.id===targetEmpId) : EMP;
 
+  console.log("TimeTrack emails:");
+  empsToShow.forEach(e => console.log("  TT:", e.name, "|", e.email));
+  console.log("Clio users:", clioUsers.length);
+
   empsToShow.forEach(emp => {
     // Try to match by email first, then by name
     const clioUser = clioUsers.find(u =>
-      (emp.email && u.email && u.email.toLowerCase() === emp.email.toLowerCase()) ||
-      u.name.toLowerCase() === emp.name.toLowerCase()
+      (emp.email && u.email && u.email.toLowerCase().trim() === emp.email.toLowerCase().trim()) ||
+      u.name.toLowerCase().trim() === emp.name.toLowerCase().trim()
     );
+    if(clioUser) console.log("MATCHED:", emp.name, "->", clioUser.name);
+    else console.log("NO MATCH:", emp.name, emp.email);
 
     // Get TimeTrack hours for this period
     const ttEntries = ENTRIES.filter(e =>
