@@ -657,14 +657,17 @@ function getPayPeriods(){
 async function fetchClioTimeEntries(startDate, endDate){
   showLoading("Fetching Clio time entries...");
   try {
-    // Clio v4 time entries use /activities with type filter
+    // Clio v4 date range filter uses date[]= with start..end
+    const dateRange = startDate + ".." + endDate;
     const data = await clioGet("/activities", {
       "fields": "id,date,quantity_in_hours,user{id,name,email},matter{id,display_number,description}",
       "type": "TimeEntry",
-      "date[]=": startDate + ".." + endDate,
-      "limit": 200
+      "date[]": dateRange,
+      "limit": 200,
+      "order": "date(asc)"
     });
-    console.log("Clio activities response:", JSON.stringify(data).substring(0, 500));
+    console.log("Clio activities date range:", dateRange);
+    console.log("Clio activities count:", (data.data||[]).length, "of", data.meta && data.meta.records);
     hideLoading();
     return data.data || [];
   } catch(err) {
