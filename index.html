@@ -2875,12 +2875,15 @@ async function saveEmp(){
     // Test that we can reach Supabase first
     if(editId){
       await sbPatch("employees",`id=eq.${editId}`,dbData);
-      Object.assign(ge(editId),data);
-      ge(editId).pin_hash=dbData.pin_hash||ge(editId).pin_hash;
+      const existing = ge(editId);
+      Object.assign(existing, data);
+      existing.tracksClio = data.tracksClio;
+      existing.pin_hash = dbData.pin_hash || existing.pin_hash;
+      console.log("Saved", existing.name, "tracksClio:", existing.tracksClio);
     } else {
       const rows=await sbPost("employees",{...dbData,pin_hash:await sha256(data.pin),pto_used:0});
       const saved=rows[0];
-      EMP.push({id:saved.id,ptoUsed:0,pin_hash:saved.pin_hash,...data});
+      EMP.push({id:saved.id,ptoUsed:0,pin_hash:saved.pin_hash,tracksClio:data.tracksClio||false,...data});
     }
     renderEmps();initLogin();
     document.getElementById("empform").classList.add("hidden");
