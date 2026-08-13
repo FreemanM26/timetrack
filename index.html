@@ -586,7 +586,7 @@ async function handleClioCallback(){
         "Content-Type": "application/json",
         "Authorization": "Bearer " + SUPABASE_KEY
       },
-      body: JSON.stringify({ code, redirect_uri: CLIO_REDIRECT_URI })
+      body: JSON.stringify({ action: "token", code, redirect_uri: CLIO_REDIRECT_URI })
     });
     
     if(resp.ok){
@@ -603,15 +603,23 @@ async function handleClioCallback(){
   return false;
 }
 
-// Fetch from Clio API
+// Fetch from Clio API — proxied through Supabase Edge Function to avoid CORS
 async function clioGet(endpoint, params={}){
   if(!clioConnected()) throw new Error("Not connected to Clio");
-  const url = new URL(CLIO_API_BASE + endpoint);
-  Object.entries(params).forEach(([k,v]) => url.searchParams.append(k,v));
-  const resp = await fetch(url, {
-    headers: { "Authorization": "Bearer " + clioAccessToken }
+  const resp = await fetch("https://ejxkytxessjsqutmnhss.supabase.co/functions/v1/clio-auth", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer " + SUPABASE_KEY
+    },
+    body: JSON.stringify({
+      action: "proxy",
+      endpoint: endpoint,
+      params: params,
+      access_token: clioAccessToken
+    })
   });
-  if(!resp.ok) throw new Error("Clio API error: " + resp.status);
+  if(!resp.ok){ const t=await resp.text(); throw new Error("Clio proxy error: " + resp.status + " " + t); }
   return resp.json();
 }
 
