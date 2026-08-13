@@ -726,26 +726,29 @@ async function fetchClioUsers(){
 
 // Build comparison data
 async function buildClioComparison(startDate, endDate, targetEmpId=null){
+  // Define empsToShow first
+  const empsToShow = targetEmpId
+    ? EMP.filter(e=>e.id===targetEmpId)
+    : EMP.filter(e=>e.tracksClio);
+
   // Fetch users first, then fetch time entries only for matched users
   const clioUsers = await fetchClioUsers();
 
   // Find Clio user IDs for our tracked employees
   const trackedEmails = empsToShow.map(e => e.email.toLowerCase().trim()).filter(Boolean);
-  const matchedClioUsers = clioUsers.filter(u => 
+  const matchedClioUsers = clioUsers.filter(u =>
     u.email && trackedEmails.includes(u.email.toLowerCase().trim())
   );
   const clioUserIds = matchedClioUsers.map(u => u.id);
   console.log("Fetching time for", clioUserIds.length, "matched Clio users");
 
-  const clioEntries = clioUserIds.length > 0 
+  const clioEntries = clioUserIds.length > 0
     ? await fetchClioTimeEntries(startDate, endDate, clioUserIds)
     : [];
 
   // Match Clio users to TimeTrack employees by email or name
   const matchedUsers = [];
-  const empsToShow = targetEmpId 
-    ? EMP.filter(e=>e.id===targetEmpId)
-    : EMP.filter(e=>e.tracksClio);  // Only show employees marked as Clio time trackers
+  // empsToShow already defined above
 
   console.log("TimeTrack emails:");
   empsToShow.forEach(e => console.log("  TT:", e.name, "|", e.email));
