@@ -676,10 +676,11 @@ async function fetchClioTimeEntries(startDate, endDate, clioUserIds){
       let hasMore = true;
       while(hasMore){
         try {
+          const [rangeStart, rangeEnd] = dateRange.split("..");
           const data = await clioGet("/activities", {
             "fields": "id,date,quantity_in_hours,user{id,name,email},matter{id,display_number,description}",
             "type": "TimeEntry",
-            "date[]": dateRange,
+            "date[]=": rangeStart + ".." + rangeEnd,
             "user_id": String(userId),
             "limit": 200,
             "page": page
@@ -695,10 +696,11 @@ async function fetchClioTimeEntries(startDate, endDate, clioUserIds){
             showLoading("Clio rate limit hit — waiting 25 seconds...");
             await delay(25000);
             try {
+              const [retryStart, retryEnd] = dateRange.split("..");
               const retryData = await clioGet("/activities", {
                 "fields": "id,date,quantity_in_hours,user{id,name,email},matter{id,display_number,description}",
                 "type": "TimeEntry",
-                "date[]": dateRange,
+                "date[]=": retryStart + ".." + retryEnd,
                 "user_id": String(userId),
                 "limit": 200,
                 "page": page
