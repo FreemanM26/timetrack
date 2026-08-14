@@ -721,9 +721,12 @@ async function fetchClioTimeEntries(startDate, endDate, clioUserIds){
       }
     }
 
-    console.log("Clio activities total:", allEntries.length, "for", dateRange);
+    // Client-side date filter since Clio API ignores date[] when combined with user_id
+    const [filterStart, filterEnd] = dateRange.split("..");
+    const filtered = allEntries.filter(e => e.date >= filterStart && e.date <= filterEnd);
+    console.log("Clio activities total:", allEntries.length, "filtered to:", filtered.length, "for", dateRange);
     hideLoading();
-    return allEntries;
+    return filtered;
   } catch(err) {
     hideLoading();
     console.error("Clio activities fetch error:", err.message);
