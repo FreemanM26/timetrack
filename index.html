@@ -691,7 +691,8 @@ async function fetchClioTimeEntries(startDate, endDate, clioUserIds){
           // Since sorted desc, if oldest entry in this page is before our range start, stop
           const oldestInPage = entries.length > 0 ? entries[entries.length-1].date : null;
           const beforeRange = oldestInPage && oldestInPage < rangeStart;
-          hasMore = entries.length === 200 && page < 10 && !beforeRange;
+          if(oldestInPage) console.log("  Page " + page + " oldest date:", oldestInPage, "target:", rangeStart);
+          hasMore = entries.length === 200 && page < 30 && !beforeRange;
           page++;
           if(hasMore) await delay(1200); // delay between pages too
         } catch(pageErr) {
