@@ -728,8 +728,15 @@ async function fetchClioTimeEntries(startDate, endDate, clioUserIds){
 
     // Client-side date filter since Clio API ignores date[] when combined with user_id
     const [filterStart, filterEnd] = dateRange.split("..");
-    const filtered = allEntries.filter(e => e.date >= filterStart && e.date <= filterEnd);
-    console.log("Clio activities total:", allEntries.length, "filtered to:", filtered.length, "for", dateRange);
+    // Deduplicate by ID first in case of pagination overlap
+    const seenIds = new Set();
+    const deduped = allEntries.filter(e => {
+      if(seenIds.has(e.id)) return false;
+      seenIds.add(e.id);
+      return true;
+    });
+    const filtered = deduped.filter(e => e.date >= filterStart && e.date <= filterEnd);
+    console.log("Clio raw:", allEntries.length, "deduped:", deduped.length, "date-filtered:", filtered.length, "for", dateRange);
     hideLoading();
     return filtered;
   } catch(err) {
@@ -829,7 +836,14 @@ async function buildClioComparison(startDate, endDate, targetEmpId=null){
     if(clioUser){
       const userEntries = clioEntries.filter(e => e.user && e.user.id === clioUser.id);
       console.log("Entries for", emp.name, ":", userEntries.length);
-      if(userEntries.length > 0) console.log("Sample entry:", JSON.stringify(userEntries[0]));
+      if(userEntries.length > 0){
+        // Show date range and total hours for debugging
+        const dates = userEntries.map(e => e.date).sort();
+        const totalH = userEntries.reduce((s,e) => s + (parseFloat(e.quantity_in_hours) || 0), 0);
+        console.log("  Date range:", dates[0], "to", dates[dates.length-1]);
+        console.log("  Total hours:", totalH.toFixed(2));
+        console.log("  Entry count:", userEntries.length);
+      }
       clioMins = userEntries.reduce((s,e) => s + (parseFloat(e.quantity_in_hours) || parseFloat(e.quantity_in_hours) || 0), 0);
       clioMatters = userEntries.map(e => (e.matter && e.matter.description) || (e.matter && e.matter.display_number) || "—");
     }
