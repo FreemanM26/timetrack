@@ -682,12 +682,16 @@ async function fetchClioTimeEntries(startDate, endDate, clioUserIds){
             "type": "TimeEntry",
             "date[]=": rangeStart + ".." + rangeEnd,
             "user_id": String(userId),
+            "order": "date(desc)",
             "limit": 200,
             "page": page
           });
           const entries = data.data || [];
           allEntries = allEntries.concat(entries);
-          hasMore = entries.length === 200 && page < 10;
+          // Since sorted desc, if oldest entry in this page is before our range start, stop
+          const oldestInPage = entries.length > 0 ? entries[entries.length-1].date : null;
+          const beforeRange = oldestInPage && oldestInPage < rangeStart;
+          hasMore = entries.length === 200 && page < 10 && !beforeRange;
           page++;
           if(hasMore) await delay(1200); // delay between pages too
         } catch(pageErr) {
@@ -702,6 +706,7 @@ async function fetchClioTimeEntries(startDate, endDate, clioUserIds){
                 "type": "TimeEntry",
                 "date[]=": retryStart + ".." + retryEnd,
                 "user_id": String(userId),
+                "order": "date(desc)",
                 "limit": 200,
                 "page": page
               });
