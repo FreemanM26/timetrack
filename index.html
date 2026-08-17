@@ -484,9 +484,12 @@ tr:hover td{background:#fafaf8}
                 <div id="clio-status" style="font-size:12px;color:#888">Checking connection...</div>
               </div>
             </div>
+            <select id="clio-team" onchange="renderClioAdmin()" class="fc" style="margin:0;width:auto;font-size:12px">
+              <option value="">All teams</option>
+            </select>
             <select id="clio-period" onchange="renderClioAdmin()" class="fc" style="margin:0;width:auto;font-size:12px"></select>
             <button id="clio-connect-btn" class="btn bp" onclick="connectClio()" style="font-size:12px;padding:6px 14px">Connect to Clio</button>
-            <button class="btn" onclick="renderClioAdmin()" style="font-size:12px;padding:6px 14px">↻ Refresh</button>
+            <button class="btn" onclick="loadClioData()" style="font-size:12px;padding:6px 14px;background:#534AB7;color:#fff;border-color:#534AB7">▶ Load Clio Data</button>
           </div>
           <div id="Aclio-content">
             <div class="card" style="padding:0;overflow:hidden;overflow-x:auto">
@@ -776,11 +779,11 @@ async function fetchClioUsers(){
 }
 
 // Build comparison data
-async function buildClioComparison(startDate, endDate, targetEmpId=null){
+async function buildClioComparison(startDate, endDate, targetEmpId=null, teamFilter=""){
   // Define empsToShow first
   const empsToShow = targetEmpId
     ? EMP.filter(e=>e.id===targetEmpId)
-    : EMP.filter(e=>e.tracksClio);
+    : EMP.filter(e=>e.tracksClio && (!teamFilter || e.team === teamFilter));
 
   // Fetch users first, then fetch time entries only for matched users
   const clioUsers = await fetchClioUsers();
@@ -862,48 +865,26 @@ async function buildClioComparison(startDate, endDate, targetEmpId=null){
 }
 
 // Render Clio comparison for admins
-async function renderClioAdmin(){
-  const container = document.getElementById("Aclio-content");
-  if(!container) return;
-
-  // Check connection status
-  const connected = clioConnected();
-  const statusEl = document.getElementById("clio-status");
-  const btnEl = document.getElementById("clio-connect-btn");
-  if(statusEl){
-    statusEl.textContent = connected ? "✓ Connected to Clio" : "Not connected";
-    statusEl.style.color = connected ? "#16a34a" : "#dc2626";
-  }
-  if(btnEl){
-    btnEl.textContent = connected ? "Reconnect Clio" : "Connect to Clio";
-    btnEl.style.background = connected ? "#f0fdf4" : "#534AB7";
-    btnEl.style.color = connected ? "#16a34a" : "#fff";
-    btnEl.style.borderColor = connected ? "#86efac" : "#534AB7";
-  }
-
-  if(!connected){
-    document.getElementById("clio-table-wrap").innerHTML =
-      '<p style="font-size:13px;color:#888;padding:1rem">Connect to Clio above to see time comparisons.</p>';
+async function loadClioData(){
+  if(!clioConnected()){
+    alert("Please connect to Clio first.");
     return;
   }
-
-  // Get selected period
-  const sel = document.getElementById("clio-period");
+  const teamSel = document.getElementById("clio-team");
+  const perSel = document.getElementById("clio-period");
+  const selectedTeam = teamSel ? teamSel.value : "";
   const periods = getPayPeriods();
-  if(sel && !sel.children.length){
-    periods.forEach((p,i) => {
-      const o = document.createElement("option");
-      o.value = i; o.textContent = p.label;
-      sel.appendChild(o);
-    });
-  }
-  const periodIdx = parseInt((sel && sel.value) || 0);
+  const periodIdx = parseInt((perSel && perSel.value) || 0);
   const period = periods[periodIdx];
 
   showLoading("Comparing Clio vs TimeTrack hours...");
-  const data = await buildClioComparison(period.start, period.end);
+  const data = await buildClioComparison(period.start, period.end, null, selectedTeam);
   hideLoading();
 
+  renderClioTable(data);
+}
+
+function renderClioTable(data){
   const rows = data.map(d => {
     const diff = d.diff;
     const diffColor = Math.abs(diff) < 0.25 ? "#16a34a" : diff > 0 ? "#854d0e" : "#991b1b";
@@ -945,6 +926,72 @@ async function renderClioAdmin(){
     + "<td style='padding:8px 10px'>" + totClio.toFixed(1) + "h</td>"
     + "<td colspan='2' style='padding:8px 10px;color:" + totColor + "'>" + totDiff.toFixed(1) + "h difference firm-wide</td>"
     + "</tr></tfoot></table>";
+
+  document.getElementById("clio-table-wrap").innerHTML =
+    "<table>"
+    + "<thead><tr><th>Employee</th><th>Team</th><th>TimeTrack hrs</th><th>Clio hrs</th><th>Comparison</th><th>Status</th></tr></thead>"
+    + "<tbody>" + rows + "</tbody>"
+    + "<tfoot style='background:#f5f4f0;font-weight:700'>"
+    + "<tr><td colspan='2' style='padding:8px 10px'>Totals</td>"
+    + "<td style='padding:8px 10px'>" + totTT.toFixed(1) + "h</td>"
+    + "<td style='padding:8px 10px'>" + totClio.toFixed(1) + "h</td>"
+    + "<td colspan='2' style='padding:8px 10px;color:" + totColor + "'>" + totDiff.toFixed(1) + "h difference</td>"
+    + "</tr></tfoot></table>";
+}
+
+async function renderClioAdmin(){
+  const container = document.getElementById("Aclio-content");
+  if(!container) return;
+
+  // Check connection status
+  const connected = clioConnected();
+  const statusEl = document.getElementById("clio-status");
+  const btnEl = document.getElementById("clio-connect-btn");
+  if(statusEl){
+    statusEl.textContent = connected ? "✓ Connected to Clio" : "Not connected";
+    statusEl.style.color = connected ? "#16a34a" : "#dc2626";
+  }
+  if(btnEl){
+    btnEl.textContent = connected ? "Reconnect Clio" : "Connect to Clio";
+    btnEl.style.background = connected ? "#f0fdf4" : "#534AB7";
+    btnEl.style.color = connected ? "#16a34a" : "#fff";
+    btnEl.style.borderColor = connected ? "#86efac" : "#534AB7";
+  }
+
+  if(!connected){
+    document.getElementById("clio-table-wrap").innerHTML =
+      '<p style="font-size:13px;color:#888;padding:1rem">Connect to Clio above to see time comparisons.</p>';
+    return;
+  }
+
+  // Populate team dropdown from tracksClio employees
+  const teamSel = document.getElementById("clio-team");
+  if(teamSel && teamSel.children.length <= 1){
+    const teams = [...new Set(EMP.filter(e => e.tracksClio).map(e => e.team))].sort();
+    teams.forEach(t => {
+      const o = document.createElement("option");
+      o.value = t; o.textContent = t;
+      teamSel.appendChild(o);
+    });
+  }
+
+  // Show placeholder table with team filter applied but NO data fetched yet
+  document.getElementById("clio-table-wrap").innerHTML =
+    '<p style="font-size:13px;color:#888;padding:1.5rem;text-align:center">Select a team and pay period, then click <strong>▶ Load Clio Data</strong> to compare hours.</p>';
+
+  // Get selected period
+  const sel = document.getElementById("clio-period");
+  const periods = getPayPeriods();
+  if(sel && !sel.children.length){
+    periods.forEach((p,i) => {
+      const o = document.createElement("option");
+      o.value = i; o.textContent = p.label;
+      sel.appendChild(o);
+    });
+  }
+  // Data fetching moved to loadClioData() — triggered by button click
+
+  
 }
 
 // Render Clio comparison for individual employee
