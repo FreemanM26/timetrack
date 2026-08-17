@@ -680,10 +680,11 @@ async function fetchClioTimeEntries(startDate, endDate, clioUserIds){
       while(hasMore){
         try {
           const [rangeStart, rangeEnd] = dateRange.split("..");
+          // Don't send date filter to Clio — it causes pagination issues.
+          // We filter client-side after fetching.
           const data = await clioGet("/activities", {
             "fields": "id,date,quantity_in_hours,user{id,name,email},matter{id,display_number,description}",
             "type": "TimeEntry",
-            "date[]=": rangeStart + ".." + rangeEnd,
             "user_id": String(userId),
             "order": "date(desc)",
             "limit": 200,
@@ -704,11 +705,9 @@ async function fetchClioTimeEntries(startDate, endDate, clioUserIds){
             showLoading("Clio rate limit hit — waiting 25 seconds...");
             await delay(25000);
             try {
-              const [retryStart, retryEnd] = dateRange.split("..");
               const retryData = await clioGet("/activities", {
                 "fields": "id,date,quantity_in_hours,user{id,name,email},matter{id,display_number,description}",
                 "type": "TimeEntry",
-                "date[]=": retryStart + ".." + retryEnd,
                 "user_id": String(userId),
                 "order": "date(desc)",
                 "limit": 200,
