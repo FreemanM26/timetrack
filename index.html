@@ -489,8 +489,10 @@ tr:hover td{background:#fafaf8}
             </select>
             <select id="clio-period" onchange="renderClioAdmin()" class="fc" style="margin:0;width:auto;font-size:12px"></select>
             <button id="clio-connect-btn" class="btn bp" onclick="connectClio()" style="font-size:12px;padding:6px 14px">Connect to Clio</button>
-            <button class="btn" onclick="loadClioData()" style="font-size:12px;padding:6px 14px;background:#534AB7;color:#fff;border-color:#534AB7">▶ Load Clio Data</button>
+            <button class="btn" onclick="loadClioData()" style="font-size:12px;padding:6px 14px;background:#534AB7;color:#fff;border-color:#534AB7">▶ Load Data</button>
+            <button class="btn" onclick="syncClioNow()" style="font-size:12px;padding:6px 14px;background:#f0f9ff;color:#0369a1;border-color:#7dd3fc" title="Pull latest data from Clio (takes 5-10 min)">↻ Sync Now</button>
           </div>
+          <div id="clio-sync-status" style="font-size:11px;color:#888;padding:0 12px;margin-top:-8px;margin-bottom:8px"></div>
           <div id="Aclio-content">
             <div class="card" style="padding:0;overflow:hidden;overflow-x:auto">
               <div id="clio-table-wrap" style="padding:1rem">
@@ -784,8 +786,8 @@ async function buildClioComparison(startDate, endDate, targetEmpId=null, teamFil
     ? EMP.filter(e=>e.id===targetEmpId)
     : EMP.filter(e=>e.tracksClio && (!teamFilter || e.team === teamFilter));
 
-  // Fetch users first, then fetch time entries only for matched users
-  const clioUsers = await fetchClioUsers();
+  // Fetch users from Supabase (synced from Clio)
+  const clioUsers = await sbGet("clio_users", "select=*");
 
   // Find Clio user IDs for our tracked employees
   const trackedEmails = empsToShow.map(e => e.email.toLowerCase().trim()).filter(Boolean);
@@ -793,11 +795,28 @@ async function buildClioComparison(startDate, endDate, targetEmpId=null, teamFil
     u.email && trackedEmails.includes(u.email.toLowerCase().trim())
   );
   const clioUserIds = matchedClioUsers.map(u => u.id);
-  console.log("Fetching time for", clioUserIds.length, "matched Clio users");
+  console.log("Loading time for", clioUserIds.length, "matched Clio users from Supabase");
 
-  const clioEntries = clioUserIds.length > 0
-    ? await fetchClioTimeEntries(startDate, endDate, clioUserIds)
-    : [];
+  // Query time entries from Supabase for the date range and matched users
+  let clioEntries = [];
+  if(clioUserIds.length > 0){
+    const userIdsStr = clioUserIds.join(",");
+    const query = `select=*&clio_user_id=in.(${userIdsStr})&entry_date=gte.${startDate}&entry_date=lte.${endDate}`;
+    const rows = await sbGet("clio_time_entries", query);
+    // Reshape to match old format
+    clioEntries = rows.map(r => ({
+      id: r.id,
+      date: r.entry_date,
+      quantity_in_hours: r.quantity_in_hours,
+      user: { id: r.clio_user_id },
+      matter: {
+        id: r.matter_id,
+        display_number: r.matter_display_number,
+        description: r.matter_description
+      }
+    }));
+    console.log("Loaded", clioEntries.length, "entries from Supabase");
+  }
 
   // Match Clio users to TimeTrack employees by email or name
   const matchedUsers = [];
@@ -938,6 +957,68 @@ function renderClioTable(data){
     + "</tr></tfoot></table>";
 }
 
+
+async function syncClioNow(){
+  if(!clioConnected()){
+    alert("Please connect to Clio first before syncing.");
+    return;
+  }
+  if(!confirm("This will pull the latest data from Clio. It may take 5-10 minutes. Continue?")) return;
+
+  showLoading("Syncing Clio data — this may take several minutes...");
+  const statusEl = document.getElementById("clio-sync-status");
+  if(statusEl) statusEl.textContent = "Syncing in progress...";
+
+  try {
+    const resp = await fetch(SUPABASE_URL + "/functions/v1/clio-auth", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + SUPABASE_KEY
+      },
+      body: JSON.stringify({
+        action: "sync",
+        access_token: clioAccessToken
+      })
+    });
+
+    hideLoading();
+
+    if(resp.ok){
+      const result = await resp.json();
+      showToast("Sync complete! " + (result.users_synced || 0) + " users synced in " + result.duration_seconds + "s");
+      updateClioSyncStatus();
+      // Reload data
+      loadClioData();
+    } else {
+      const err = await resp.text();
+      alert("Sync failed: " + err);
+    }
+  } catch(err) {
+    hideLoading();
+    alert("Sync error: " + err.message);
+  }
+}
+
+async function updateClioSyncStatus(){
+  const statusEl = document.getElementById("clio-sync-status");
+  if(!statusEl) return;
+  try {
+    const settings = await sbGet("settings", "select=*&key=eq.clio_last_sync");
+    if(settings.length > 0 && settings[0].value){
+      const lastSync = new Date(settings[0].value);
+      const now = new Date();
+      const hoursAgo = Math.floor((now - lastSync) / (1000*60*60));
+      const label = hoursAgo < 1 ? "just now" : hoursAgo === 1 ? "1 hour ago" : hoursAgo + " hours ago";
+      statusEl.textContent = "Last synced: " + label + " (" + lastSync.toLocaleString() + ")";
+    } else {
+      statusEl.textContent = "Never synced — click ↻ Sync Now to pull Clio data";
+      statusEl.style.color = "#dc2626";
+    }
+  } catch(e){
+    console.error("Sync status error:", e);
+  }
+}
 async function renderClioAdmin(){
   const container = document.getElementById("Aclio-content");
   if(!container) return;
@@ -976,7 +1057,10 @@ async function renderClioAdmin(){
 
   // Show placeholder table with team filter applied but NO data fetched yet
   document.getElementById("clio-table-wrap").innerHTML =
-    '<p style="font-size:13px;color:#888;padding:1.5rem;text-align:center">Select a team and pay period, then click <strong>▶ Load Clio Data</strong> to compare hours.</p>';
+    '<p style="font-size:13px;color:#888;padding:1.5rem;text-align:center">Select a team and pay period, then click <strong>▶ Load Data</strong> to compare hours.</p>';
+
+  // Update sync status display
+  updateClioSyncStatus();
 
   // Get selected period
   const sel = document.getElementById("clio-period");
