@@ -132,6 +132,23 @@ tr:hover td{background:#fafaf8}
 .oc-avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin:0 auto 5px}
 .oc-team-pill{font-size:8px;font-weight:600;padding:1px 6px;border-radius:20px;display:inline-block}
 .oc-toggle{font-size:9px;color:#888;margin-top:3px;cursor:pointer}
+.notif-dot{position:relative}
+.notif-dot::after{content:attr(data-count);display:none;position:absolute;top:-6px;right:-10px;min-width:16px;height:16px;padding:0 4px;background:#dc2626;color:#fff;font-size:9px;font-weight:700;border-radius:99px;line-height:16px;text-align:center}
+.notif-dot.has-notif::after{display:block}
+.notif-banner{background:#fef3c7;border:1px solid #fde68a;border-radius:10px;padding:.65rem 1rem;display:flex;align-items:center;gap:8px;margin-bottom:1rem;font-size:13px;color:#854d0e;cursor:pointer;transition:background .15s}
+.notif-banner:hover{background:#fde68a}
+.req-card{background:#fff;border:1px solid #eee;border-radius:10px;padding:.85rem 1rem;margin-bottom:.6rem;transition:border-color .15s}
+.req-card:hover{border-color:#CECBF6}
+.req-header{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:.4rem}
+.req-subj{font-size:14px;font-weight:600;color:#1a1a1a}
+.req-meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:11px;color:#888}
+.req-desc{font-size:13px;color:#555;margin-top:.35rem;line-height:1.5}
+.b-open{background:#fef9c3;color:#854d0e}
+.b-inprog{background:#dbeafe;color:#1e40af}
+.b-resolved{background:#dcfce7;color:#166534}
+.b-low{background:#f0f0f0;color:#666}
+.b-normal{background:#dbeafe;color:#1e40af}
+.b-urgent{background:#fee2e2;color:#991b1b}
 @media(max-width:600px){.r2,.r3{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}}
 </style>
 </head>
@@ -172,6 +189,7 @@ tr:hover td{background:#fafaf8}
     <button class="nb" onclick="showTab('mypto',this)">🏖 My PTO</button>
     <button class="nb" onclick="showTab('mileage',this)">🚗 Mileage</button>
     <button class="nb" onclick="showTab('myclio',this)">⚖️ My Clio</button>
+    <button id="navreqs" class="nb notif-dot" data-count="0" onclick="showTab('requests',this)">🔧 Requests</button>
     <button id="navadmin" class="nb adm hidden" onclick="showTab('admin',this)">🛡 Admin</button>
     <button class="nb" onclick="showTab('orgchart',this)">🏢 Org Chart</button>
   </nav>
@@ -340,6 +358,7 @@ tr:hover td{background:#fafaf8}
           <button class="pt" onclick="aTab('emps',this)">Employees</button>
           <button class="pt" onclick="aTab('hols',this)">Holidays</button>
           <button class="pt" onclick="aTab('mileageadmin',this)">🚗 Mileage</button>
+          <button class="pt" onclick="aTab('requestsadmin',this)">🔧 Requests</button>
           <button class="pt" onclick="aTab('clio',this)">⚖️ Clio</button>
         </div>
 
@@ -474,6 +493,23 @@ tr:hover td{background:#fafaf8}
         </div>
 
 
+        <!-- Admin Requests -->
+        <div id="Arequestsadmin" class="hidden">
+          <div class="tb">
+            <select id="areq-status" onchange="renderAdminReqPanel()" class="fc" style="margin:0;width:auto">
+              <option value="">All statuses</option><option value="Open">Open</option><option value="In Progress">In Progress</option><option value="Resolved">Resolved</option>
+            </select>
+            <select id="areq-cat" onchange="renderAdminReqPanel()" class="fc" style="margin:0;width:auto">
+              <option value="">All categories</option><option value="Office Supplies">Office Supplies</option><option value="Facilities">Facilities</option><option value="Kitchen">Kitchen</option><option value="Clio">Clio</option><option value="Other">Other</option>
+            </select>
+            <select id="areq-pri" onchange="renderAdminReqPanel()" class="fc" style="margin:0;width:auto">
+              <option value="">All priorities</option><option value="Low">Low</option><option value="Normal">Normal</option><option value="Urgent">Urgent</option>
+            </select>
+            <input type="text" id="areq-search" class="fc" placeholder="Search employee or subject..." oninput="renderAdminReqPanel()" style="margin:0;flex:1;min-width:120px">
+          </div>
+          <div id="areq-list"></div>
+        </div>
+
         <!-- Admin Clio Comparison -->
         <div id="Aclio" class="hidden">
           <div class="card" style="padding:.75rem 1.25rem;display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:.75rem">
@@ -502,6 +538,85 @@ tr:hover td{background:#fafaf8}
           </div>
         </div>
 
+      </div>
+    </div>
+
+    <!-- REQUESTS -->
+    <div id="Trequests" class="hidden">
+      <div id="req-notif-banner" class="notif-banner hidden" onclick="showTab('requests',document.getElementById('navreqs'))">
+        <span style="font-size:16px">🔔</span>
+        <span id="req-notif-text">You have new notifications</span>
+        <button class="bsm" style="margin-left:auto" onclick="event.stopPropagation();dismissNotifications()">Dismiss</button>
+      </div>
+      <div class="metrics" id="req-metrics"></div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem">
+          <h3 style="margin:0">My requests</h3>
+          <button class="btn bp" onclick="openReqForm()">+ New request</button>
+        </div>
+        <div class="tb">
+          <select id="req-filter-status" onchange="renderMyRequests()" class="fc" style="margin:0;width:auto">
+            <option value="">All statuses</option><option value="Open">Open</option><option value="In Progress">In Progress</option><option value="Resolved">Resolved</option>
+          </select>
+          <select id="req-filter-cat" onchange="renderMyRequests()" class="fc" style="margin:0;width:auto">
+            <option value="">All categories</option><option value="Office Supplies">Office Supplies</option><option value="Facilities">Facilities</option><option value="Kitchen">Kitchen</option><option value="Clio">Clio</option><option value="Other">Other</option>
+          </select>
+        </div>
+        <div id="my-req-list"></div>
+      </div>
+      <div id="req-form" class="card hidden">
+        <h3 style="margin-bottom:.75rem">Submit a request</h3>
+        <div class="r2" style="margin-bottom:.75rem">
+          <div><div class="stl" style="margin-top:0">Category</div>
+            <select id="rf-cat" class="fc" style="margin:0;width:100%">
+              <option value="">— Select —</option>
+              <option value="Office Supplies">Office Supplies</option>
+              <option value="Facilities">Facilities</option>
+              <option value="Kitchen">Kitchen</option>
+              <option value="Clio">Clio</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div><div class="stl" style="margin-top:0">Priority</div>
+            <select id="rf-pri" class="fc" style="margin:0;width:100%">
+              <option value="Normal">Normal</option>
+              <option value="Low">Low</option>
+              <option value="Urgent">Urgent</option>
+            </select>
+          </div>
+        </div>
+        <div style="margin-bottom:.75rem">
+          <div class="stl" style="margin-top:0">Subject</div>
+          <input type="text" id="rf-subj" class="fc" placeholder="Brief summary of the issue" style="margin:0;width:100%">
+        </div>
+        <div style="margin-bottom:.75rem">
+          <div class="stl" style="margin-top:0">Description</div>
+          <textarea id="rf-desc" class="fc" rows="3" placeholder="Provide details — what's the issue, where is it, what do you need?" style="margin:0;width:100%;resize:vertical;font-family:inherit"></textarea>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button class="btn bp" onclick="submitRequest()">Submit request</button>
+          <button class="bsm" onclick="document.getElementById('req-form').classList.add('hidden')">Cancel</button>
+        </div>
+      </div>
+
+      <!-- Admin Requests Panel (only visible to request managers) -->
+      <div id="req-admin-panel" class="hidden" style="margin-top:1rem">
+        <div class="card" style="border-color:#CECBF6">
+          <div class="abar" style="margin-bottom:.75rem">🔧 Manage all requests</div>
+          <div class="tb">
+            <select id="req-admin-status" onchange="renderAdminRequests()" class="fc" style="margin:0;width:auto">
+              <option value="">All statuses</option><option value="Open">Open</option><option value="In Progress">In Progress</option><option value="Resolved">Resolved</option>
+            </select>
+            <select id="req-admin-cat" onchange="renderAdminRequests()" class="fc" style="margin:0;width:auto">
+              <option value="">All categories</option><option value="Office Supplies">Office Supplies</option><option value="Facilities">Facilities</option><option value="Kitchen">Kitchen</option><option value="Clio">Clio</option><option value="Other">Other</option>
+            </select>
+            <select id="req-admin-pri" onchange="renderAdminRequests()" class="fc" style="margin:0;width:auto">
+              <option value="">All priorities</option><option value="Low">Low</option><option value="Normal">Normal</option><option value="Urgent">Urgent</option>
+            </select>
+            <input type="text" id="req-admin-search" class="fc" placeholder="Search..." oninput="renderAdminRequests()" style="margin:0;flex:1;min-width:120px">
+          </div>
+          <div id="admin-req-list"></div>
+        </div>
       </div>
     </div>
 
@@ -1197,7 +1312,7 @@ async function loadAllData(){
   );
 
   try {
-    const [emps, ptoR, wfhR, entriesR, lunchR, holsR, mileageR, settingsR] = await Promise.race([
+    const [emps, ptoR, wfhR, entriesR, lunchR, holsR, mileageR, settingsR, reqsR, notifsR] = await Promise.race([
       Promise.all([
         sbGet("employees","select=*&order=id"),
         sbGet("pto_requests","select=*&order=id"),
@@ -1207,6 +1322,8 @@ async function loadAllData(){
         sbGet("holidays","select=*&order=holiday_date"),
         sbGet("mileage_requests","select=*&order=id"),
         sbGet("settings","select=*"),
+        sbGet("office_requests","select=*&order=id.desc").catch(()=>[]),
+        sbGet("notifications","select=*&order=id.desc").catch(()=>[]),
       ]),
       timeout
     ]);
@@ -1248,6 +1365,18 @@ async function loadAllData(){
       from: m.from_location, to: m.to_location,
       miles: parseFloat(m.miles), rate: parseFloat(m.rate),
       amount: parseFloat(m.amount), status: m.status, notes: m.notes||""
+    }));
+
+    REQUESTS = reqsR.map(r=>({
+      id: r.id, empId: r.emp_id, category: r.category, priority: r.priority||"Normal",
+      subject: r.subject, description: r.description||"", status: r.status||"Open",
+      resolvedBy: r.resolved_by, resolvedAt: r.resolved_at, adminNotes: r.admin_notes||"",
+      created: r.created_at
+    }));
+
+    NOTIFS = notifsR.map(n=>({
+      id: n.id, empId: n.emp_id, type: n.type, message: n.message,
+      refId: n.reference_id, read: n.is_read, created: n.created_at
     }));
 
     const rateSetting = settingsR.find(s=>s.key==="mileage_rate");
@@ -1937,6 +2066,12 @@ let HOLS=[
 
 let MILEAGE=[];
 let mileageRate=0.67; // IRS standard rate per mile (admin can update)
+let REQUESTS=[];
+let NOTIFS=[];
+let nR=1;
+
+// Request manager IDs — Mitchell Freeman, Julia Rohan, Mia Fenice
+const REQ_MANAGERS=[29,27,28];
 
 const ge=id=>EMP.find(e=>e.id===id);
 const ini=n=>n.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
@@ -2160,7 +2295,9 @@ function saveAndDownload(){
     {id:"oc-root",type:"inner"},{id:"lnerr",type:"text"},
     {id:"anniv-panel",type:"inner"},{id:"my-mileage-rows",type:"inner"},
     {id:"mileage-metrics",type:"inner"},{id:"admin-mileage-rows",type:"inner"},
-    {id:"whosin-grid",type:"inner"},
+    {id:"whosin-grid",type:"inner"},{id:"my-req-list",type:"inner"},
+    {id:"req-metrics",type:"inner"},{id:"admin-req-list",type:"inner"},
+    {id:"areq-list",type:"inner"},
   ];
   toClear.forEach(({id,type})=>{
     const el=clone.querySelector("#"+id);
@@ -2188,7 +2325,7 @@ function saveAndDownload(){
   if(appEl){appEl.className="hidden";}
 
   // Reset all tab panels to hidden
-  ["Tclock","Tcal","Twhosin","Tmypto","Tmileage","Tmyclio","Tadmin","Torgchart"].forEach(id=>{
+  ["Tclock","Tcal","Twhosin","Tmypto","Tmileage","Tmyclio","Trequests","Tadmin","Torgchart"].forEach(id=>{
     const el=clone.querySelector("#"+id);
     if(el)el.className="hidden";
   });
@@ -2233,6 +2370,8 @@ function saveAndDownload(){
   src=replaceBlock(src,"ENTRIES",ENTRIES);
   src=replaceBlock(src,"LUNCH",LUNCH);
   src=replaceBlock(src,"MILEAGE",MILEAGE);
+  src=replaceBlock(src,"REQUESTS",REQUESTS);
+  src=replaceBlock(src,"NOTIFS",NOTIFS);
 
   // Update counters
   src=src.replace(/let nP=\d+/,"let nP="+nP);
@@ -2241,6 +2380,7 @@ function saveAndDownload(){
   src=src.replace(/let nEn=\d+/,"let nEn="+nEn);
   src=src.replace(/let nL=\d+/,"let nL="+nL);
   src=src.replace(/let nM=\d+/,"let nM="+nM);
+  src=src.replace(/let nR=\d+/,"let nR="+nR);
   src=src.replace(/let mileageRate=[0-9.]+/,"let mileageRate="+mileageRate);
 
   const blob=new Blob([src],{type:"text/html"});
@@ -2281,6 +2421,7 @@ async function doLogin(){
   document.getElementById("abbadge").textContent=e.role==="admin"?"Admin":"Employee";
   document.getElementById("abbadge").className="badge "+(e.role==="admin"?"b-admin":"b-emp");
   document.getElementById("navadmin").classList.toggle("hidden",!isAdm());
+  updateNotifBadge();
   showTab("clock",document.querySelector(".nb.active"));
 }
 
@@ -2292,7 +2433,7 @@ function doLogout(){
 }
 
 function showTab(name,btn){
-  ["Tclock","Tcal","Twhosin","Tmypto","Tmileage","Tmyclio","Tadmin","Torgchart"].forEach(id=>document.getElementById(id).classList.add("hidden"));
+  ["Tclock","Tcal","Twhosin","Tmypto","Tmileage","Tmyclio","Trequests","Tadmin","Torgchart"].forEach(id=>document.getElementById(id).classList.add("hidden"));
   document.querySelectorAll(".nb").forEach(b=>b.classList.remove("active"));
   document.getElementById("T"+name).classList.remove("hidden");
   if(btn)btn.classList.add("active");
@@ -2302,6 +2443,7 @@ function showTab(name,btn){
   if(name==="mypto")renderMyPTO();
   if(name==="mileage"){renderMyMileage();}
   if(name==="myclio"){renderClioEmployee();}
+  if(name==="requests"){renderRequestsTab();}
   if(name==="orgchart"){initOrgChart();renderOrgChart();}
   if(name==="admin"){
     if(!isAdm()){document.getElementById("adminlock").classList.remove("hidden");document.getElementById("adminbody").classList.add("hidden")}
@@ -2568,7 +2710,7 @@ async function submitPTO(){
 
 function aTab(name,btn){
   document.querySelectorAll("#Tadmin .pt").forEach(b=>b.classList.remove("active"));btn.classList.add("active");
-  ["Aapprovals","Atimesheets","Awfh","Aemps","Ahols","Amileageadmin","Aclio"].forEach(id=>document.getElementById(id).classList.add("hidden"));
+  ["Aapprovals","Atimesheets","Awfh","Aemps","Ahols","Amileageadmin","Arequestsadmin","Aclio"].forEach(id=>document.getElementById(id).classList.add("hidden"));
   document.getElementById("A"+name).classList.remove("hidden");
   if(name==="approvals")renderApprovals();
   if(name==="timesheets")initTS();
@@ -2576,8 +2718,324 @@ function aTab(name,btn){
   if(name==="emps")renderEmps();
   if(name==="hols")renderHols();
   if(name==="mileageadmin")renderAdminMileage();
+  if(name==="requestsadmin")renderAdminReqPanel();
   if(name==="clio")renderClioAdmin();
   renderAnnivPanel();
+}
+
+// ---- REQUESTS & NOTIFICATIONS ----
+
+function isReqManager(){
+  return CU && REQ_MANAGERS.includes(CU.id);
+}
+
+function updateNotifBadge(){
+  if(!CU) return;
+  const unread = NOTIFS.filter(n=>n.empId===CU.id && !n.read).length;
+  const btn = document.getElementById("navreqs");
+  if(unread>0){
+    btn.classList.add("has-notif");
+    btn.setAttribute("data-count", unread);
+  } else {
+    btn.classList.remove("has-notif");
+    btn.setAttribute("data-count", "0");
+  }
+}
+
+function renderRequestsTab(){
+  if(!CU) return;
+  renderMyRequests();
+  renderReqNotifBanner();
+  // Show admin panel if user is a request manager
+  const adminPanel = document.getElementById("req-admin-panel");
+  if(isReqManager()){
+    adminPanel.classList.remove("hidden");
+    renderAdminRequests();
+  } else {
+    adminPanel.classList.add("hidden");
+  }
+}
+
+function renderReqNotifBanner(){
+  if(!CU) return;
+  const unread = NOTIFS.filter(n=>n.empId===CU.id && !n.read);
+  const banner = document.getElementById("req-notif-banner");
+  if(unread.length > 0){
+    banner.classList.remove("hidden");
+    const resolvedCount = unread.filter(n=>n.type==="request_resolved").length;
+    const newCount = unread.filter(n=>n.type==="new_request").length;
+    let text = "";
+    if(resolvedCount > 0 && newCount > 0){
+      text = resolvedCount + " request" + (resolvedCount>1?"s":"") + " resolved, " + newCount + " new request" + (newCount>1?"s":"");
+    } else if(resolvedCount > 0){
+      text = resolvedCount + " of your request" + (resolvedCount>1?"s have":" has") + " been resolved!";
+    } else {
+      text = newCount + " new request" + (newCount>1?"s":"") + " submitted";
+    }
+    document.getElementById("req-notif-text").textContent = "🔔 " + text;
+  } else {
+    banner.classList.add("hidden");
+  }
+}
+
+async function dismissNotifications(){
+  if(!CU) return;
+  const unread = NOTIFS.filter(n=>n.empId===CU.id && !n.read);
+  for(const n of unread){
+    n.read = true;
+    try { await sbPatch("notifications","id=eq."+n.id,{is_read:true}); } catch(e){ console.error(e); }
+  }
+  renderReqNotifBanner();
+  updateNotifBadge();
+}
+
+function renderMyRequests(){
+  if(!CU) return;
+  const statusF = document.getElementById("req-filter-status").value;
+  const catF = document.getElementById("req-filter-cat").value;
+  const myReqs = REQUESTS.filter(r=>{
+    if(r.empId !== CU.id) return false;
+    if(statusF && r.status !== statusF) return false;
+    if(catF && r.category !== catF) return false;
+    return true;
+  });
+
+  // Metrics
+  const allMine = REQUESTS.filter(r=>r.empId===CU.id);
+  const openCount = allMine.filter(r=>r.status==="Open").length;
+  const inProgCount = allMine.filter(r=>r.status==="In Progress").length;
+  const resolvedCount = allMine.filter(r=>r.status==="Resolved").length;
+  document.getElementById("req-metrics").innerHTML = `
+    <div class="metric"><div class="mlbl">Open</div><div class="mval" style="color:#854d0e">${openCount}</div></div>
+    <div class="metric"><div class="mlbl">In progress</div><div class="mval" style="color:#1e40af">${inProgCount}</div></div>
+    <div class="metric"><div class="mlbl">Resolved</div><div class="mval" style="color:#166534">${resolvedCount}</div></div>
+    <div class="metric"><div class="mlbl">Total</div><div class="mval">${allMine.length}</div></div>
+  `;
+
+  const catIcon = {"Office Supplies":"📦","Facilities":"🏢","Kitchen":"☕","Clio":"⚖️","Other":"📋"};
+  const priIcon = {"Low":"","Normal":"","Urgent":"🔴 "};
+
+  document.getElementById("my-req-list").innerHTML = myReqs.length ? myReqs.map(r=>{
+    const statusCls = r.status==="Open"?"b-open":r.status==="In Progress"?"b-inprog":"b-resolved";
+    const priCls = r.priority==="Low"?"b-low":r.priority==="Urgent"?"b-urgent":"b-normal";
+    const created = r.created ? new Date(r.created).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "";
+    const resolver = r.resolvedBy ? ge(r.resolvedBy) : null;
+    const resolvedDate = r.resolvedAt ? new Date(r.resolvedAt).toLocaleDateString("en-US",{month:"short",day:"numeric"}) : "";
+    return `<div class="req-card">
+      <div class="req-header">
+        <div class="req-subj">${catIcon[r.category]||"📋"} ${esc(r.subject)}</div>
+        <span class="badge ${statusCls}">${r.status}</span>
+      </div>
+      <div class="req-meta">
+        <span class="badge ${priCls}" style="font-size:10px">${priIcon[r.priority]||""}${r.priority}</span>
+        <span>${r.category}</span>
+        <span>·</span>
+        <span>${created}</span>
+      </div>
+      ${r.description ? `<div class="req-desc">${esc(r.description)}</div>` : ""}
+      ${r.status==="Resolved" && resolver ? `<div style="margin-top:.5rem;font-size:11px;color:#166534;background:#f0fdf4;padding:6px 10px;border-radius:6px">✅ Resolved by ${resolver.name} on ${resolvedDate}${r.adminNotes ? " — " + esc(r.adminNotes) : ""}</div>` : ""}
+      ${r.status==="In Progress" ? `<div style="margin-top:.5rem;font-size:11px;color:#1e40af;background:#eff6ff;padding:6px 10px;border-radius:6px">⏳ Being worked on${r.adminNotes ? " — " + esc(r.adminNotes) : ""}</div>` : ""}
+    </div>`;
+  }).join("") : `<div style="text-align:center;padding:2rem;color:#888;font-size:13px">No requests yet. Click <strong>+ New request</strong> to submit one.</div>`;
+}
+
+function esc(s){ const d=document.createElement("div"); d.textContent=s; return d.innerHTML; }
+
+function openReqForm(){
+  document.getElementById("req-form").classList.remove("hidden");
+  document.getElementById("rf-cat").value = "";
+  document.getElementById("rf-pri").value = "Normal";
+  document.getElementById("rf-subj").value = "";
+  document.getElementById("rf-desc").value = "";
+}
+
+async function submitRequest(){
+  const category = document.getElementById("rf-cat").value;
+  const priority = document.getElementById("rf-pri").value;
+  const subject = document.getElementById("rf-subj").value.trim();
+  const description = document.getElementById("rf-desc").value.trim();
+  if(!category){alert("Please select a category.");return}
+  if(!subject){alert("Please enter a subject.");return}
+
+  try {
+    const rows = await sbPost("office_requests",{
+      emp_id: CU.id, category, priority, subject, description, status:"Open"
+    });
+    const saved = rows[0];
+    REQUESTS.unshift({
+      id: saved.id, empId: CU.id, category, priority, subject, description,
+      status:"Open", resolvedBy:null, resolvedAt:null, adminNotes:"",
+      created: saved.created_at
+    });
+
+    // Create notifications for request managers
+    for(const mgrId of REQ_MANAGERS){
+      try {
+        const nRows = await sbPost("notifications",{
+          emp_id: mgrId, type:"new_request",
+          message: CU.name + " submitted a " + priority.toLowerCase() + " " + category + " request: " + subject,
+          reference_id: saved.id, is_read: false
+        });
+        const nSaved = nRows[0];
+        NOTIFS.unshift({
+          id: nSaved.id, empId: mgrId, type:"new_request",
+          message: CU.name + " submitted a " + priority.toLowerCase() + " " + category + " request: " + subject,
+          refId: saved.id, read: false, created: nSaved.created_at
+        });
+      } catch(e){ console.error("Notification error:",e); }
+    }
+
+    document.getElementById("req-form").classList.add("hidden");
+    updateNotifBadge();
+    renderRequestsTab();
+
+    // Show success feedback
+    const btn = event.currentTarget;
+    const orig = btn.textContent;
+    btn.textContent = "✓ Submitted!"; btn.style.background = "#dcfce7"; btn.style.borderColor = "#86efac"; btn.style.color = "#166534";
+    setTimeout(()=>{ btn.textContent = orig; btn.style.background = ""; btn.style.borderColor = ""; btn.style.color = ""; }, 1500);
+  } catch(e){
+    alert("Could not submit request. Please try again.");
+    console.error(e);
+  }
+}
+
+function renderAdminRequests(){
+  if(!CU) return;
+  const statusF = document.getElementById("req-admin-status").value;
+  const catF = document.getElementById("req-admin-cat").value;
+  const priF = document.getElementById("req-admin-pri").value;
+  const search = document.getElementById("req-admin-search").value.toLowerCase();
+
+  const reqs = REQUESTS.filter(r=>{
+    if(statusF && r.status !== statusF) return false;
+    if(catF && r.category !== catF) return false;
+    if(priF && r.priority !== priF) return false;
+    if(search){
+      const e = ge(r.empId);
+      const name = e ? e.name.toLowerCase() : "";
+      if(!name.includes(search) && !r.subject.toLowerCase().includes(search)) return false;
+    }
+    return true;
+  });
+
+  renderReqCards(reqs, "admin-req-list", true);
+}
+
+function renderAdminReqPanel(){
+  if(!CU) return;
+  const statusF = document.getElementById("areq-status").value;
+  const catF = document.getElementById("areq-cat").value;
+  const priF = document.getElementById("areq-pri").value;
+  const search = document.getElementById("areq-search").value.toLowerCase();
+
+  const reqs = REQUESTS.filter(r=>{
+    if(statusF && r.status !== statusF) return false;
+    if(catF && r.category !== catF) return false;
+    if(priF && r.priority !== priF) return false;
+    if(search){
+      const e = ge(r.empId);
+      const name = e ? e.name.toLowerCase() : "";
+      if(!name.includes(search) && !r.subject.toLowerCase().includes(search)) return false;
+    }
+    return true;
+  });
+
+  renderReqCards(reqs, "areq-list", true);
+}
+
+function renderReqCards(reqs, targetId, showAdmin){
+  const catIcon = {"Office Supplies":"📦","Facilities":"🏢","Kitchen":"☕","Clio":"⚖️","Other":"📋"};
+  const priIcon = {"Low":"","Normal":"","Urgent":"🔴 "};
+
+  document.getElementById(targetId).innerHTML = reqs.length ? reqs.map(r=>{
+    const e = ge(r.empId);
+    const statusCls = r.status==="Open"?"b-open":r.status==="In Progress"?"b-inprog":"b-resolved";
+    const priCls = r.priority==="Low"?"b-low":r.priority==="Urgent"?"b-urgent":"b-normal";
+    const created = r.created ? new Date(r.created).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "";
+    const resolver = r.resolvedBy ? ge(r.resolvedBy) : null;
+    const resolvedDate = r.resolvedAt ? new Date(r.resolvedAt).toLocaleDateString("en-US",{month:"short",day:"numeric"}) : "";
+
+    let adminActions = "";
+    if(showAdmin && r.status !== "Resolved"){
+      adminActions = `<div style="margin-top:.6rem;padding-top:.6rem;border-top:1px solid #f0f0f0;display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+        <input type="text" id="req-note-${r.id}" class="fc" placeholder="Add a note (optional)" style="margin:0;flex:1;min-width:120px;font-size:12px;padding:6px 10px">
+        ${r.status==="Open" ? `<button class="bsm" style="color:#1e40af;border-color:#93c5fd" onclick="updateReqStatus(${r.id},'In Progress')">▶ In Progress</button>` : ""}
+        <button class="bsm bapp" onclick="updateReqStatus(${r.id},'Resolved')">✓ Resolve</button>
+      </div>`;
+    }
+
+    return `<div class="req-card" ${r.priority==="Urgent"&&r.status!=="Resolved"?'style="border-left:3px solid #dc2626"':""}>
+      <div class="req-header">
+        <div>
+          <div class="req-subj">${catIcon[r.category]||"📋"} ${esc(r.subject)}</div>
+          <div class="req-meta" style="margin-top:3px">
+            <div class="er"><div class="av ${avc(r.empId)}" style="width:20px;height:20px;font-size:8px">${e?ini(e.name):"?"}</div>
+            <span style="font-weight:600">${e?e.name:"Unknown"}</span></div>
+            <span>·</span>
+            <span class="badge ${priCls}" style="font-size:10px">${priIcon[r.priority]||""}${r.priority}</span>
+            <span>${r.category}</span>
+            <span>·</span>
+            <span>${created}</span>
+          </div>
+        </div>
+        <span class="badge ${statusCls}">${r.status}</span>
+      </div>
+      ${r.description ? `<div class="req-desc">${esc(r.description)}</div>` : ""}
+      ${r.status==="Resolved" && resolver ? `<div style="margin-top:.5rem;font-size:11px;color:#166534;background:#f0fdf4;padding:6px 10px;border-radius:6px">✅ Resolved by ${resolver.name} on ${resolvedDate}${r.adminNotes ? " — " + esc(r.adminNotes) : ""}</div>` : ""}
+      ${adminActions}
+    </div>`;
+  }).join("") : `<div style="text-align:center;padding:2rem;color:#888;font-size:13px">No requests match your filters.</div>`;
+}
+
+async function updateReqStatus(reqId, newStatus){
+  const r = REQUESTS.find(x=>x.id===reqId);
+  if(!r) return;
+  const noteEl = document.getElementById("req-note-"+reqId);
+  const adminNotes = noteEl ? noteEl.value.trim() : "";
+
+  const patch = { status: newStatus, admin_notes: adminNotes || null };
+  if(newStatus === "Resolved"){
+    patch.resolved_by = CU.id;
+    patch.resolved_at = new Date().toISOString();
+  }
+
+  try {
+    await sbPatch("office_requests","id=eq."+reqId, patch);
+    r.status = newStatus;
+    r.adminNotes = adminNotes;
+    if(newStatus === "Resolved"){
+      r.resolvedBy = CU.id;
+      r.resolvedAt = new Date().toISOString();
+    }
+
+    // Notify the requestor when resolved
+    if(newStatus === "Resolved"){
+      try {
+        const nRows = await sbPost("notifications",{
+          emp_id: r.empId, type: "request_resolved",
+          message: "Your " + r.category + " request has been resolved: " + r.subject,
+          reference_id: r.id, is_read: false
+        });
+        const nSaved = nRows[0];
+        NOTIFS.unshift({
+          id: nSaved.id, empId: r.empId, type: "request_resolved",
+          message: "Your " + r.category + " request has been resolved: " + r.subject,
+          refId: r.id, read: false, created: nSaved.created_at
+        });
+      } catch(e){ console.error("Notification error:", e); }
+    }
+
+    renderRequestsTab();
+    // Also re-render admin panel if visible
+    if(document.getElementById("Arequestsadmin") && !document.getElementById("Arequestsadmin").classList.contains("hidden")){
+      renderAdminReqPanel();
+    }
+    updateNotifBadge();
+  } catch(e){
+    alert("Could not update request. Please try again.");
+    console.error(e);
+  }
 }
 
 // ---- WHO'S IN ----
@@ -3182,7 +3640,8 @@ if(window.location.protocol === 'file:'){
 (function cleanStale(){
   const toClear=["calhdrs","caldays","cal-team-grid","tclog","tcweek",
     "ptometrics","myrows","approws","tsrows","wfhrows","emprows","holrows",
-    "oc-root","anniv-panel","my-mileage-rows","mileage-metrics","admin-mileage-rows","whosin-grid"];
+    "oc-root","anniv-panel","my-mileage-rows","mileage-metrics","admin-mileage-rows","whosin-grid",
+    "my-req-list","req-metrics","admin-req-list","areq-list"];
   toClear.forEach(id=>{const el=document.getElementById(id);if(el)el.innerHTML="";});
   const callbl=document.getElementById("callbl");if(callbl)callbl.textContent="";
   const tcsince=document.getElementById("tcsince");if(tcsince)tcsince.textContent="";
