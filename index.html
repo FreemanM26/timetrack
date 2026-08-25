@@ -143,6 +143,19 @@ tr:hover td{background:#fafaf8}
 .req-subj{font-size:14px;font-weight:600;color:#1a1a1a}
 .req-meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:11px;color:#888}
 .req-desc{font-size:13px;color:#555;margin-top:.35rem;line-height:1.5}
+.req-attach{margin-top:.5rem;display:flex;flex-wrap:wrap;gap:.5rem}
+.req-img{max-width:280px;max-height:200px;border-radius:8px;border:1px solid #eee;cursor:pointer;transition:transform .15s}
+.req-img:hover{transform:scale(1.02)}
+.req-link{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:#534AB7;text-decoration:none;background:#EEEDFE;padding:4px 10px;border-radius:6px;word-break:break-all}
+.req-link:hover{background:#CECBF6}
+.file-upload-area{border:2px dashed #ddd;border-radius:10px;padding:1.25rem;text-align:center;cursor:pointer;transition:border-color .15s,background .15s;margin:0}
+.file-upload-area:hover,.file-upload-area.dragover{border-color:#534AB7;background:#EEEDFE}
+.file-upload-area input[type=file]{display:none}
+.file-preview{position:relative;display:inline-block;margin-top:.5rem}
+.file-preview img{max-width:200px;max-height:140px;border-radius:8px;border:1px solid #eee}
+.file-preview .remove-img{position:absolute;top:-6px;right:-6px;width:20px;height:20px;background:#dc2626;color:#fff;border:none;border-radius:50%;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
+.img-modal{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:999;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:1rem}
+.img-modal img{max-width:90vw;max-height:90vh;border-radius:8px}
 .b-open{background:#fef9c3;color:#854d0e}
 .b-inprog{background:#dbeafe;color:#1e40af}
 .b-resolved{background:#dcfce7;color:#166534}
@@ -592,6 +605,20 @@ tr:hover td{background:#fafaf8}
         <div style="margin-bottom:.75rem">
           <div class="stl" style="margin-top:0">Description</div>
           <textarea id="rf-desc" class="fc" rows="3" placeholder="Provide details — what's the issue, where is it, what do you need?" style="margin:0;width:100%;resize:vertical;font-family:inherit"></textarea>
+        </div>
+        <div class="r2" style="margin-bottom:.75rem">
+          <div>
+            <div class="stl" style="margin-top:0">Link <span style="font-weight:400;text-transform:none">(optional)</span></div>
+            <input type="url" id="rf-link" class="fc" placeholder="https://..." style="margin:0;width:100%">
+          </div>
+          <div>
+            <div class="stl" style="margin-top:0">Screenshot <span style="font-weight:400;text-transform:none">(optional)</span></div>
+            <div class="file-upload-area" id="rf-upload-area" onclick="document.getElementById('rf-file').click()" ondragover="event.preventDefault();this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="event.preventDefault();this.classList.remove('dragover');handleFileDrop(event)">
+              <input type="file" id="rf-file" accept="image/*" onchange="handleFileSelect(event)">
+              <div style="font-size:12px;color:#888">📷 Click or drag an image here</div>
+            </div>
+            <div id="rf-file-preview" class="file-preview hidden"></div>
+          </div>
         </div>
         <div style="display:flex;gap:8px">
           <button class="btn bp" onclick="submitRequest()">Submit request</button>
@@ -1371,6 +1398,7 @@ async function loadAllData(){
       id: r.id, empId: r.emp_id, category: r.category, priority: r.priority||"Normal",
       subject: r.subject, description: r.description||"", status: r.status||"Open",
       resolvedBy: r.resolved_by, resolvedAt: r.resolved_at, adminNotes: r.admin_notes||"",
+      linkUrl: r.link_url||"", imageData: r.image_data||"",
       created: r.created_at
     }));
 
@@ -2069,6 +2097,7 @@ let mileageRate=0.67; // IRS standard rate per mile (admin can update)
 let REQUESTS=[];
 let NOTIFS=[];
 let nR=1;
+let pendingFile=null; // holds base64 screenshot data before submit
 
 // Request manager IDs — Mitchell Freeman, Julia Rohan, Mia Fenice
 const REQ_MANAGERS=[29,27,28];
@@ -2833,6 +2862,8 @@ function renderMyRequests(){
         <span>${created}</span>
       </div>
       ${r.description ? `<div class="req-desc">${esc(r.description)}</div>` : ""}
+      ${r.linkUrl ? `<div style="margin-top:.5rem"><a href="${esc(r.linkUrl)}" target="_blank" rel="noopener" class="req-link">🔗 ${esc(r.linkUrl.length>50 ? r.linkUrl.slice(0,50)+"…" : r.linkUrl)}</a></div>` : ""}
+      ${r.imageData ? `<div style="margin-top:.5rem"><img src="${r.imageData}" alt="Screenshot" style="max-width:280px;max-height:180px;border-radius:8px;border:1px solid #eee;cursor:pointer" onclick="openImgModal(this.src)"><div style="font-size:10px;color:#888;margin-top:2px">Click to enlarge</div></div>` : ""}
       ${r.status==="Resolved" && resolver ? `<div style="margin-top:.5rem;font-size:11px;color:#166534;background:#f0fdf4;padding:6px 10px;border-radius:6px">✅ Resolved by ${resolver.name} on ${resolvedDate}${r.adminNotes ? " — " + esc(r.adminNotes) : ""}</div>` : ""}
       ${r.status==="In Progress" ? `<div style="margin-top:.5rem;font-size:11px;color:#1e40af;background:#eff6ff;padding:6px 10px;border-radius:6px">⏳ Being worked on${r.adminNotes ? " — " + esc(r.adminNotes) : ""}</div>` : ""}
     </div>`;
@@ -2847,6 +2878,52 @@ function openReqForm(){
   document.getElementById("rf-pri").value = "Normal";
   document.getElementById("rf-subj").value = "";
   document.getElementById("rf-desc").value = "";
+  document.getElementById("rf-link").value = "";
+  document.getElementById("rf-file").value = "";
+  document.getElementById("rf-file-preview").classList.add("hidden");
+  document.getElementById("rf-file-preview").innerHTML = "";
+  document.getElementById("rf-upload-area").style.display = "";
+  pendingFile = null;
+}
+
+function handleFileSelect(evt){
+  const file = evt.target.files[0];
+  if(file) processFile(file);
+}
+
+function handleFileDrop(evt){
+  const file = evt.dataTransfer.files[0];
+  if(file) processFile(file);
+}
+
+function processFile(file){
+  if(!file.type.startsWith("image/")){alert("Please select an image file.");return}
+  if(file.size > 4 * 1024 * 1024){alert("Image must be under 4 MB.");return}
+  const reader = new FileReader();
+  reader.onload = function(e){
+    pendingFile = e.target.result; // full data URL (base64)
+    const preview = document.getElementById("rf-file-preview");
+    preview.innerHTML = `<img src="${pendingFile}" alt="Screenshot preview"><button class="remove-img" onclick="removeFile()" title="Remove">✕</button>`;
+    preview.classList.remove("hidden");
+    document.getElementById("rf-upload-area").style.display = "none";
+  };
+  reader.readAsDataURL(file);
+}
+
+function removeFile(){
+  pendingFile = null;
+  document.getElementById("rf-file").value = "";
+  document.getElementById("rf-file-preview").classList.add("hidden");
+  document.getElementById("rf-file-preview").innerHTML = "";
+  document.getElementById("rf-upload-area").style.display = "";
+}
+
+function openImgModal(src){
+  const modal = document.createElement("div");
+  modal.className = "img-modal";
+  modal.onclick = function(){ document.body.removeChild(modal); };
+  modal.innerHTML = `<img src="${src}" alt="Screenshot">`;
+  document.body.appendChild(modal);
 }
 
 async function submitRequest(){
@@ -2854,19 +2931,23 @@ async function submitRequest(){
   const priority = document.getElementById("rf-pri").value;
   const subject = document.getElementById("rf-subj").value.trim();
   const description = document.getElementById("rf-desc").value.trim();
+  const linkUrl = document.getElementById("rf-link").value.trim();
+  const imageData = pendingFile || "";
   if(!category){alert("Please select a category.");return}
   if(!subject){alert("Please enter a subject.");return}
 
   try {
-    const rows = await sbPost("office_requests",{
-      emp_id: CU.id, category, priority, subject, description, status:"Open"
-    });
+    const postBody = { emp_id: CU.id, category, priority, subject, description, status:"Open" };
+    if(linkUrl) postBody.link_url = linkUrl;
+    if(imageData) postBody.image_data = imageData;
+    const rows = await sbPost("office_requests", postBody);
     const saved = rows[0];
     REQUESTS.unshift({
       id: saved.id, empId: CU.id, category, priority, subject, description,
       status:"Open", resolvedBy:null, resolvedAt:null, adminNotes:"",
-      created: saved.created_at
+      linkUrl, imageData, created: saved.created_at
     });
+    pendingFile = null;
 
     // Create notifications for request managers
     for(const mgrId of REQ_MANAGERS){
@@ -2982,6 +3063,8 @@ function renderReqCards(reqs, targetId, showAdmin){
         <span class="badge ${statusCls}">${r.status}</span>
       </div>
       ${r.description ? `<div class="req-desc">${esc(r.description)}</div>` : ""}
+      ${r.linkUrl ? `<div style="margin-top:.5rem"><a href="${esc(r.linkUrl)}" target="_blank" rel="noopener" class="req-link">🔗 ${esc(r.linkUrl.length>50 ? r.linkUrl.slice(0,50)+"…" : r.linkUrl)}</a></div>` : ""}
+      ${r.imageData ? `<div style="margin-top:.5rem"><img src="${r.imageData}" alt="Screenshot" style="max-width:280px;max-height:180px;border-radius:8px;border:1px solid #eee;cursor:pointer" onclick="openImgModal(this.src)"><div style="font-size:10px;color:#888;margin-top:2px">Click to enlarge</div></div>` : ""}
       ${r.status==="Resolved" && resolver ? `<div style="margin-top:.5rem;font-size:11px;color:#166534;background:#f0fdf4;padding:6px 10px;border-radius:6px">✅ Resolved by ${resolver.name} on ${resolvedDate}${r.adminNotes ? " — " + esc(r.adminNotes) : ""}</div>` : ""}
       ${adminActions}
     </div>`;
