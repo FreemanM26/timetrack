@@ -316,8 +316,14 @@ tr:hover td{background:#fafaf8}
         <h3 style="margin-bottom:.75rem">Log a trip</h3>
         <div class="r3" style="margin-bottom:.75rem">
           <div><div class="stl" style="margin-top:0">Date</div><input type="date" id="mf-date" class="fc" style="margin:0;width:100%"></div>
-          <div><div class="stl" style="margin-top:0">Starting location</div><input type="text" id="mf-from" class="fc" placeholder="e.g. Office, 123 Main St" style="margin:0;width:100%"></div>
-          <div><div class="stl" style="margin-top:0">Ending location</div><input type="text" id="mf-to" class="fc" placeholder="e.g. Courthouse, 456 Oak Ave" style="margin:0;width:100%"></div>
+          <div><div class="stl" style="margin-top:0">Starting location</div><input type="text" id="mf-from" class="fc" placeholder="Start typing an address..." style="margin:0;width:100%" autocomplete="off"></div>
+          <div><div class="stl" style="margin-top:0">Ending location</div><input type="text" id="mf-to" class="fc" placeholder="Start typing an address..." style="margin:0;width:100%" autocomplete="off"></div>
+        </div>
+        <div style="margin-bottom:.75rem">
+          <button type="button" id="mf-calc-btn" class="btn" onclick="calculateMileage()" style="font-size:13px;padding:7px 16px;background:#EEEDFE;color:#534AB7;border:1px solid #d5d3f0;width:100%">📍 Calculate driving distance</button>
+          <div id="mf-calc-status" style="font-size:12px;color:#888;margin-top:4px;text-align:center;display:none"></div>
+        </div>
+        <div class="r3" style="margin-bottom:.75rem">
           <div><div class="stl" style="margin-top:0">Miles driven</div><input type="number" id="mf-miles" class="fc" placeholder="0.0" min="0" step="0.1" style="margin:0;width:100%" oninput="updateMileagePreview()"></div>
           <div><div class="stl" style="margin-top:0">Reimbursement</div>
             <div id="mf-preview" style="padding:9px 12px;background:#f5f4f0;border-radius:8px;font-size:14px;font-weight:700;color:#166534">$0.00</div>
@@ -3241,6 +3247,95 @@ function submitMileage(){
   renderMyMileage();
 }
 
+// ---- GOOGLE MAPS MILEAGE INTEGRATION ----
+var mapsReady=false;
+function initGoogleMaps(){
+  mapsReady=true;
+  try{
+    var fromInput=document.getElementById("mf-from");
+    var toInput=document.getElementById("mf-to");
+    if(!fromInput||!toInput)return;
+    var opts={componentRestrictions:{country:"us"}};
+    var acFrom=new google.maps.places.Autocomplete(fromInput,opts);
+    var acTo=new google.maps.places.Autocomplete(toInput,opts);
+    acFrom.setFields(["formatted_address"]);
+    acTo.setFields(["formatted_address"]);
+    acFrom.addListener("place_changed",function(){
+      var p=acFrom.getPlace();
+      if(p&&p.formatted_address)fromInput.value=p.formatted_address;
+      autoCalcIfReady();
+    });
+    acTo.addListener("place_changed",function(){
+      var p=acTo.getPlace();
+      if(p&&p.formatted_address)toInput.value=p.formatted_address;
+      autoCalcIfReady();
+    });
+  }catch(e){console.log("Places autocomplete not available:",e.message);}
+}
+
+function autoCalcIfReady(){
+  var f=document.getElementById("mf-from").value.trim();
+  var t=document.getElementById("mf-to").value.trim();
+  if(f&&t&&f.length>5&&t.length>5)calculateMileage();
+}
+
+function calculateMileage(){
+  var fromVal=document.getElementById("mf-from").value.trim();
+  var toVal=document.getElementById("mf-to").value.trim();
+  var statusEl=document.getElementById("mf-calc-status");
+  var calcBtn=document.getElementById("mf-calc-btn");
+  if(!fromVal||!toVal){
+    statusEl.textContent="Please enter both locations first.";
+    statusEl.style.display="block";statusEl.style.color="#dc2626";
+    return;
+  }
+  if(!mapsReady||typeof google==="undefined"||!google.maps){
+    statusEl.textContent="Google Maps is still loading — try again in a moment.";
+    statusEl.style.display="block";statusEl.style.color="#854d0e";
+    return;
+  }
+  calcBtn.disabled=true;
+  calcBtn.textContent="Calculating...";
+  calcBtn.style.opacity="0.6";
+  statusEl.style.display="none";
+  var svc=new google.maps.DistanceMatrixService();
+  svc.getDistanceMatrix({
+    origins:[fromVal],
+    destinations:[toVal],
+    travelMode:google.maps.TravelMode.DRIVING,
+    unitSystem:google.maps.UnitSystem.IMPERIAL
+  },function(resp,status){
+    calcBtn.disabled=false;
+    calcBtn.style.opacity="1";
+    if(status!=="OK"){
+      calcBtn.textContent="📍 Calculate driving distance";
+      statusEl.textContent="Distance lookup failed — you can enter miles manually.";
+      statusEl.style.display="block";statusEl.style.color="#dc2626";
+      return;
+    }
+    var el=resp.rows[0]&&resp.rows[0].elements[0];
+    if(!el||el.status!=="OK"){
+      calcBtn.textContent="📍 Calculate driving distance";
+      statusEl.textContent="Could not find a route between those locations. Check the addresses and try again, or enter miles manually.";
+      statusEl.style.display="block";statusEl.style.color="#dc2626";
+      return;
+    }
+    var meters=el.distance.value;
+    var miles=Math.round((meters/1609.344)*10)/10;
+    document.getElementById("mf-miles").value=miles.toFixed(1);
+    updateMileagePreview();
+    var duration=el.duration.text;
+    calcBtn.textContent="✓ " + miles.toFixed(1) + " miles calculated";
+    calcBtn.style.background="#dcfce7";calcBtn.style.color="#166534";calcBtn.style.borderColor="#bbf7d0";
+    statusEl.textContent="Driving distance: "+el.distance.text+" (approx. "+duration+"). You can adjust the miles if needed.";
+    statusEl.style.display="block";statusEl.style.color="#166534";
+    setTimeout(function(){
+      calcBtn.textContent="📍 Recalculate driving distance";
+      calcBtn.style.background="#EEEDFE";calcBtn.style.color="#534AB7";calcBtn.style.borderColor="#d5d3f0";
+    },3000);
+  });
+}
+
 function renderAdminMileage(){
   const f=document.getElementById("am-filter").value;
   const s=document.getElementById("am-search").value.toLowerCase();
@@ -3738,4 +3833,5 @@ if(window.location.protocol === 'file:'){
 
 
 
+<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3BEAA-4tORFIQ9GjefOO3FCBsCAc6YCk&libraries=places&callback=initGoogleMaps"></script>
 </body></html>
