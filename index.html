@@ -2,178 +2,363 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TimeTrack</title>
+<script>
+(function(){var t=null;try{t=localStorage.getItem("tt-theme")}catch(e){}
+if(!t){t=(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light"}
+document.documentElement.setAttribute("data-theme",t);})();
+</script>
 <style>
+:root{
+  --c0369a1:#0369a1;
+  --c085041:#085041;
+  --c0891b2:#0891b2;
+  --c0c447c:#0c447c;
+  --c0e7490:#0e7490;
+  --c14532d:#14532d;
+  --c166534:#166534;
+  --c16a34a:#16a34a;
+  --c1a1a1a:#1a1a1a;
+  --c1e3a8a:#1e3a8a;
+  --c1e40af:#1e40af;
+  --c3c3489:#3c3489;
+  --c451a03:#451a03;
+  --c534ab7:#534ab7;
+  --c555555:#555555;
+  --c633806:#633806;
+  --c666666:#666666;
+  --c6b7280:#6b7280;
+  --c6d28d9:#6d28d9;
+  --c712b13:#712b13;
+  --c78350f:#78350f;
+  --c7c2d12:#7c2d12;
+  --c7c3aed:#7c3aed;
+  --c7dd3fc:#7dd3fc;
+  --c831843:#831843;
+  --c854d0e:#854d0e;
+  --c86efac:#86efac;
+  --c888888:#888888;
+  --c92400e:#92400e;
+  --c93c5fd:#93c5fd;
+  --c991b1b:#991b1b;
+  --c9a3412:#9a3412;
+  --caaaaaa:#aaaaaa;
+  --cbbf7d0:#bbf7d0;
+  --cbfdbfe:#bfdbfe;
+  --ccccccc:#cccccc;
+  --ccecbf6:#cecbf6;
+  --ccffafe:#cffafe;
+  --cd1d5db:#d1d5db;
+  --cd5d3f0:#d5d3f0;
+  --cdbeafe:#dbeafe;
+  --cdc2626:#dc2626;
+  --cdcfce7:#dcfce7;
+  --cdddddd:#dddddd;
+  --ce1f5ee:#e1f5ee;
+  --ce5e5e5:#e5e5e5;
+  --ce6f1fb:#e6f1fb;
+  --cede9fe:#ede9fe;
+  --ceeedfe:#eeedfe;
+  --ceeeeee:#eeeeee;
+  --ceff6ff:#eff6ff;
+  --cf0abda:#f0abda;
+  --cf0f0f0:#f0f0f0;
+  --cf0f9ff:#f0f9ff;
+  --cf0fdf4:#f0fdf4;
+  --cf3f4f6:#f3f4f6;
+  --cf5f4f0:#f5f4f0;
+  --cf9fafb:#f9fafb;
+  --cfaece7:#faece7;
+  --cfaeeda:#faeeda;
+  --cfafaf8:#fafaf8;
+  --cfca5a5:#fca5a5;
+  --cfce7f3:#fce7f3;
+  --cfde68a:#fde68a;
+  --cfdf2f8:#fdf2f8;
+  --cfed7aa:#fed7aa;
+  --cfee2e2:#fee2e2;
+  --cfef3c7:#fef3c7;
+  --cfef9c3:#fef9c3;
+  --cffedd5:#ffedd5;
+  --cfffbeb:#fffbeb;
+  --cffffff:#ffffff;
+  --accent-hover:#3c3489;
+  --overlay:rgba(245,244,240,.95);
+  --glass:rgba(255,255,255,.6);
+  --shadow:rgba(0,0,0,.08);
+  color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --c0369a1:#7cc4f0;
+  --c085041:#7fdcc0;
+  --c0891b2:#2bb9d6;
+  --c0c447c:#94c3f0;
+  --c0e7490:#7fd9ea;
+  --c14532d:#9be8b6;
+  --c166534:#74d99b;
+  --c16a34a:#2fb866;
+  --c1a1a1a:#e9e9ee;
+  --c1e3a8a:#a9c3f8;
+  --c1e40af:#93b4f6;
+  --c3c3489:#c3bdf7;
+  --c451a03:#fde68a;
+  --c534ab7:#7a71e0;
+  --c555555:#b6b7c0;
+  --c633806:#eec27f;
+  --c666666:#b0b1ba;
+  --c6b7280:#a4a5ae;
+  --c6d28d9:#c4b1fc;
+  --c712b13:#f4b095;
+  --c78350f:#f0c374;
+  --c7c2d12:#f7b485;
+  --c7c3aed:#a58bfa;
+  --c7dd3fc:#2b6a8b;
+  --c831843:#f2a3cb;
+  --c854d0e:#e3b653;
+  --c86efac:#2f7a4a;
+  --c888888:#9a9ba5;
+  --c92400e:#d69a52;
+  --c93c5fd:#2f5590;
+  --c991b1b:#f19c9c;
+  --c9a3412:#f5a56d;
+  --caaaaaa:#767781;
+  --cbbf7d0:#1d4c32;
+  --cbfdbfe:#21406e;
+  --ccccccc:#4a4b54;
+  --ccecbf6:#4c4696;
+  --ccffafe:#133b43;
+  --cd1d5db:#555660;
+  --cd5d3f0:#4c4696;
+  --cdbeafe:#1b2c4e;
+  --cdc2626:#e5534f;
+  --cdcfce7:#17392a;
+  --cdddddd:#3b3c44;
+  --ce1f5ee:#16362b;
+  --ce5e5e5:#35363e;
+  --ce6f1fb:#182d43;
+  --cede9fe:#2e2452;
+  --ceeedfe:#2b2852;
+  --ceeeeee:#2c2d34;
+  --ceff6ff:#17243b;
+  --cf0abda:#8b3b6b;
+  --cf0f0f0:#2a2b32;
+  --cf0f9ff:#15293a;
+  --cf0fdf4:#16301f;
+  --cf3f4f6:#2a2b32;
+  --cf5f4f0:#131418;
+  --cf9fafb:#22232a;
+  --cfaece7:#3a2319;
+  --cfaeeda:#3a2c16;
+  --cfafaf8:#22232a;
+  --cfca5a5:#8b3b3b;
+  --cfce7f3:#3f1d31;
+  --cfde68a:#4a3b12;
+  --cfdf2f8:#331b29;
+  --cfed7aa:#4f3016;
+  --cfee2e2:#421d1d;
+  --cfef3c7:#3a3011;
+  --cfef9c3:#38320f;
+  --cffedd5:#3d2716;
+  --cfffbeb:#2c2714;
+  --cffffff:#1d1e24;
+  --accent-hover:#5d54c9;
+  --overlay:rgba(19,20,24,.95);
+  --glass:rgba(0,0,0,.28);
+  --shadow:rgba(0,0,0,.5);
+  color-scheme:dark;
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f4f0;color:#1a1a1a;font-size:14px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--cf5f4f0);color:var(--c1a1a1a);font-size:14px}
 .hidden{display:none!important}
 #login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1rem}
-.login-box{background:#fff;border-radius:16px;padding:2rem;width:100%;max-width:360px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
-.logo{width:52px;height:52px;background:#EEEDFE;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:28px}
+.login-box{background:var(--cffffff);border-radius:16px;padding:2rem;width:100%;max-width:360px;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.logo{width:52px;height:52px;background:var(--ceeedfe);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:28px}
 .login-title{text-align:center;font-size:22px;font-weight:700;margin-bottom:.25rem}
-.login-sub{text-align:center;font-size:13px;color:#888;margin-bottom:1.5rem}
-.lbl{display:block;font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
-.fc{width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:8px;font-size:14px;margin-bottom:1rem;outline:none;font-family:inherit;background:#fff;color:#1a1a1a}
-.fc:focus{border-color:#534AB7}
-.btn-login{width:100%;padding:11px;background:#534AB7;border:none;border-radius:8px;color:#fff;font-size:14px;font-weight:600;cursor:pointer}
-.btn-login:hover{background:#3C3489}
-.lerr{color:#dc2626;font-size:12px;text-align:center;margin-top:.5rem;min-height:18px}
-.lhint{margin-top:1rem;padding-top:1rem;border-top:1px solid #eee;font-size:11px;color:#aaa;text-align:center;line-height:1.8}
+.login-sub{text-align:center;font-size:13px;color:var(--c888888);margin-bottom:1.5rem}
+.lbl{display:block;font-size:11px;font-weight:600;color:var(--c888888);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
+.fc{width:100%;padding:9px 12px;border:1px solid var(--cdddddd);border-radius:8px;font-size:14px;margin-bottom:1rem;outline:none;font-family:inherit;background:var(--cffffff);color:var(--c1a1a1a)}
+.fc:focus{border-color:var(--c534ab7)}
+.btn-login{width:100%;padding:11px;background:var(--c534ab7);border:none;border-radius:8px;color:white;font-size:14px;font-weight:600;cursor:pointer}
+.btn-login:hover{background:var(--accent-hover)}
+.lerr{color:var(--cdc2626);font-size:12px;text-align:center;margin-top:.5rem;min-height:18px}
+.lhint{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--ceeeeee);font-size:11px;color:var(--caaaaaa);text-align:center;line-height:1.8}
 #app-screen{min-height:100vh;display:flex;flex-direction:column}
-.app-bar{background:#fff;border-bottom:1px solid #eee;padding:.65rem 1.25rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap;position:sticky;top:0;z-index:50}
-.app-logo{width:34px;height:34px;background:#EEEDFE;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.app-bar{background:var(--cffffff);border-bottom:1px solid var(--ceeeeee);padding:.65rem 1.25rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap;position:sticky;top:0;z-index:50}
+.app-logo{width:34px;height:34px;background:var(--ceeedfe);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .ab-name{font-size:14px;font-weight:700}
-.ab-sub{font-size:11px;color:#888}
+.ab-sub{font-size:11px;color:var(--c888888)}
 .badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:600}
-.b-admin{background:#EEEDFE;color:#3C3489}
-.b-emp{background:#f0f0f0;color:#666}
-.b-pto{background:#dbeafe;color:#1e40af}
-.b-wfh{background:#dcfce7;color:#166534}
-.b-hol{background:#ffedd5;color:#9a3412}
-.b-pend{background:#fef9c3;color:#854d0e}
-.b-appr{background:#dcfce7;color:#166534}
-.b-deni{background:#fee2e2;color:#991b1b}
-.b-lunch{background:#fde68a;color:#78350f}
-.b-anniv{background:#fce7f3;color:#831843}
-.btn-so{margin-left:auto;padding:6px 12px;font-size:12px;border:1px solid #ddd;border-radius:7px;background:#fff;color:#666;cursor:pointer}
-.btn-so:hover{background:#f5f4f0}
-.nav{background:#fff;border-bottom:1px solid #eee;padding:.5rem 1.25rem;display:flex;gap:4px;flex-wrap:wrap}
-.nb{padding:6px 13px;border:1px solid transparent;border-radius:7px;background:transparent;color:#666;font-size:13px;cursor:pointer;font-family:inherit}
-.nb:hover{background:#f5f4f0}
-.nb.active{background:#EEEDFE;color:#3C3489;border-color:#CECBF6;font-weight:600}
-.nb.adm{border-color:#CECBF6;color:#534AB7}
-.nb.adm.active{background:#EEEDFE}
+.b-admin{background:var(--ceeedfe);color:var(--c3c3489)}
+.b-emp{background:var(--cf0f0f0);color:var(--c666666)}
+.b-pto{background:var(--cdbeafe);color:var(--c1e40af)}
+.b-wfh{background:var(--cdcfce7);color:var(--c166534)}
+.b-hol{background:var(--cffedd5);color:var(--c9a3412)}
+.b-pend{background:var(--cfef9c3);color:var(--c854d0e)}
+.b-appr{background:var(--cdcfce7);color:var(--c166534)}
+.b-deni{background:var(--cfee2e2);color:var(--c991b1b)}
+.b-lunch{background:var(--cfde68a);color:var(--c78350f)}
+.b-anniv{background:var(--cfce7f3);color:var(--c831843)}
+.btn-theme{margin-left:auto;padding:6px 10px;font-size:12px;border:1px solid var(--cdddddd);border-radius:7px;background:var(--cffffff);color:var(--c666666);cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:5px}
+.btn-theme:hover{background:var(--cf5f4f0)}
+.btn-theme:focus-visible,.btn-so:focus-visible,.nb:focus-visible{outline:2px solid var(--c534ab7);outline-offset:2px}
+.login-theme{position:fixed;top:14px;right:14px;margin:0}
+.btn-so{padding:6px 12px;font-size:12px;border:1px solid var(--cdddddd);border-radius:7px;background:var(--cffffff);color:var(--c666666);cursor:pointer}
+.btn-so:hover{background:var(--cf5f4f0)}
+.nav{background:var(--cffffff);border-bottom:1px solid var(--ceeeeee);padding:.5rem 1.25rem;display:flex;gap:4px;flex-wrap:wrap}
+.nb{padding:6px 13px;border:1px solid transparent;border-radius:7px;background:transparent;color:var(--c666666);font-size:13px;cursor:pointer;font-family:inherit}
+.nb:hover{background:var(--cf5f4f0)}
+.nb.active{background:var(--ceeedfe);color:var(--c3c3489);border-color:var(--ccecbf6);font-weight:600}
+.nb.adm{border-color:var(--ccecbf6);color:var(--c534ab7)}
+.nb.adm.active{background:var(--ceeedfe)}
 .main{padding:1.25rem;max-width:1100px;margin:0 auto;width:100%}
-.card{background:#fff;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem;border:1px solid #eee}
+.card{background:var(--cffffff);border-radius:12px;padding:1rem 1.25rem;margin-bottom:1rem;border:1px solid var(--ceeeeee)}
 .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-bottom:1.25rem}
-.metric{background:#f5f4f0;border-radius:10px;padding:.8rem 1rem}
-.mlbl{font-size:11px;color:#888;margin-bottom:3px;font-weight:500}
+.metric{background:var(--cf5f4f0);border-radius:10px;padding:.8rem 1rem}
+.mlbl{font-size:11px;color:var(--c888888);margin-bottom:3px;font-weight:500}
 .mval{font-size:22px;font-weight:700}
 .r2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 .r3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem}
-.stl{font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.5px;margin:.75rem 0 .4rem}
+.stl{font-size:11px;font-weight:600;color:var(--c888888);text-transform:uppercase;letter-spacing:.5px;margin:.75rem 0 .4rem}
 h3{font-size:15px;font-weight:700;margin-bottom:.5rem}
 table{width:100%;border-collapse:collapse;font-size:13px}
-th{text-align:left;padding:8px 10px;font-weight:600;font-size:11px;color:#888;border-bottom:1px solid #f0f0f0}
-td{padding:8px 10px;border-bottom:1px solid #f5f4f0;vertical-align:middle}
+th{text-align:left;padding:8px 10px;font-weight:600;font-size:11px;color:var(--c888888);border-bottom:1px solid var(--cf0f0f0)}
+td{padding:8px 10px;border-bottom:1px solid var(--cf5f4f0);vertical-align:middle}
 tr:last-child td{border-bottom:none}
-tr:hover td{background:#fafaf8}
+tr:hover td{background:var(--cfafaf8)}
 .av{width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
-.av0{background:#EEEDFE;color:#3C3489}.av1{background:#E1F5EE;color:#085041}
-.av2{background:#FAECE7;color:#712B13}.av3{background:#E6F1FB;color:#0C447C}.av4{background:#FAEEDA;color:#633806}
+.av0{background:var(--ceeedfe);color:var(--c3c3489)}.av1{background:var(--ce1f5ee);color:var(--c085041)}
+.av2{background:var(--cfaece7);color:var(--c712b13)}.av3{background:var(--ce6f1fb);color:var(--c0c447c)}.av4{background:var(--cfaeeda);color:var(--c633806)}
 .er{display:flex;align-items:center;gap:8px}
-.btn{padding:7px 14px;background:#fff;border:1px solid #ccc;border-radius:8px;color:#1a1a1a;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;font-family:inherit}
-.btn:hover{background:#f5f4f0}
-.bp{background:#534AB7;border-color:#534AB7;color:#fff}
-.bp:hover{background:#3C3489;border-color:#3C3489}
-.bsm{padding:4px 9px;font-size:11px;border:1px solid #ddd;border-radius:6px;background:#fff;color:#666;cursor:pointer;font-family:inherit}
-.bsm:hover{background:#f5f4f0}
-.bapp{color:#166534;border-color:#86efac}
-.bdny{color:#991b1b;border-color:#fca5a5}
+.btn{padding:7px 14px;background:var(--cffffff);border:1px solid var(--ccccccc);border-radius:8px;color:var(--c1a1a1a);font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;font-family:inherit}
+.btn:hover{background:var(--cf5f4f0)}
+.bp{background:var(--c534ab7);border-color:var(--c534ab7);color:white}
+.bp:hover{background:var(--accent-hover);border-color:var(--accent-hover)}
+.bsm{padding:4px 9px;font-size:11px;border:1px solid var(--cdddddd);border-radius:6px;background:var(--cffffff);color:var(--c666666);cursor:pointer;font-family:inherit}
+.bsm:hover{background:var(--cf5f4f0)}
+.bapp{color:var(--c166534);border-color:var(--c86efac)}
+.bdny{color:var(--c991b1b);border-color:var(--cfca5a5)}
 .tb{display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap;align-items:center}
-.cring{width:144px;height:144px;border-radius:50%;border:3px solid #e5e5e5;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 1rem;transition:border-color .3s,box-shadow .3s}
-.cring.on{border-color:#16a34a;box-shadow:0 0 0 8px #dcfce7}
+.cring{width:144px;height:144px;border-radius:50%;border:3px solid var(--ce5e5e5);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 1rem;transition:border-color .3s,box-shadow .3s}
+.cring.on{border-color:var(--c16a34a);box-shadow:0 0 0 8px var(--cdcfce7)}
 .cdigs{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-1px}
-.csub{font-size:11px;color:#888;margin-top:2px}
+.csub{font-size:11px;color:var(--c888888);margin-top:2px}
 .spill{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:20px;font-size:12px;font-weight:600;margin-bottom:.75rem}
-.sin{background:#dcfce7;color:#166534}
-.sout{background:#f0f0f0;color:#666}
+.sin{background:var(--cdcfce7);color:var(--c166534)}
+.sout{background:var(--cf0f0f0);color:var(--c666666)}
 .dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex-shrink:0}
 .cg{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
-.ch{text-align:center;font-size:10px;font-weight:600;color:#888;padding:4px 0}
-.cd{min-height:60px;border:1px solid #f0f0f0;border-radius:8px;padding:3px;cursor:pointer;background:#fff;transition:background .1s}
-.cd:hover{background:#f5f4f0}
+.ch{text-align:center;font-size:10px;font-weight:600;color:var(--c888888);padding:4px 0}
+.cd{min-height:60px;border:1px solid var(--cf0f0f0);border-radius:8px;padding:3px;cursor:pointer;background:var(--cffffff);transition:background .1s}
+.cd:hover{background:var(--cf5f4f0)}
 .cd.oth{opacity:.3}
-.cd.tod{border-color:#534AB7;background:#EEEDFE}
-.cd.wkn{background:#fafaf8}
-.cdn{font-size:10px;font-weight:600;color:#888;margin-bottom:2px}
+.cd.tod{border-color:var(--c534ab7);background:var(--ceeedfe)}
+.cd.wkn{background:var(--cfafaf8)}
+.cdn{font-size:10px;font-weight:600;color:var(--c888888);margin-bottom:2px}
 .ev{font-size:8px;padding:1px 3px;border-radius:3px;margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.5}
-.ep{background:#bfdbfe;color:#1e3a8a}
-.ew{background:#bbf7d0;color:#14532d}
-.eh{background:#fed7aa;color:#7c2d12}
-.el{background:#fde68a;color:#78350f}
-.ea{background:#fce7f3;color:#831843}
+.ep{background:var(--cbfdbfe);color:var(--c1e3a8a)}
+.ew{background:var(--cbbf7d0);color:var(--c14532d)}
+.eh{background:var(--cfed7aa);color:var(--c7c2d12)}
+.el{background:var(--cfde68a);color:var(--c78350f)}
+.ea{background:var(--cfce7f3);color:var(--c831843)}
 .cnav{display:flex;align-items:center;gap:10px;margin-bottom:.75rem;flex-wrap:wrap}
 .mlb{font-size:15px;font-weight:700;min-width:130px;text-align:center}
-.cdet{display:none;background:#f5f4f0;border-radius:12px;padding:.85rem 1rem;margin-top:.6rem}
+.cdet{display:none;background:var(--cf5f4f0);border-radius:12px;padding:.85rem 1rem;margin-top:.6rem}
 .cdet.open{display:block}
-.abar{background:#EEEDFE;border-radius:8px;padding:7px 12px;display:flex;align-items:center;gap:8px;font-size:12px;color:#3C3489;font-weight:600;margin-bottom:1rem}
-.ptabs{display:flex;gap:3px;background:#f0f0f0;padding:3px;border-radius:10px;width:fit-content;margin-bottom:1rem;flex-wrap:wrap}
-.pt{padding:5px 12px;border-radius:8px;font-size:12px;cursor:pointer;color:#666;border:none;background:transparent;font-family:inherit}
-.pt.active{background:#fff;color:#1a1a1a;font-weight:600;border:1px solid #e5e5e5}
+.abar{background:var(--ceeedfe);border-radius:8px;padding:7px 12px;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--c3c3489);font-weight:600;margin-bottom:1rem}
+.ptabs{display:flex;gap:3px;background:var(--cf0f0f0);padding:3px;border-radius:10px;width:fit-content;margin-bottom:1rem;flex-wrap:wrap}
+.pt{padding:5px 12px;border-radius:8px;font-size:12px;cursor:pointer;color:var(--c666666);border:none;background:transparent;font-family:inherit}
+.pt.active{background:var(--cffffff);color:var(--c1a1a1a);font-weight:600;border:1px solid var(--ce5e5e5)}
 .lock{text-align:center;padding:3rem 1rem}
-.pbb{height:5px;background:#eee;border-radius:3px;width:55px;display:inline-block;vertical-align:middle}
-.pbf{height:5px;border-radius:3px;background:#16a34a}
-.pbl{background:#dc2626}
+.pbb{height:5px;background:var(--ceeeeee);border-radius:3px;width:55px;display:inline-block;vertical-align:middle}
+.pbf{height:5px;border-radius:3px;background:var(--c16a34a)}
+.pbl{background:var(--cdc2626)}
 /* Who's In */
-.wi-card{background:#fff;border-radius:12px;border:1px solid #eee;overflow:hidden}
+.wi-card{background:var(--cffffff);border-radius:12px;border:1px solid var(--ceeeeee);overflow:hidden}
 .wi-team-header{padding:10px 14px;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:space-between}
 .wi-team-count{font-size:11px;font-weight:400;opacity:.7}
-.wi-member{display:flex;align-items:center;gap:10px;padding:7px 14px;border-top:1px solid #f5f4f0;transition:background .1s}
-.wi-member:hover{background:#fafaf8}
+.wi-member{display:flex;align-items:center;gap:10px;padding:7px 14px;border-top:1px solid var(--cf5f4f0);transition:background .1s}
+.wi-member:hover{background:var(--cfafaf8)}
 .wi-status-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
-.wi-dot-in{background:#16a34a}
-.wi-dot-lunch{background:#92400e}
-.wi-dot-wfh{background:#0891b2}
-.wi-dot-pto{background:#7c3aed}
-.wi-dot-out{background:#d1d5db}
-.wi-name{font-size:13px;color:#1a1a1a;flex:1}
+.wi-dot-in{background:var(--c16a34a)}
+.wi-dot-lunch{background:var(--c92400e)}
+.wi-dot-wfh{background:var(--c0891b2)}
+.wi-dot-pto{background:var(--c7c3aed)}
+.wi-dot-out{background:var(--cd1d5db)}
+.wi-name{font-size:13px;color:var(--c1a1a1a);flex:1}
 .wi-status-lbl{font-size:11px;font-weight:500;padding:2px 8px;border-radius:20px}
-.wi-lbl-in{background:#dcfce7;color:#166534}
-.wi-lbl-lunch{background:#fde68a;color:#78350f}
-.wi-lbl-wfh{background:#cffafe;color:#0e7490}
-.wi-lbl-pto{background:#ede9fe;color:#6d28d9}
-.wi-lbl-out{background:#f3f4f6;color:#6b7280}
-.wi-since{font-size:10px;color:#aaa;margin-left:4px}
+.wi-lbl-in{background:var(--cdcfce7);color:var(--c166534)}
+.wi-lbl-lunch{background:var(--cfde68a);color:var(--c78350f)}
+.wi-lbl-wfh{background:var(--ccffafe);color:var(--c0e7490)}
+.wi-lbl-pto{background:var(--cede9fe);color:var(--c6d28d9)}
+.wi-lbl-out{background:var(--cf3f4f6);color:var(--c6b7280)}
+.wi-since{font-size:10px;color:var(--caaaaaa);margin-left:4px}
 /* Org Chart */
-.oc-card{background:#fff;border:1.5px solid #e5e5e5;border-radius:10px;padding:10px 12px;text-align:center;transition:box-shadow .15s,transform .15s;user-select:none;box-sizing:border-box}
+.oc-card{background:var(--cffffff);border:1.5px solid var(--ce5e5e5);border-radius:10px;padding:10px 12px;text-align:center;transition:box-shadow .15s,transform .15s;user-select:none;box-sizing:border-box}
 .oc-card:hover{box-shadow:0 4px 12px rgba(0,0,0,.1);transform:translateY(-1px)}
-.oc-name{font-size:11px;font-weight:700;color:#1a1a1a;margin-bottom:2px;line-height:1.3;word-break:break-word}
-.oc-title{font-size:9px;color:#888;margin-bottom:5px;line-height:1.3;min-height:12px}
+.oc-name{font-size:11px;font-weight:700;color:var(--c1a1a1a);margin-bottom:2px;line-height:1.3;word-break:break-word}
+.oc-title{font-size:9px;color:var(--c888888);margin-bottom:5px;line-height:1.3;min-height:12px}
 .oc-avatar{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin:0 auto 5px}
 .oc-team-pill{font-size:8px;font-weight:600;padding:1px 6px;border-radius:20px;display:inline-block}
-.oc-toggle{font-size:9px;color:#888;margin-top:3px;cursor:pointer}
+.oc-toggle{font-size:9px;color:var(--c888888);margin-top:3px;cursor:pointer}
 .notif-dot{position:relative}
-.notif-dot::after{content:attr(data-count);display:none;position:absolute;top:-6px;right:-10px;min-width:16px;height:16px;padding:0 4px;background:#dc2626;color:#fff;font-size:9px;font-weight:700;border-radius:99px;line-height:16px;text-align:center}
+.notif-dot::after{content:attr(data-count);display:none;position:absolute;top:-6px;right:-10px;min-width:16px;height:16px;padding:0 4px;background:var(--cdc2626);color:white;font-size:9px;font-weight:700;border-radius:99px;line-height:16px;text-align:center}
 .notif-dot.has-notif::after{display:block}
-.notif-banner{background:#fef3c7;border:1px solid #fde68a;border-radius:10px;padding:.65rem 1rem;display:flex;align-items:center;gap:8px;margin-bottom:1rem;font-size:13px;color:#854d0e;cursor:pointer;transition:background .15s}
-.notif-banner:hover{background:#fde68a}
-.req-card{background:#fff;border:1px solid #eee;border-radius:10px;padding:.85rem 1rem;margin-bottom:.6rem;transition:border-color .15s}
-.req-card:hover{border-color:#CECBF6}
+.notif-banner{background:var(--cfef3c7);border:1px solid var(--cfde68a);border-radius:10px;padding:.65rem 1rem;display:flex;align-items:center;gap:8px;margin-bottom:1rem;font-size:13px;color:var(--c854d0e);cursor:pointer;transition:background .15s}
+.notif-banner:hover{background:var(--cfde68a)}
+.req-card{background:var(--cffffff);border:1px solid var(--ceeeeee);border-radius:10px;padding:.85rem 1rem;margin-bottom:.6rem;transition:border-color .15s}
+.req-card:hover{border-color:var(--ccecbf6)}
 .req-header{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:.4rem}
-.req-subj{font-size:14px;font-weight:600;color:#1a1a1a}
-.req-meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:11px;color:#888}
-.req-desc{font-size:13px;color:#555;margin-top:.35rem;line-height:1.5}
+.req-subj{font-size:14px;font-weight:600;color:var(--c1a1a1a)}
+.req-meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:11px;color:var(--c888888)}
+.req-desc{font-size:13px;color:var(--c555555);margin-top:.35rem;line-height:1.5}
 .req-attach{margin-top:.5rem;display:flex;flex-wrap:wrap;gap:.5rem}
-.req-img{max-width:280px;max-height:200px;border-radius:8px;border:1px solid #eee;cursor:pointer;transition:transform .15s}
+.req-img{max-width:280px;max-height:200px;border-radius:8px;border:1px solid var(--ceeeeee);cursor:pointer;transition:transform .15s}
 .req-img:hover{transform:scale(1.02)}
-.req-link{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:#534AB7;text-decoration:none;background:#EEEDFE;padding:4px 10px;border-radius:6px;word-break:break-all}
-.req-link:hover{background:#CECBF6}
-.file-upload-area{border:2px dashed #ddd;border-radius:10px;padding:1.25rem;text-align:center;cursor:pointer;transition:border-color .15s,background .15s;margin:0}
-.file-upload-area:hover,.file-upload-area.dragover{border-color:#534AB7;background:#EEEDFE}
+.req-link{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--c534ab7);text-decoration:none;background:var(--ceeedfe);padding:4px 10px;border-radius:6px;word-break:break-all}
+.req-link:hover{background:var(--ccecbf6)}
+.file-upload-area{border:2px dashed var(--cdddddd);border-radius:10px;padding:1.25rem;text-align:center;cursor:pointer;transition:border-color .15s,background .15s;margin:0}
+.file-upload-area:hover,.file-upload-area.dragover{border-color:var(--c534ab7);background:var(--ceeedfe)}
 .file-upload-area input[type=file]{display:none}
 .file-preview{position:relative;display:inline-block;margin-top:.5rem}
-.file-preview img{max-width:200px;max-height:140px;border-radius:8px;border:1px solid #eee}
-.file-preview .remove-img{position:absolute;top:-6px;right:-6px;width:20px;height:20px;background:#dc2626;color:#fff;border:none;border-radius:50%;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
+.file-preview img{max-width:200px;max-height:140px;border-radius:8px;border:1px solid var(--ceeeeee)}
+.file-preview .remove-img{position:absolute;top:-6px;right:-6px;width:20px;height:20px;background:var(--cdc2626);color:white;border:none;border-radius:50%;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
 .img-modal{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:999;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:1rem}
 .img-modal img{max-width:90vw;max-height:90vh;border-radius:8px}
-.b-open{background:#fef9c3;color:#854d0e}
-.b-inprog{background:#dbeafe;color:#1e40af}
-.b-resolved{background:#dcfce7;color:#166534}
-.b-low{background:#f0f0f0;color:#666}
-.b-normal{background:#dbeafe;color:#1e40af}
-.b-urgent{background:#fee2e2;color:#991b1b}
+.b-open{background:var(--cfef9c3);color:var(--c854d0e)}
+.b-inprog{background:var(--cdbeafe);color:var(--c1e40af)}
+.b-resolved{background:var(--cdcfce7);color:var(--c166534)}
+.b-low{background:var(--cf0f0f0);color:var(--c666666)}
+.b-normal{background:var(--cdbeafe);color:var(--c1e40af)}
+.b-urgent{background:var(--cfee2e2);color:var(--c991b1b)}
+:root[data-theme="dark"] .pac-container{background:#1d1e24;border:1px solid #35363e;box-shadow:0 4px 12px rgba(0,0,0,.5)}
+:root[data-theme="dark"] .pac-item{border-top-color:#2c2d34;color:#9a9ba5}
+:root[data-theme="dark"] .pac-item:hover,:root[data-theme="dark"] .pac-item-selected{background:#2a2b32}
+:root[data-theme="dark"] .pac-item-query{color:#e9e9ee}
+/* Documents */
+.doc-layout{display:grid;grid-template-columns:230px 1fr;gap:1rem;align-items:start}
+.doc-folder{display:flex;align-items:center;gap:8px;width:100%;padding:7px 10px;border:1px solid transparent;border-radius:8px;background:transparent;color:var(--c1a1a1a);font-size:13px;cursor:pointer;text-align:left;font-family:inherit}
+.doc-folder:hover{background:var(--cf5f4f0)}
+.doc-folder.active{background:var(--ceeedfe);color:var(--c3c3489);border-color:var(--ccecbf6);font-weight:600}
+.doc-folder .dcount{margin-left:auto;font-size:11px;color:var(--c888888);font-weight:400}
+.doc-drop{outline:2px dashed var(--c534ab7);outline-offset:-6px}
+.doc-name{display:flex;align-items:center;gap:8px;min-width:0}
+.doc-name span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.doc-ico{width:30px;height:30px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;flex-shrink:0;letter-spacing:.3px}
+.doc-actions{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.doc-empty{text-align:center;padding:2.5rem 1rem;color:var(--c888888);font-size:13px}
+@media(max-width:760px){.doc-layout{grid-template-columns:1fr}}
 @media(max-width:600px){.r2,.r3{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
 
-<div id="loading-overlay" style="position:fixed;inset:0;background:rgba(245,244,240,.95);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem">
-  <div style="width:48px;height:48px;border:3px solid #EEEDFE;border-top-color:#534AB7;border-radius:50%;animation:spin .8s linear infinite"></div>
-  <div id="loading-msg" style="font-size:14px;font-weight:500;color:#534AB7">Loading...</div>
+<div id="loading-overlay" style="position:fixed;inset:0;background:var(--overlay);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem">
+  <div style="width:48px;height:48px;border:3px solid var(--ceeedfe);border-top-color:var(--c534ab7);border-radius:50%;animation:spin .8s linear infinite"></div>
+  <div id="loading-msg" style="font-size:14px;font-weight:500;color:var(--c534ab7)">Loading...</div>
 </div>
 <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
 
 <div id="login-screen" class="">
+  <button class="btn-theme login-theme" onclick="toggleTheme()" title="Switch between light and dark mode"><span class="theme-ico"></span><span class="theme-lbl"></span></button>
   <div class="login-box">
     <div class="logo">🕐</div>
     <div class="login-title">TimeTrack</div>
@@ -193,6 +378,7 @@ tr:hover td{background:#fafaf8}
     <div class="app-logo">🕐</div>
     <div><div class="ab-name" id="abname"></div><div class="ab-sub" id="absub"></div></div>
     <span id="abbadge" class="badge"></span>
+    <button class="btn-theme" onclick="toggleTheme()" title="Switch between light and dark mode"><span class="theme-ico"></span><span class="theme-lbl"></span></button>
     <button class="btn-so" onclick="doLogout()">Sign out</button>
   </div>
   <nav class="nav">
@@ -203,6 +389,7 @@ tr:hover td{background:#fafaf8}
     <button class="nb" onclick="showTab('mileage',this)">🚗 Mileage</button>
     <button class="nb" onclick="showTab('myclio',this)">⚖️ My Clio</button>
     <button id="navreqs" class="nb notif-dot" data-count="0" onclick="showTab('requests',this)">🔧 Requests</button>
+    <button class="nb" onclick="showTab('docs',this)">📁 Documents</button>
     <button id="navadmin" class="nb adm hidden" onclick="showTab('admin',this)">🛡 Admin</button>
     <button class="nb" onclick="showTab('orgchart',this)">🏢 Org Chart</button>
   </nav>
@@ -218,10 +405,10 @@ tr:hover td{background:#fafaf8}
             <div class="csub">elapsed</div>
           </div>
           <div><span id="tcpill" class="spill sout"><span class="dot"></span> Clocked out</span></div>
-          <div style="font-size:12px;color:#888;margin-bottom:.75rem;min-height:16px" id="tcsince"></div>
+          <div style="font-size:12px;color:var(--c888888);margin-bottom:.75rem;min-height:16px" id="tcsince"></div>
           <button id="tcbtn" class="btn bp" style="width:100%;justify-content:center;padding:11px;font-size:14px" onclick="toggleClock()">▶ Clock In</button>
-          <button id="lunchbtn" class="btn hidden" style="width:100%;justify-content:center;padding:9px;font-size:13px;margin-top:8px;color:#78350f;border-color:#fde68a;background:#fffbeb" onclick="toggleLunch()">🍽 Start Lunch</button>
-          <div style="margin-top:.6rem;font-size:12px;color:#888" id="tctotal"></div>
+          <button id="lunchbtn" class="btn hidden" style="width:100%;justify-content:center;padding:9px;font-size:13px;margin-top:8px;color:var(--c78350f);border-color:var(--cfde68a);background:var(--cfffbeb)" onclick="toggleLunch()">🍽 Start Lunch</button>
+          <div style="margin-top:.6rem;font-size:12px;color:var(--c888888)" id="tctotal"></div>
         </div>
         <div class="card">
           <h3>Today's entries</h3>
@@ -240,11 +427,11 @@ tr:hover td{background:#fafaf8}
           <span class="mlb" id="callbl"></span>
           <button class="bsm" onclick="chMo(1)">›</button>
           <div style="margin-left:auto;display:flex;gap:10px;font-size:11px;align-items:center;flex-wrap:wrap">
-            <span><span style="display:inline-block;width:9px;height:9px;background:#bfdbfe;border-radius:2px;vertical-align:middle"></span> PTO</span>
-            <span><span style="display:inline-block;width:9px;height:9px;background:#bbf7d0;border-radius:2px;vertical-align:middle"></span> WFH</span>
-            <span><span style="display:inline-block;width:9px;height:9px;background:#fed7aa;border-radius:2px;vertical-align:middle"></span> Holiday</span>
-            <span><span style="display:inline-block;width:9px;height:9px;background:#fde68a;border-radius:2px;vertical-align:middle"></span> On Lunch (live)</span>
-            <span><span style="display:inline-block;width:9px;height:9px;background:#fce7f3;border-radius:2px;vertical-align:middle"></span> Anniversary 🎂</span>
+            <span><span style="display:inline-block;width:9px;height:9px;background:var(--cbfdbfe);border-radius:2px;vertical-align:middle"></span> PTO</span>
+            <span><span style="display:inline-block;width:9px;height:9px;background:var(--cbbf7d0);border-radius:2px;vertical-align:middle"></span> WFH</span>
+            <span><span style="display:inline-block;width:9px;height:9px;background:var(--cfed7aa);border-radius:2px;vertical-align:middle"></span> Holiday</span>
+            <span><span style="display:inline-block;width:9px;height:9px;background:var(--cfde68a);border-radius:2px;vertical-align:middle"></span> On Lunch (live)</span>
+            <span><span style="display:inline-block;width:9px;height:9px;background:var(--cfce7f3);border-radius:2px;vertical-align:middle"></span> Anniversary 🎂</span>
           </div>
         </div>
         <div class="cg" id="calhdrs"></div>
@@ -252,7 +439,7 @@ tr:hover td{background:#fafaf8}
       </div>
       <div class="cdet" id="caldet"><div id="caldetinner"></div></div>
       <div id="cal-team-panel" class="" style="margin-top:.75rem">
-        <div style="font-size:12px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.6rem">Today's team breakdown — <span id="cal-team-date">Thursday, June 11</span></div>
+        <div style="font-size:12px;font-weight:600;color:var(--c888888);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.6rem">Today's team breakdown — <span id="cal-team-date">Thursday, June 11</span></div>
         <div id="cal-team-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.75rem"></div>
       </div>
     </div>
@@ -261,15 +448,15 @@ tr:hover td{background:#fafaf8}
     <div id="Twhosin" class="hidden">
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:1rem">
         <div>
-          <div style="font-size:11px;font-weight:600;color:#888;text-transform:uppercase;letter-spacing:.5px" id="whosin-date">Today — Thursday, June 11</div>
-          <div style="font-size:12px;color:#aaa;margin-top:2px">Updates live as employees clock in and out</div>
+          <div style="font-size:11px;font-weight:600;color:var(--c888888);text-transform:uppercase;letter-spacing:.5px" id="whosin-date">Today — Thursday, June 11</div>
+          <div style="font-size:12px;color:var(--caaaaaa);margin-top:2px">Updates live as employees clock in and out</div>
         </div>
         <div style="display:flex;gap:6px;flex-wrap:wrap" id="whosin-legend">
-          <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px"><span style="width:10px;height:10px;border-radius:50%;background:#16a34a;display:inline-block"></span>Clocked in</span>
-          <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px"><span style="width:10px;height:10px;border-radius:50%;background:#92400e;display:inline-block"></span>On lunch</span>
-          <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px"><span style="width:10px;height:10px;border-radius:50%;background:#0891b2;display:inline-block"></span>WFH</span>
-          <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px"><span style="width:10px;height:10px;border-radius:50%;background:#7c3aed;display:inline-block"></span>On PTO</span>
-          <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px"><span style="width:10px;height:10px;border-radius:50%;background:#d1d5db;display:inline-block"></span>Not in</span>
+          <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px"><span style="width:10px;height:10px;border-radius:50%;background:var(--c16a34a);display:inline-block"></span>Clocked in</span>
+          <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px"><span style="width:10px;height:10px;border-radius:50%;background:var(--c92400e);display:inline-block"></span>On lunch</span>
+          <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px"><span style="width:10px;height:10px;border-radius:50%;background:var(--c0891b2);display:inline-block"></span>WFH</span>
+          <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px"><span style="width:10px;height:10px;border-radius:50%;background:var(--c7c3aed);display:inline-block"></span>On PTO</span>
+          <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px"><span style="width:10px;height:10px;border-radius:50%;background:var(--cd1d5db);display:inline-block"></span>Not in</span>
         </div>
       </div>
       <div id="whosin-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.75rem"></div>
@@ -320,13 +507,13 @@ tr:hover td{background:#fafaf8}
           <div><div class="stl" style="margin-top:0">Ending location</div><input type="text" id="mf-to" class="fc" placeholder="Start typing an address..." style="margin:0;width:100%" autocomplete="off"></div>
         </div>
         <div style="margin-bottom:.75rem">
-          <button type="button" id="mf-calc-btn" class="btn" onclick="calculateMileage()" style="font-size:13px;padding:7px 16px;background:#EEEDFE;color:#534AB7;border:1px solid #d5d3f0;width:100%">📍 Calculate driving distance</button>
-          <div id="mf-calc-status" style="font-size:12px;color:#888;margin-top:4px;text-align:center;display:none"></div>
+          <button type="button" id="mf-calc-btn" class="btn" onclick="calculateMileage()" style="font-size:13px;padding:7px 16px;background:var(--ceeedfe);color:var(--c534ab7);border:1px solid var(--cd5d3f0);width:100%">📍 Calculate driving distance</button>
+          <div id="mf-calc-status" style="font-size:12px;color:var(--c888888);margin-top:4px;text-align:center;display:none"></div>
         </div>
         <div class="r3" style="margin-bottom:.75rem">
           <div><div class="stl" style="margin-top:0">Miles driven</div><input type="number" id="mf-miles" class="fc" placeholder="0.0" min="0" step="0.1" style="margin:0;width:100%" oninput="updateMileagePreview()"></div>
           <div><div class="stl" style="margin-top:0">Reimbursement</div>
-            <div id="mf-preview" style="padding:9px 12px;background:#f5f4f0;border-radius:8px;font-size:14px;font-weight:700;color:#166534">$0.00</div>
+            <div id="mf-preview" style="padding:9px 12px;background:var(--cf5f4f0);border-radius:8px;font-size:14px;font-weight:700;color:var(--c166534)">$0.00</div>
           </div>
           <div><div class="stl" style="margin-top:0">Purpose / notes</div><input type="text" id="mf-notes" class="fc" placeholder="e.g. Client meeting" style="margin:0;width:100%"></div>
         </div>
@@ -343,12 +530,12 @@ tr:hover td{background:#fafaf8}
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:1rem">
         <div>
           <div style="font-size:17px;font-weight:700">My Clio Hours</div>
-          <div style="font-size:12px;color:#888;margin-top:2px">Your billed hours in Clio vs time clocked in TimeTrack</div>
+          <div style="font-size:12px;color:var(--c888888);margin-top:2px">Your billed hours in Clio vs time clocked in TimeTrack</div>
         </div>
         <select id="clio-my-period" onchange="renderClioEmployee()" class="fc" style="margin:0;width:auto;font-size:12px"></select>
       </div>
       <div id="clio-my-content">
-        <p style="font-size:13px;color:#888">Loading...</p>
+        <p style="font-size:13px;color:var(--c888888)">Loading...</p>
       </div>
     </div>
 
@@ -357,12 +544,12 @@ tr:hover td{background:#fafaf8}
       <div id="adminlock" class="lock hidden">
         <div style="font-size:48px;margin-bottom:.75rem">🔒</div>
         <h3 style="margin-bottom:.4rem">Admin access required</h3>
-        <p style="font-size:13px;color:#888">This area is restricted to HR administrators.</p>
+        <p style="font-size:13px;color:var(--c888888)">This area is restricted to HR administrators.</p>
       </div>
       <div id="adminbody" class="hidden">
         <div class="abar" style="justify-content:space-between;flex-wrap:wrap;gap:8px">
           <span>🛡 Admin panel — HR administrator access</span>
-          <button class="btn" onclick="alert('Data saves automatically to Supabase in real time!')" style="background:#fff;border-color:#3C3489;color:#3C3489;font-size:12px;padding:5px 12px">
+          <button class="btn" onclick="alert('Data saves automatically to Supabase in real time!')" style="background:var(--cffffff);border-color:var(--c3c3489);color:var(--c3c3489);font-size:12px;padding:5px 12px">
             ☁️ Supabase connected
           </button>
         </div>
@@ -455,7 +642,7 @@ tr:hover td{background:#fafaf8}
             <label for="efclio" style="font-size:13px;cursor:pointer">Tracks time in Clio (show in Clio comparison)</label>
           </div>
             </div>
-            <div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid #f0f0f0">
+            <div style="margin-top:.75rem;padding-top:.75rem;border-top:1px solid var(--cf0f0f0)">
               <div class="stl" style="margin-top:0;margin-bottom:.5rem">🚨 Emergency contact</div>
               <div class="r3">
                 <div><div class="stl" style="margin-top:0">Contact name</div><input type="text" id="efecname" class="fc" placeholder="e.g. Jane Smith" style="margin:0;width:100%"></div>
@@ -474,7 +661,7 @@ tr:hover td{background:#fafaf8}
           <div class="card">
             <table><thead><tr><th>Date</th><th>Name</th><th>Type</th><th></th></tr></thead>
             <tbody id="holrows"></tbody></table>
-            <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid #eee">
+            <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--ceeeeee)">
               <h3 style="margin-bottom:.75rem">Add holiday</h3>
               <div class="r3">
                 <div><div class="stl" style="margin-top:0">Date</div><input type="date" id="hfdate" class="fc" style="margin:0;width:100%"></div>
@@ -491,11 +678,11 @@ tr:hover td{background:#fafaf8}
           <div class="card" style="padding:.75rem 1.25rem;display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:.75rem">
             <span style="font-size:13px;font-weight:600">Rate per mile:</span>
             <div style="display:flex;align-items:center;gap:6px">
-              <span style="font-size:14px;color:#888">$</span>
+              <span style="font-size:14px;color:var(--c888888)">$</span>
               <input type="number" id="mileage-rate-input" class="fc" step="0.01" min="0" value="0.67" style="margin:0;width:80px;font-weight:700">
               <button class="btn" onclick="updateRate()" style="font-size:12px;padding:5px 12px">Update rate</button>
             </div>
-            <span style="font-size:11px;color:#888">Current IRS standard rate: $0.67/mile</span>
+            <span style="font-size:11px;color:var(--c888888)">Current IRS standard rate: $0.67/mile</span>
             <button class="btn" onclick="exportMileageCSV()" style="margin-left:auto;font-size:12px;padding:5px 12px">⬇ Export CSV</button>
           </div>
           <div class="toolbar">
@@ -536,7 +723,7 @@ tr:hover td{background:#fafaf8}
               <span style="font-size:22px">⚖️</span>
               <div>
                 <div style="font-size:13px;font-weight:700">Clio Time Comparison</div>
-                <div id="clio-status" style="font-size:12px;color:#888">Checking connection...</div>
+                <div id="clio-status" style="font-size:12px;color:var(--c888888)">Checking connection...</div>
               </div>
             </div>
             <select id="clio-team" onchange="renderClioAdmin()" class="fc" style="margin:0;width:auto;font-size:12px">
@@ -544,14 +731,14 @@ tr:hover td{background:#fafaf8}
             </select>
             <select id="clio-period" onchange="renderClioAdmin()" class="fc" style="margin:0;width:auto;font-size:12px"></select>
             <button id="clio-connect-btn" class="btn bp" onclick="connectClio()" style="font-size:12px;padding:6px 14px">Connect to Clio</button>
-            <button class="btn" onclick="loadClioData()" style="font-size:12px;padding:6px 14px;background:#534AB7;color:#fff;border-color:#534AB7">▶ Load Data</button>
-            <button class="btn" onclick="syncClioNow()" style="font-size:12px;padding:6px 14px;background:#f0f9ff;color:#0369a1;border-color:#7dd3fc" title="Pull latest data from Clio (takes 5-10 min)">↻ Sync Now</button>
+            <button class="btn" onclick="loadClioData()" style="font-size:12px;padding:6px 14px;background:var(--c534ab7);color:white;border-color:var(--c534ab7)">▶ Load Data</button>
+            <button class="btn" onclick="syncClioNow()" style="font-size:12px;padding:6px 14px;background:var(--cf0f9ff);color:var(--c0369a1);border-color:var(--c7dd3fc)" title="Pull latest data from Clio (takes 5-10 min)">↻ Sync Now</button>
           </div>
-          <div id="clio-sync-status" style="font-size:11px;color:#888;padding:0 12px;margin-top:-8px;margin-bottom:8px"></div>
+          <div id="clio-sync-status" style="font-size:11px;color:var(--c888888);padding:0 12px;margin-top:-8px;margin-bottom:8px"></div>
           <div id="Aclio-content">
             <div class="card" style="padding:0;overflow:hidden;overflow-x:auto">
               <div id="clio-table-wrap" style="padding:1rem">
-                <p style="font-size:13px;color:#888">Loading...</p>
+                <p style="font-size:13px;color:var(--c888888)">Loading...</p>
               </div>
             </div>
           </div>
@@ -621,7 +808,7 @@ tr:hover td{background:#fafaf8}
             <div class="stl" style="margin-top:0">Screenshot <span style="font-weight:400;text-transform:none">(optional)</span></div>
             <div class="file-upload-area" id="rf-upload-area" onclick="document.getElementById('rf-file').click()" ondragover="event.preventDefault();this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="event.preventDefault();this.classList.remove('dragover');handleFileDrop(event)">
               <input type="file" id="rf-file" accept="image/*" onchange="handleFileSelect(event)">
-              <div style="font-size:12px;color:#888">📷 Click or drag an image here</div>
+              <div style="font-size:12px;color:var(--c888888)">📷 Click or drag an image here</div>
             </div>
             <div id="rf-file-preview" class="file-preview hidden"></div>
           </div>
@@ -634,7 +821,7 @@ tr:hover td{background:#fafaf8}
 
       <!-- Admin Requests Panel (only visible to request managers) -->
       <div id="req-admin-panel" class="hidden" style="margin-top:1rem">
-        <div class="card" style="border-color:#CECBF6">
+        <div class="card" style="border-color:var(--ccecbf6)">
           <div class="abar" style="margin-bottom:.75rem">🔧 Manage all requests</div>
           <div class="tb">
             <select id="req-admin-status" onchange="renderAdminRequests()" class="fc" style="margin:0;width:auto">
@@ -653,6 +840,33 @@ tr:hover td{background:#fafaf8}
       </div>
     </div>
 
+    <!-- DOCUMENTS -->
+    <div id="Tdocs" class="hidden">
+      <div class="tb">
+        <input type="search" id="docsearch" class="fc" placeholder="Search all documents..." oninput="renderDocs()" style="margin:0;flex:1;min-width:160px">
+        <button class="btn doc-admin hidden" onclick="docNewFolder()">+ New folder</button>
+        <button class="btn bp doc-admin hidden" onclick="docPickFiles()">⬆ Upload files</button>
+        <input type="file" id="docfile" multiple class="hidden" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.rtf,.png,.jpg,.jpeg" onchange="docUpload(this.files);this.value=''">
+      </div>
+      <div id="docstatus" style="font-size:12px;color:var(--c888888);margin:-.4rem 0 .75rem;min-height:0"></div>
+      <div class="doc-layout">
+        <div class="card" style="padding:.6rem">
+          <div class="stl" style="margin:.25rem .4rem .5rem">Folders</div>
+          <div id="docfolders"></div>
+        </div>
+        <div class="card" id="docpanel" style="padding:0;overflow:hidden">
+          <div style="display:flex;align-items:center;gap:8px;padding:.85rem 1.1rem;border-bottom:1px solid var(--cf0f0f0);flex-wrap:wrap">
+            <h3 id="doctitle" style="margin:0;flex:1">Documents</h3>
+            <span id="docfolderactions" class="doc-actions"></span>
+          </div>
+          <div style="overflow-x:auto"><table>
+            <thead><tr><th>Name</th><th id="docthfolder" class="hidden">Folder</th><th>Size</th><th>Added</th><th></th></tr></thead>
+            <tbody id="docrows"></tbody>
+          </table></div>
+        </div>
+      </div>
+    </div>
+
     <!-- ORG CHART -->
     <div id="Torgchart" class="hidden">
       <div class="card" style="padding:.75rem 1.25rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:.75rem">
@@ -660,7 +874,7 @@ tr:hover td{background:#fafaf8}
         <select id="oc-team-filter" onchange="renderOrgChart()" class="fc" style="margin:0;width:auto;font-size:12px">
           <option value="">All teams</option>
         <option value="Crim Team">Crim Team</option><option value="WC Team">WC Team</option><option value="Intake Team">Intake Team</option><option value="Dragons">Dragons</option><option value="Admin Team">Admin Team</option><option value="PI Team">PI Team</option></select>
-        <span style="font-size:12px;color:#888;margin-left:4px">Click any card to expand/collapse their reports</span>
+        <span style="font-size:12px;color:var(--c888888);margin-left:4px">Click any card to expand/collapse their reports</span>
         <button class="btn" style="margin-left:auto;font-size:12px;padding:5px 12px" onclick="expandAll()">Expand all</button>
         <button class="btn" style="font-size:12px;padding:5px 12px" onclick="collapseAll()">Collapse all</button>
       </div>
@@ -1053,7 +1267,7 @@ async function loadClioData(){
 function renderClioTable(data){
   const rows = data.map(d => {
     const diff = d.diff;
-    const diffColor = Math.abs(diff) < 0.25 ? "#16a34a" : diff > 0 ? "#854d0e" : "#991b1b";
+    const diffColor = Math.abs(diff) < 0.25 ? "var(--c16a34a)" : diff > 0 ? "var(--c854d0e)" : "var(--c991b1b)";
     const diffAbs = Math.abs(diff).toFixed(1);
     const diffLabel = Math.abs(diff) < 0.25 ? "Matching" :
       diff > 0 ? ("+" + diffAbs + "h untracked") : (diffAbs + "h gap");
@@ -1061,17 +1275,17 @@ function renderClioTable(data){
     const barW = Math.min(100, pct);
     const avCls = ["av0","av1","av2","av3","av4"][(d.emp.id-1)%5];
     const initials = d.emp.name.split(" ").map(function(w){return w[0];}).join("").slice(0,2);
-    const tbg = TEAM_COLORS[d.emp.team] || "#f0f0f0";
-    const ttx = TEAM_TEXT[d.emp.team] || "#666";
+    const tbg = TEAM_COLORS[d.emp.team] || "var(--cf0f0f0)";
+    const ttx = TEAM_TEXT[d.emp.team] || "var(--c666666)";
     const statusHtml = d.matched ? "Matched" : "No Clio match";
-    const statusColor = d.matched ? "#16a34a" : "#dc2626";
+    const statusColor = d.matched ? "var(--c16a34a)" : "var(--cdc2626)";
     return "<tr>"
       + "<td><div class='er'><div class='av " + avCls + "'>" + initials + "</div>" + d.emp.name + "</div></td>"
       + "<td><span style='font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:" + tbg + ";color:" + ttx + "'>" + d.emp.team + "</span></td>"
       + "<td style='font-size:13px;font-weight:600'>" + d.ttHours.toFixed(1) + "h</td>"
       + "<td style='font-size:13px;font-weight:600'>" + d.clioHours.toFixed(1) + "h</td>"
       + "<td><div style='display:flex;align-items:center;gap:8px'>"
-      + "<div style='width:60px;height:6px;background:#f0f0f0;border-radius:3px'>"
+      + "<div style='width:60px;height:6px;background:var(--cf0f0f0);border-radius:3px'>"
       + "<div style='width:" + barW + "%;height:6px;background:" + diffColor + ";border-radius:3px'></div></div>"
       + "<span style='font-size:12px;color:" + diffColor + ";font-weight:600'>" + diffLabel + "</span></div></td>"
       + "<td style='font-size:11px;color:" + statusColor + "'>" + statusHtml + "</td>"
@@ -1081,12 +1295,12 @@ function renderClioTable(data){
   const totTT = data.reduce((s,d)=>s+d.ttHours,0);
   const totClio = data.reduce((s,d)=>s+d.clioHours,0);
   const totDiff = Math.abs(totTT-totClio);
-  const totColor = totDiff<1 ? "#16a34a" : "#854d0e";
+  const totColor = totDiff<1 ? "var(--c16a34a)" : "var(--c854d0e)";
   document.getElementById("clio-table-wrap").innerHTML =
     "<table>"
     + "<thead><tr><th>Employee</th><th>Team</th><th>TimeTrack hrs</th><th>Clio hrs</th><th>Comparison</th><th>Status</th></tr></thead>"
     + "<tbody>" + rows + "</tbody>"
-    + "<tfoot style='background:#f5f4f0;font-weight:700'>"
+    + "<tfoot style='background:var(--cf5f4f0);font-weight:700'>"
     + "<tr><td colspan='2' style='padding:8px 10px'>Totals</td>"
     + "<td style='padding:8px 10px'>" + totTT.toFixed(1) + "h</td>"
     + "<td style='padding:8px 10px'>" + totClio.toFixed(1) + "h</td>"
@@ -1097,7 +1311,7 @@ function renderClioTable(data){
     "<table>"
     + "<thead><tr><th>Employee</th><th>Team</th><th>TimeTrack hrs</th><th>Clio hrs</th><th>Comparison</th><th>Status</th></tr></thead>"
     + "<tbody>" + rows + "</tbody>"
-    + "<tfoot style='background:#f5f4f0;font-weight:700'>"
+    + "<tfoot style='background:var(--cf5f4f0);font-weight:700'>"
     + "<tr><td colspan='2' style='padding:8px 10px'>Totals</td>"
     + "<td style='padding:8px 10px'>" + totTT.toFixed(1) + "h</td>"
     + "<td style='padding:8px 10px'>" + totClio.toFixed(1) + "h</td>"
@@ -1161,7 +1375,7 @@ async function updateClioSyncStatus(){
       statusEl.textContent = "Last synced: " + label + " (" + lastSync.toLocaleString() + ")";
     } else {
       statusEl.textContent = "Never synced — click ↻ Sync Now to pull Clio data";
-      statusEl.style.color = "#dc2626";
+      statusEl.style.color = "var(--cdc2626)";
     }
   } catch(e){
     console.error("Sync status error:", e);
@@ -1177,18 +1391,18 @@ async function renderClioAdmin(){
   const btnEl = document.getElementById("clio-connect-btn");
   if(statusEl){
     statusEl.textContent = connected ? "✓ Connected to Clio" : "Not connected";
-    statusEl.style.color = connected ? "#16a34a" : "#dc2626";
+    statusEl.style.color = connected ? "var(--c16a34a)" : "var(--cdc2626)";
   }
   if(btnEl){
     btnEl.textContent = connected ? "Reconnect Clio" : "Connect to Clio";
-    btnEl.style.background = connected ? "#f0fdf4" : "#534AB7";
-    btnEl.style.color = connected ? "#16a34a" : "#fff";
-    btnEl.style.borderColor = connected ? "#86efac" : "#534AB7";
+    btnEl.style.background = connected ? "var(--cf0fdf4)" : "var(--c534ab7)";
+    btnEl.style.color = connected ? "var(--c16a34a)" : "white";
+    btnEl.style.borderColor = connected ? "var(--c86efac)" : "var(--c534ab7)";
   }
 
   if(!connected){
     document.getElementById("clio-table-wrap").innerHTML =
-      '<p style="font-size:13px;color:#888;padding:1rem">Connect to Clio above to see time comparisons.</p>';
+      '<p style="font-size:13px;color:var(--c888888);padding:1rem">Connect to Clio above to see time comparisons.</p>';
     return;
   }
 
@@ -1205,7 +1419,7 @@ async function renderClioAdmin(){
 
   // Show placeholder table with team filter applied but NO data fetched yet
   document.getElementById("clio-table-wrap").innerHTML =
-    '<p style="font-size:13px;color:#888;padding:1.5rem;text-align:center">Select a team and pay period, then click <strong>▶ Load Data</strong> to compare hours.</p>';
+    '<p style="font-size:13px;color:var(--c888888);padding:1.5rem;text-align:center">Select a team and pay period, then click <strong>▶ Load Data</strong> to compare hours.</p>';
 
   // Update sync status display
   updateClioSyncStatus();
@@ -1232,7 +1446,7 @@ async function renderClioEmployee(){
   if(!container) return;
 
   if(!clioConnected()){
-    container.innerHTML = '<div class="card"><p style="font-size:13px;color:#888;text-align:center;padding:1rem">Clio integration not yet connected. Please ask your admin to connect.</p></div>';
+    container.innerHTML = '<div class="card"><p style="font-size:13px;color:var(--c888888);text-align:center;padding:1rem">Clio integration not yet connected. Please ask your admin to connect.</p></div>';
     return;
   }
 
@@ -1250,10 +1464,10 @@ async function renderClioEmployee(){
   const data = await buildClioComparison(period.start, period.end, CU.id);
   hideLoading();
 
-  if(!data.length){container.innerHTML='<p style="color:#888;font-size:13px">No data found.</p>';return;}
+  if(!data.length){container.innerHTML='<p style="color:var(--c888888);font-size:13px">No data found.</p>';return;}
   const d = data[0];
   const diff = d.diff;
-  const diffColor = Math.abs(diff)<0.25?"#16a34a":diff>0?"#854d0e":"#991b1b";
+  const diffColor = Math.abs(diff)<0.25?"var(--c16a34a)":diff>0?"var(--c854d0e)":"var(--c991b1b)";
 
   container.innerHTML = `
     <div class="metrics" style="margin-bottom:1rem">
@@ -1266,13 +1480,13 @@ async function renderClioEmployee(){
       <div style="font-size:13px;margin-bottom:.5rem;font-weight:600">Hours breakdown</div>
       <div style="margin-bottom:.75rem">
         <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>TimeTrack (clocked in)</span><span style="font-weight:600">${d.ttHours.toFixed(1)}h</span></div>
-        <div style="height:8px;background:#f0f0f0;border-radius:4px"><div style="width:100%;height:8px;background:#534AB7;border-radius:4px"></div></div>
+        <div style="height:8px;background:var(--cf0f0f0);border-radius:4px"><div style="width:100%;height:8px;background:var(--c534ab7);border-radius:4px"></div></div>
       </div>
       <div>
         <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Clio (billed/tracked)</span><span style="font-weight:600">${d.clioHours.toFixed(1)}h</span></div>
-        <div style="height:8px;background:#f0f0f0;border-radius:4px"><div style="width:${d.ttHours>0?Math.min(100,Math.round((d.clioHours/d.ttHours)*100)):0}%;height:8px;background:#16a34a;border-radius:4px"></div></div>
+        <div style="height:8px;background:var(--cf0f0f0);border-radius:4px"><div style="width:${d.ttHours>0?Math.min(100,Math.round((d.clioHours/d.ttHours)*100)):0}%;height:8px;background:var(--c16a34a);border-radius:4px"></div></div>
       </div>
-      ${!d.matched?'<p style="font-size:11px;color:#dc2626;margin-top:.75rem">⚠ Your TimeTrack account could not be matched to a Clio user. Please ask your admin to verify your email matches in both systems.</p>':""}
+      ${!d.matched?'<p style="font-size:11px;color:var(--cdc2626);margin-top:.75rem">⚠ Your TimeTrack account could not be matched to a Clio user. Please ask your admin to verify your email matches in both systems.</p>':""}
     </div>`;
 }
 
@@ -1423,34 +1637,256 @@ async function loadAllData(){
     const overlay = document.getElementById("loading-overlay");
     const msg = document.getElementById("loading-msg");
     overlay.classList.remove("hidden");
-    overlay.style.background="rgba(245,244,240,.98)";
+    overlay.style.background="var(--overlay)";
     // Build error UI safely
     var errDiv=document.createElement('div');
     errDiv.style.cssText='text-align:center;max-width:340px';
-    errDiv.innerHTML='<div style="font-size:32px;margin-bottom:.75rem">&#9888;</div><div style="font-size:15px;font-weight:700;color:#dc2626;margin-bottom:.5rem">Could not connect to database</div><div style="font-size:13px;color:#666;margin-bottom:1.25rem">'+err.message+'</div>';
+    errDiv.innerHTML='<div style="font-size:32px;margin-bottom:.75rem">&#9888;</div><div style="font-size:15px;font-weight:700;color:var(--cdc2626);margin-bottom:.5rem">Could not connect to database</div><div style="font-size:13px;color:var(--c666666);margin-bottom:1.25rem">'+err.message+'</div>';
     var rb=document.createElement('button');
-    rb.textContent='Retry';rb.style.cssText='padding:10px 24px;background:#534AB7;color:#fff;border:none;border-radius:8px;font-size:14px;cursor:pointer;margin-right:8px';
+    rb.textContent='Retry';rb.style.cssText='padding:10px 24px;background:var(--c534ab7);color:white;border:none;border-radius:8px;font-size:14px;cursor:pointer;margin-right:8px';
     rb.onclick=function(){location.reload();};
     var ob=document.createElement('button');
-    ob.textContent='Continue offline';ob.style.cssText='padding:10px 24px;background:#f0f0f0;color:#666;border:none;border-radius:8px;font-size:14px;cursor:pointer';
+    ob.textContent='Continue offline';ob.style.cssText='padding:10px 24px;background:var(--cf0f0f0);color:var(--c666666);border:none;border-radius:8px;font-size:14px;cursor:pointer';
     ob.onclick=function(){document.getElementById('loading-overlay').classList.add('hidden');initLogin();};
     errDiv.appendChild(rb);errDiv.appendChild(ob);
     msg.innerHTML='';msg.appendChild(errDiv);
-    msg.style.color="#dc2626";
+    msg.style.color="var(--cdc2626)";
   }
 }
 
 function showToast(msg, color){
-  color = color || "#16a34a";
+  color = color || "var(--c16a34a)";
   var t = document.createElement("div");
   t.textContent = msg;
-  t.style.cssText = "position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:"+color+";color:#fff;padding:10px 24px;border-radius:8px;font-size:14px;font-weight:600;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,.15);transition:opacity .3s";
+  t.style.cssText = "position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:"+color+";color:white;padding:10px 24px;border-radius:8px;font-size:14px;font-weight:600;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,.15);transition:opacity .3s";
   document.body.appendChild(t);
   setTimeout(function(){ t.style.opacity="0"; setTimeout(function(){ t.remove(); }, 300); }, 2500);
 }
 const TEAMS=["Crim Team","WC Team","Intake Team","Dragons","Admin Team","PI Team"];
-const TEAM_COLORS={"Crim Team":"#EEEDFE","WC Team":"#E1F5EE","Intake Team":"#FAECE7","Dragons":"#E6F1FB","Admin Team":"#FEF3C7","PI Team":"#FCE7F3"};
-const TEAM_TEXT={"Crim Team":"#3C3489","WC Team":"#085041","Intake Team":"#712B13","Dragons":"#0C447C","Admin Team":"#78350F","PI Team":"#831843"};
+const TEAM_COLORS={"Crim Team":"var(--ceeedfe)","WC Team":"var(--ce1f5ee)","Intake Team":"var(--cfaece7)","Dragons":"var(--ce6f1fb)","Admin Team":"var(--cfef3c7)","PI Team":"var(--cfce7f3)"};
+const TEAM_TEXT={"Crim Team":"var(--c3c3489)","WC Team":"var(--c085041)","Intake Team":"var(--c712b13)","Dragons":"var(--c0c447c)","Admin Team":"var(--c78350f)","PI Team":"var(--c831843)"};
+
+// ---- DOCUMENTS (HR file repository) ----
+const DOC_BUCKET="hr-documents";
+let DOC_FOLDERS=[],DOCS=[],docSel=null,docBusy=false;
+
+function docEsc(t){return String(t==null?"":t).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function docSize(b){if(!b&&b!==0)return"—";if(b<1024)return b+" B";if(b<1048576)return(b/1024).toFixed(0)+" KB";return(b/1048576).toFixed(1)+" MB"}
+function docDate(iso){if(!iso)return"—";return new Date(iso).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})}
+function docType(name){
+  var ext=(String(name).split(".").pop()||"").toLowerCase();
+  if(ext==="pdf")return{t:"PDF",bg:"var(--cfee2e2)",tx:"var(--c991b1b)"};
+  if(ext==="doc"||ext==="docx"||ext==="rtf"||ext==="txt")return{t:ext==="txt"?"TXT":"DOC",bg:"var(--cdbeafe)",tx:"var(--c1e40af)"};
+  if(ext==="xls"||ext==="xlsx"||ext==="csv")return{t:ext==="csv"?"CSV":"XLS",bg:"var(--cdcfce7)",tx:"var(--c166534)"};
+  if(ext==="ppt"||ext==="pptx")return{t:"PPT",bg:"var(--cffedd5)",tx:"var(--c9a3412)"};
+  if(ext==="png"||ext==="jpg"||ext==="jpeg")return{t:"IMG",bg:"var(--cfce7f3)",tx:"var(--c831843)"};
+  return{t:"FILE",bg:"var(--cf0f0f0)",tx:"var(--c666666)"};
+}
+function docHeaders(extra){var h={"apikey":SUPABASE_KEY,"Authorization":"Bearer "+SUPABASE_KEY};for(var k in (extra||{}))h[k]=extra[k];return h}
+function docStatus(msg,isErr){var el=document.getElementById("docstatus");el.textContent=msg||"";el.style.color=isErr?"var(--cdc2626)":"var(--c888888)";el.style.marginBottom=msg?".75rem":"0"}
+
+async function openDocs(){
+  document.querySelectorAll(".doc-admin").forEach(function(b){b.classList.toggle("hidden",!isAdm())});
+  docSetupDrop();
+  renderDocs();
+  try{
+    var res=await Promise.all([sbGet("doc_folders","select=*&order=name.asc"),sbGet("documents","select=*&order=name.asc")]);
+    DOC_FOLDERS=res[0];DOCS=res[1];
+    if(docSel===null||!DOC_FOLDERS.some(function(f){return f.id===docSel}))docSel=DOC_FOLDERS.length?DOC_FOLDERS[0].id:null;
+    docStatus("");
+  }catch(err){
+    console.error(err);
+    docStatus("Couldn't load documents. If this is the first time, run add_documents.sql in Supabase, then refresh.",true);
+  }
+  renderDocs();
+}
+
+function docSelect(id){docSel=id;document.getElementById("docsearch").value="";renderDocs()}
+
+function renderDocs(){
+  var adm=isAdm();
+  var q=(document.getElementById("docsearch").value||"").trim().toLowerCase();
+  // folder list
+  var fl=document.getElementById("docfolders");
+  fl.innerHTML=DOC_FOLDERS.length?DOC_FOLDERS.map(function(f){
+    var n=DOCS.filter(function(d){return d.folder_id===f.id}).length;
+    return '<button class="doc-folder'+(!q&&f.id===docSel?" active":"")+'" onclick="docSelect('+f.id+')"><span>📁</span><span>'+docEsc(f.name)+'</span><span class="dcount">'+n+'</span></button>';
+  }).join(""):'<div style="font-size:12px;color:var(--c888888);padding:.4rem">'+(adm?'No folders yet. Click "+ New folder" to create one.':'No folders yet.')+'</div>';
+
+  var folder=DOC_FOLDERS.find(function(f){return f.id===docSel});
+  var list,title;
+  if(q){
+    list=DOCS.filter(function(d){return d.name.toLowerCase().indexOf(q)>-1});
+    title='Search results ('+list.length+')';
+  }else{
+    list=folder?DOCS.filter(function(d){return d.folder_id===folder.id}):[];
+    title=folder?folder.name:"Documents";
+  }
+  document.getElementById("doctitle").textContent=title;
+  document.getElementById("docthfolder").classList.toggle("hidden",!q);
+  document.getElementById("docfolderactions").innerHTML=(adm&&folder&&!q)
+    ?'<button class="bsm" onclick="docRenameFolder('+folder.id+')">Rename folder</button><button class="bsm bdny" onclick="docDeleteFolder('+folder.id+')">Delete folder</button>':"";
+
+  var rows=document.getElementById("docrows");
+  if(!list.length){
+    var msg=q?"No documents match your search."
+      :!folder?(adm?"Create a folder to start adding documents.":"No documents have been shared yet.")
+      :(adm?"This folder is empty. Click \"⬆ Upload files\" or drag files here.":"This folder is empty.");
+    rows.innerHTML='<tr><td colspan="5"><div class="doc-empty">'+msg+'</div></td></tr>';
+    return;
+  }
+  rows.innerHTML=list.map(function(d){
+    var ty=docType(d.name),fo=DOC_FOLDERS.find(function(f){return f.id===d.folder_id});
+    var up=d.uploaded_by?ge(d.uploaded_by):null;
+    return '<tr>'
+      +'<td><div class="doc-name"><span class="doc-ico" style="background:'+ty.bg+';color:'+ty.tx+'">'+ty.t+'</span><span title="'+docEsc(d.name)+'">'+docEsc(d.name)+'</span></div></td>'
+      +(q?'<td style="font-size:12px;color:var(--c888888)">'+docEsc(fo?fo.name:"")+'</td>':'')
+      +'<td style="font-size:12px;color:var(--c888888);white-space:nowrap">'+docSize(d.size_bytes)+'</td>'
+      +'<td style="font-size:12px;color:var(--c888888);white-space:nowrap" title="'+(up?"Uploaded by "+docEsc(up.name):"")+'">'+docDate(d.created_at)+'</td>'
+      +'<td><div class="doc-actions">'
+        +'<button class="bsm" onclick="docOpen('+d.id+',false)">Open</button>'
+        +'<button class="bsm" onclick="docOpen('+d.id+',true)">Download</button>'
+        +(adm?'<button class="bsm" onclick="docRename('+d.id+')">Rename</button><button class="bsm" onclick="docMove('+d.id+')">Move</button><button class="bsm bdny" onclick="docDelete('+d.id+')">Delete</button>':'')
+      +'</div></td></tr>';
+  }).join("");
+}
+
+// ---- viewing / downloading (short-lived private links) ----
+async function docSignedUrl(path,downloadName){
+  var r=await fetch(SUPABASE_URL+"/storage/v1/object/sign/"+DOC_BUCKET+"/"+path.split("/").map(encodeURIComponent).join("/"),{
+    method:"POST",headers:docHeaders({"Content-Type":"application/json"}),body:JSON.stringify({expiresIn:120})});
+  if(!r.ok)throw new Error("Link failed: "+r.status);
+  var j=await r.json();
+  var url=SUPABASE_URL+"/storage/v1"+(j.signedURL||j.signedUrl);
+  if(downloadName)url+=(url.indexOf("?")>-1?"&":"?")+"download="+encodeURIComponent(downloadName);
+  return url;
+}
+async function docOpen(id,download){
+  var d=DOCS.find(function(x){return x.id===id});if(!d)return;
+  var win=download?null:window.open("","_blank");   // open right away so pop-up blockers allow it
+  try{
+    var url=await docSignedUrl(d.storage_path,download?d.name:null);
+    if(download){var a=document.createElement("a");a.href=url;a.rel="noopener";document.body.appendChild(a);a.click();a.remove();}
+    else if(win){win.location.href=url;}
+    else{window.location.href=url;}
+  }catch(err){
+    if(win)win.close();
+    console.error(err);showToast("Couldn't open that file. Try again.","var(--cdc2626)");
+  }
+}
+
+// ---- admin: folders ----
+async function docNewFolder(){
+  if(!isAdm())return;
+  var name=(prompt("New folder name:")||"").trim();if(!name)return;
+  if(DOC_FOLDERS.some(function(f){return f.name.toLowerCase()===name.toLowerCase()})){alert("A folder with that name already exists.");return}
+  try{
+    var rows=await sbPost("doc_folders",{name:name,created_by:CU.id});
+    DOC_FOLDERS.push(rows[0]);DOC_FOLDERS.sort(function(a,b){return a.name.localeCompare(b.name)});
+    docSel=rows[0].id;renderDocs();showToast("Folder created");
+  }catch(err){console.error(err);showToast("Couldn't create folder","var(--cdc2626)")}
+}
+async function docRenameFolder(id){
+  var f=DOC_FOLDERS.find(function(x){return x.id===id});if(!f||!isAdm())return;
+  var name=(prompt("Rename folder:",f.name)||"").trim();if(!name||name===f.name)return;
+  if(DOC_FOLDERS.some(function(x){return x.id!==id&&x.name.toLowerCase()===name.toLowerCase()})){alert("A folder with that name already exists.");return}
+  try{await sbPatch("doc_folders","id=eq."+id,{name:name});f.name=name;DOC_FOLDERS.sort(function(a,b){return a.name.localeCompare(b.name)});renderDocs();showToast("Folder renamed")}
+  catch(err){console.error(err);showToast("Couldn't rename folder","var(--cdc2626)")}
+}
+async function docDeleteFolder(id){
+  var f=DOC_FOLDERS.find(function(x){return x.id===id});if(!f||!isAdm())return;
+  var n=DOCS.filter(function(d){return d.folder_id===id}).length;
+  if(n){alert('"'+f.name+'" still has '+n+' file'+(n>1?"s":"")+'. Move or delete them first, then delete the folder.');return}
+  if(!confirm('Delete the folder "'+f.name+'"?'))return;
+  try{await sbDelete("doc_folders","id=eq."+id);DOC_FOLDERS=DOC_FOLDERS.filter(function(x){return x.id!==id});docSel=DOC_FOLDERS.length?DOC_FOLDERS[0].id:null;renderDocs();showToast("Folder deleted")}
+  catch(err){console.error(err);showToast("Couldn't delete folder","var(--cdc2626)")}
+}
+
+// ---- admin: files ----
+function docPickFiles(){
+  if(!DOC_FOLDERS.find(function(f){return f.id===docSel})){alert("Create or select a folder first.");return}
+  document.getElementById("docfile").click();
+}
+async function docUpload(fileList){
+  if(!isAdm()||docBusy)return;
+  var files=Array.prototype.slice.call(fileList||[]);if(!files.length)return;
+  var folder=DOC_FOLDERS.find(function(f){return f.id===docSel});
+  if(!folder){alert("Create or select a folder first.");return}
+  var tooBig=files.filter(function(f){return f.size>50*1048576});
+  if(tooBig.length){alert("These files are over the 50 MB limit and were skipped:\n"+tooBig.map(function(f){return f.name}).join("\n"))}
+  files=files.filter(function(f){return f.size<=50*1048576});if(!files.length)return;
+  docBusy=true;var ok=0,failed=[];
+  for(var i=0;i<files.length;i++){
+    var file=files[i];
+    docStatus("Uploading "+(i+1)+" of "+files.length+": "+file.name+"...");
+    var safe=file.name.replace(/[^\w.\-]+/g,"_").slice(-120);
+    var path="f"+folder.id+"/"+Date.now()+"_"+Math.random().toString(36).slice(2,7)+"_"+safe;
+    try{
+      var r=await fetch(SUPABASE_URL+"/storage/v1/object/"+DOC_BUCKET+"/"+path,{
+        method:"POST",headers:docHeaders({"Content-Type":file.type||"application/octet-stream","x-upsert":"false"}),body:file});
+      if(!r.ok)throw new Error(await r.text());
+      var rows=await sbPost("documents",{folder_id:folder.id,name:file.name,storage_path:path,size_bytes:file.size,mime_type:file.type||null,uploaded_by:CU.id});
+      DOCS.push(rows[0]);ok++;
+    }catch(err){console.error(err);failed.push(file.name)}
+  }
+  docBusy=false;
+  DOCS.sort(function(a,b){return a.name.localeCompare(b.name)});
+  renderDocs();
+  if(failed.length)docStatus("Uploaded "+ok+". Couldn't upload: "+failed.join(", "),true);
+  else{docStatus("");showToast("Uploaded "+ok+" file"+(ok>1?"s":""))}
+}
+async function docRename(id){
+  var d=DOCS.find(function(x){return x.id===id});if(!d||!isAdm())return;
+  var name=(prompt("Rename document:",d.name)||"").trim();if(!name||name===d.name)return;
+  try{await sbPatch("documents","id=eq."+id,{name:name});d.name=name;DOCS.sort(function(a,b){return a.name.localeCompare(b.name)});renderDocs();showToast("Document renamed")}
+  catch(err){console.error(err);showToast("Couldn't rename document","var(--cdc2626)")}
+}
+async function docMove(id){
+  var d=DOCS.find(function(x){return x.id===id});if(!d||!isAdm())return;
+  var others=DOC_FOLDERS.filter(function(f){return f.id!==d.folder_id});
+  if(!others.length){alert("Create another folder first, then you can move files into it.");return}
+  var pick=prompt('Move "'+d.name+'" to which folder? Type the number:\n\n'+others.map(function(f,i){return(i+1)+". "+f.name}).join("\n"));
+  var idx=parseInt(pick,10)-1;if(isNaN(idx))return;
+  var to=others[idx];if(!to){alert("That number isn't in the list.");return}
+  try{await sbPatch("documents","id=eq."+id,{folder_id:to.id});d.folder_id=to.id;renderDocs();showToast('Moved to "'+to.name+'"')}
+  catch(err){console.error(err);showToast("Couldn't move document","var(--cdc2626)")}
+}
+async function docDelete(id){
+  var d=DOCS.find(function(x){return x.id===id});if(!d||!isAdm())return;
+  if(!confirm('Delete "'+d.name+'"? This permanently removes the file.'))return;
+  try{
+    var r=await fetch(SUPABASE_URL+"/storage/v1/object/"+DOC_BUCKET,{method:"DELETE",headers:docHeaders({"Content-Type":"application/json"}),body:JSON.stringify({prefixes:[d.storage_path]})});
+    if(!r.ok)throw new Error(await r.text());
+    await sbDelete("documents","id=eq."+id);
+    DOCS=DOCS.filter(function(x){return x.id!==id});renderDocs();showToast("Document deleted");
+  }catch(err){console.error(err);showToast("Couldn't delete document","var(--cdc2626)")}
+}
+
+// drag-and-drop upload onto the file panel (admins only)
+var docDropReady=false;
+function docSetupDrop(){
+  if(docDropReady)return;docDropReady=true;
+  var p=document.getElementById("docpanel");
+  p.addEventListener("dragover",function(e){if(!isAdm())return;e.preventDefault();p.classList.add("doc-drop")});
+  p.addEventListener("dragleave",function(){p.classList.remove("doc-drop")});
+  p.addEventListener("drop",function(e){if(!isAdm())return;e.preventDefault();p.classList.remove("doc-drop");docUpload(e.dataTransfer.files)});
+}
+
+// ---- THEME (light/dark) ----
+function currentTheme(){return document.documentElement.getAttribute("data-theme")==="dark"?"dark":"light"}
+function paintThemeButtons(){
+  var dark=currentTheme()==="dark";
+  document.querySelectorAll(".theme-ico").forEach(function(el){el.textContent=dark?"\u2600\uFE0F":"\uD83C\uDF19"});
+  document.querySelectorAll(".theme-lbl").forEach(function(el){el.textContent=dark?"Light mode":"Dark mode"});
+}
+function toggleTheme(){
+  var next=currentTheme()==="dark"?"light":"dark";
+  document.documentElement.setAttribute("data-theme",next);
+  try{localStorage.setItem("tt-theme",next)}catch(e){}
+  paintThemeButtons();
+}
+document.addEventListener("DOMContentLoaded",paintThemeButtons);
+
 const _now=new Date(),TODAY=`${_now.getFullYear()}-${String(_now.getMonth()+1).padStart(2,"0")}-${String(_now.getDate()).padStart(2,"0")}`;
 let calMo=_now.getMonth(),calYr=_now.getFullYear(),CU=null,clockEntry=null,clockTick=null,clockStart=null;
 let lunchEntry=null;
@@ -2236,7 +2672,7 @@ function renderOrgChart(){
       const px=parent.x+CW/2, py=parent.y+CH;
       const cx=n.x+CW/2, cy=n.y;
       const my=(py+cy)/2;
-      paths+=`<path d="M${px},${py} C${px},${my} ${cx},${my} ${cx},${cy}" fill="none" stroke="#ddd" stroke-width="1.5" stroke-linecap="round"/>`;
+      paths+=`<path d="M${px},${py} C${px},${my} ${cx},${my} ${cx},${cy}" fill="none" style="stroke:var(--cdddddd)" stroke-width="1.5" stroke-linecap="round"/>`;
     });
     return '<svg style="position:absolute;top:0;left:0;width:' + svgW + 'px;height:' + svgH + 'px;pointer-events:none;overflow:visible"><g>' + paths + '</g></svg>';
   }
@@ -2276,16 +2712,16 @@ function makeCard(emp,childMap,flatMode){
   const children=(childMap[emp.id]||[]);
   const hasChildren=children.length>0;
   const isCollapsed=!!ocCollapsed[emp.id];
-  const tbg=TEAM_COLORS[emp.team]||"#f0f0f0";
-  const ttx=TEAM_TEXT[emp.team]||"#555";
-  const avBgs=["#EEEDFE","#E1F5EE","#FAECE7","#E6F1FB","#FAEEDA"];
-  const avTxs=["#3C3489","#085041","#712B13","#0C447C","#633806"];
+  const tbg=TEAM_COLORS[emp.team]||"var(--cf0f0f0)";
+  const ttx=TEAM_TEXT[emp.team]||"var(--c555555)";
+  const avBgs=["var(--ceeedfe)","var(--ce1f5ee)","var(--cfaece7)","var(--ce6f1fb)","var(--cfaeeda)"];
+  const avTxs=["var(--c3c3489)","var(--c085041)","var(--c712b13)","var(--c0c447c)","var(--c633806)"];
   const avIdx=(emp.id-1)%5;
   const initStr=emp.name.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
 
   const card=document.createElement("div");
   card.className="oc-card";
-  card.style.cssText=`border-color:${emp.role==="admin"?"#534AB7":tbg};box-sizing:border-box`;
+  card.style.cssText=`border-color:${emp.role==="admin"?"var(--c534ab7)":tbg};box-sizing:border-box`;
 
   card.innerHTML=`
     <div class="oc-avatar" style="background:${avBgs[avIdx]};color:${avTxs[avIdx]}">${initStr}</div>
@@ -2360,7 +2796,7 @@ function saveAndDownload(){
   if(appEl){appEl.className="hidden";}
 
   // Reset all tab panels to hidden
-  ["Tclock","Tcal","Twhosin","Tmypto","Tmileage","Tmyclio","Trequests","Tadmin","Torgchart"].forEach(id=>{
+  ["Tclock","Tcal","Twhosin","Tmypto","Tmileage","Tmyclio","Trequests","Tadmin","Torgchart","Tdocs"].forEach(id=>{
     const el=clone.querySelector("#"+id);
     if(el)el.className="hidden";
   });
@@ -2426,8 +2862,8 @@ function saveAndDownload(){
 
   const btn=event.currentTarget;
   const orig=btn.textContent;
-  btn.textContent="✓ Saved!";btn.style.background="#dcfce7";
-  setTimeout(()=>{btn.textContent=orig;btn.style.background="#fff"},2000);
+  btn.textContent="✓ Saved!";btn.style.background="var(--cdcfce7)";
+  setTimeout(()=>{btn.textContent=orig;btn.style.background="var(--cffffff)"},2000);
 }
 
 function initLogin(){
@@ -2468,7 +2904,7 @@ function doLogout(){
 }
 
 function showTab(name,btn){
-  ["Tclock","Tcal","Twhosin","Tmypto","Tmileage","Tmyclio","Trequests","Tadmin","Torgchart"].forEach(id=>document.getElementById(id).classList.add("hidden"));
+  ["Tclock","Tcal","Twhosin","Tmypto","Tmileage","Tmyclio","Trequests","Tadmin","Torgchart","Tdocs"].forEach(id=>document.getElementById(id).classList.add("hidden"));
   document.querySelectorAll(".nb").forEach(b=>b.classList.remove("active"));
   document.getElementById("T"+name).classList.remove("hidden");
   if(btn)btn.classList.add("active");
@@ -2480,6 +2916,7 @@ function showTab(name,btn){
   if(name==="myclio"){renderClioEmployee();}
   if(name==="requests"){renderRequestsTab();}
   if(name==="orgchart"){initOrgChart();renderOrgChart();}
+  if(name==="docs"){openDocs();}
   if(name==="admin"){
     if(!isAdm()){document.getElementById("adminlock").classList.remove("hidden");document.getElementById("adminbody").classList.add("hidden")}
     else{document.getElementById("adminlock").classList.add("hidden");document.getElementById("adminbody").classList.remove("hidden");renderApprovals();renderAnnivPanel()}
@@ -2513,10 +2950,10 @@ function renderClock(){
   }
   if(lunchEntry){
     lbtn.textContent="🍽 End Lunch ("+lunchEntry.start+")";
-    lbtn.style.background="#fde68a";lbtn.style.color="#451a03";
+    lbtn.style.background="var(--cfde68a)";lbtn.style.color="var(--c451a03)";
   } else {
     lbtn.textContent="🍽 Start Lunch";
-    lbtn.style.background="#fffbeb";lbtn.style.color="#78350f";
+    lbtn.style.background="var(--cfffbeb)";lbtn.style.color="var(--c78350f)";
   }
   document.getElementById("tctotal").textContent=totM?"Today: "+mH(totM)+" hrs logged"+(lunchM?" (after "+mH(lunchM)+"h lunch)":""):"";
   const logItems=[
@@ -2525,20 +2962,20 @@ function renderClock(){
   ].sort((a,b)=>(a.ci||"").localeCompare(b.ci||""));
   document.getElementById("tclog").innerHTML=logItems.length?logItems.map(r=>{
     if(r.type==="lunch"){
-      return`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f5f4f0;font-size:12px;align-items:center;background:#fffbeb">
-        <span style="color:#92400e">🍽 ${r.ci}</span>
-        <span>${r.co?`<span style="color:#92400e">&#8594; ${r.co}</span>`:'<span class="badge b-lunch" style="font-size:10px">On lunch</span>'}</span>
-        <span style="color:#888">${r.co?mH(toM(r.co)-toM(r.ci))+"h":"—"}</span>
-        <span style="font-size:10px;color:#aaa">lunch</span>
+      return`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--cf5f4f0);font-size:12px;align-items:center;background:var(--cfffbeb)">
+        <span style="color:var(--c92400e)">🍽 ${r.ci}</span>
+        <span>${r.co?`<span style="color:var(--c92400e)">&#8594; ${r.co}</span>`:'<span class="badge b-lunch" style="font-size:10px">On lunch</span>'}</span>
+        <span style="color:var(--c888888)">${r.co?mH(toM(r.co)-toM(r.ci))+"h":"—"}</span>
+        <span style="font-size:10px;color:var(--caaaaaa)">lunch</span>
       </div>`;
     }
-    return`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f5f4f0;font-size:12px;align-items:center">
-      <span style="color:#16a34a">&#8594; ${r.ci}</span>
-      <span>${r.co?`<span style="color:#dc2626">&#8592; ${r.co}</span>`:'<span class="badge b-appr" style="font-size:10px">Active</span>'}</span>
-      <span style="color:#888">${r.co?mH(toM(r.co)-toM(r.ci))+"h":"—"}</span>
-      ${r.manual?'<span style="font-size:10px;color:#aaa">edited</span>':""}
+    return`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--cf5f4f0);font-size:12px;align-items:center">
+      <span style="color:var(--c16a34a)">&#8594; ${r.ci}</span>
+      <span>${r.co?`<span style="color:var(--cdc2626)">&#8592; ${r.co}</span>`:'<span class="badge b-appr" style="font-size:10px">Active</span>'}</span>
+      <span style="color:var(--c888888)">${r.co?mH(toM(r.co)-toM(r.ci))+"h":"—"}</span>
+      ${r.manual?'<span style="font-size:10px;color:var(--caaaaaa)">edited</span>':""}
     </div>`;
-  }).join(""):'<p style="font-size:12px;color:#888;padding:4px 0">No entries yet today.</p>';
+  }).join(""):'<p style="font-size:12px;color:var(--c888888);padding:4px 0">No entries yet today.</p>';
   const base=new Date(TODAY+"T12:00:00");
   const dow=base.getDay();base.setDate(base.getDate()-(dow===0?6:dow-1));
   const wk=[0,1,2,3,4].map(i=>{const dd=new Date(base);dd.setDate(dd.getDate()+i);return dS(dd)});
@@ -2547,8 +2984,8 @@ function renderClock(){
     const dayLunchM=LUNCH.filter(r=>r.empId===CU.id&&r.date===d&&r.start&&r.end).reduce((s,r)=>s+toM(r.end)-toM(r.start),0);
     const mins=Math.max(0,ents.reduce((s,r)=>s+toM(r.co)-toM(r.ci),0)-dayLunchM);
     const onPTO=PTO.find(r=>r.empId===CU.id&&r.status==="Approved"&&r.start<=d&&r.end>=d);
-    return`<div style="text-align:center;background:#f5f4f0;border-radius:8px;padding:5px 3px">
-      <div style="font-size:10px;color:#888">${["Mon","Tue","Wed","Thu","Fri"][i]}</div>
+    return`<div style="text-align:center;background:var(--cf5f4f0);border-radius:8px;padding:5px 3px">
+      <div style="font-size:10px;color:var(--c888888)">${["Mon","Tue","Wed","Thu","Fri"][i]}</div>
       <div style="font-size:12px;font-weight:700;margin-top:2px">${onPTO?'<span class="badge b-pto" style="font-size:9px">PTO</span>':mins?mH(mins)+"h":"—"}</div>
     </div>`;}).join("")+"</div>";
 }
@@ -2642,7 +3079,7 @@ function renderCal(){
     });
     const day=document.createElement("div");
     day.className="cd"+(oth?" oth":"")+(isT?" tod":"")+(isW&&!isT?" wkn":"");
-    day.innerHTML=`<div class="cdn">${dn}</div>`+evs.slice(0,3).map(ev=>`<div class="ev ${ev.cls}">${ev.lbl}</div>`).join("")+(evs.length>3?`<div style="font-size:8px;color:#888">+${evs.length-3} more</div>`:"");
+    day.innerHTML=`<div class="cdn">${dn}</div>`+evs.slice(0,3).map(ev=>`<div class="ev ${ev.cls}">${ev.lbl}</div>`).join("")+(evs.length>3?`<div style="font-size:8px;color:var(--c888888)">+${evs.length-3} more</div>`:"");
     day.onclick=()=>{
       const p=document.getElementById("caldet");
       if(!evs.length){p.classList.remove("open");return}
@@ -2675,30 +3112,30 @@ function renderTeamPanel(){
       !PTO.find(r=>r.empId===e.id&&r.status==="Approved"&&r.start<=TODAY&&r.end>=TODAY)&&
       !WFH.find(r=>r.empId===e.id&&r.date===TODAY)
     );
-    const bg=TEAM_COLORS[team]||"#f5f4f0";
-    const tc=TEAM_TEXT[team]||"#1a1a1a";
+    const bg=TEAM_COLORS[team]||"var(--cf5f4f0)";
+    const tc=TEAM_TEXT[team]||"var(--c1a1a1a)";
     return`<div style="background:${bg};border-radius:12px;padding:1rem">
       <div style="font-size:13px;font-weight:700;color:${tc};margin-bottom:.6rem">${team} <span style="font-weight:400;font-size:11px;opacity:.7">(${total} people)</span></div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
-        <div style="background:rgba(255,255,255,.6);border-radius:8px;padding:6px 8px">
-          <div style="font-size:10px;color:#666;font-weight:600;text-transform:uppercase;letter-spacing:.4px">In office</div>
-          <div style="font-size:20px;font-weight:700;color:#1a1a1a">${inOffice.length}</div>
-          <div style="font-size:10px;color:#888;margin-top:1px">${inOffice.map(e=>e.first).join(", ")||"—"}</div>
+        <div style="background:var(--glass);border-radius:8px;padding:6px 8px">
+          <div style="font-size:10px;color:var(--c666666);font-weight:600;text-transform:uppercase;letter-spacing:.4px">In office</div>
+          <div style="font-size:20px;font-weight:700;color:var(--c1a1a1a)">${inOffice.length}</div>
+          <div style="font-size:10px;color:var(--c888888);margin-top:1px">${inOffice.map(e=>e.first).join(", ")||"—"}</div>
         </div>
-        <div style="background:rgba(255,255,255,.6);border-radius:8px;padding:6px 8px">
-          <div style="font-size:10px;color:#166534;font-weight:600;text-transform:uppercase;letter-spacing:.4px">WFH</div>
-          <div style="font-size:20px;font-weight:700;color:#166534">${onWFH.length}</div>
-          <div style="font-size:10px;color:#888;margin-top:1px">${onWFH.map(e=>e.first).join(", ")||"—"}</div>
+        <div style="background:var(--glass);border-radius:8px;padding:6px 8px">
+          <div style="font-size:10px;color:var(--c166534);font-weight:600;text-transform:uppercase;letter-spacing:.4px">WFH</div>
+          <div style="font-size:20px;font-weight:700;color:var(--c166534)">${onWFH.length}</div>
+          <div style="font-size:10px;color:var(--c888888);margin-top:1px">${onWFH.map(e=>e.first).join(", ")||"—"}</div>
         </div>
-        <div style="background:rgba(255,255,255,.6);border-radius:8px;padding:6px 8px">
-          <div style="font-size:10px;color:#1e40af;font-weight:600;text-transform:uppercase;letter-spacing:.4px">On PTO</div>
-          <div style="font-size:20px;font-weight:700;color:#1e40af">${onPTO.length}</div>
-          <div style="font-size:10px;color:#888;margin-top:1px">${onPTO.map(e=>e.first).join(", ")||"—"}</div>
+        <div style="background:var(--glass);border-radius:8px;padding:6px 8px">
+          <div style="font-size:10px;color:var(--c1e40af);font-weight:600;text-transform:uppercase;letter-spacing:.4px">On PTO</div>
+          <div style="font-size:20px;font-weight:700;color:var(--c1e40af)">${onPTO.length}</div>
+          <div style="font-size:10px;color:var(--c888888);margin-top:1px">${onPTO.map(e=>e.first).join(", ")||"—"}</div>
         </div>
-        <div style="background:rgba(255,255,255,.6);border-radius:8px;padding:6px 8px">
-          <div style="font-size:10px;color:#92400e;font-weight:600;text-transform:uppercase;letter-spacing:.4px">On Lunch</div>
-          <div style="font-size:20px;font-weight:700;color:#92400e">${onLunch.length}</div>
-          <div style="font-size:10px;color:#888;margin-top:1px">${onLunch.map(e=>e.first).join(", ")||"—"}</div>
+        <div style="background:var(--glass);border-radius:8px;padding:6px 8px">
+          <div style="font-size:10px;color:var(--c92400e);font-weight:600;text-transform:uppercase;letter-spacing:.4px">On Lunch</div>
+          <div style="font-size:20px;font-weight:700;color:var(--c92400e)">${onLunch.length}</div>
+          <div style="font-size:10px;color:var(--c888888);margin-top:1px">${onLunch.map(e=>e.first).join(", ")||"—"}</div>
         </div>
       </div>
     </div>`;
@@ -2712,7 +3149,7 @@ function renderMyPTO(){
   document.getElementById("ptometrics").innerHTML=`
     <div class="metric"><div class="mlbl">Total PTO</div><div class="mval">${e.ptoTotal}d</div></div>
     <div class="metric"><div class="mlbl">Used</div><div class="mval">${e.ptoUsed}d</div></div>
-    <div class="metric"><div class="mlbl">Remaining</div><div class="mval" style="color:${rem<5?"#dc2626":"#16a34a"}">${rem}d</div></div>
+    <div class="metric"><div class="mlbl">Remaining</div><div class="mval" style="color:${rem<5?"var(--cdc2626)":"var(--c16a34a)"}">${rem}d</div></div>
     <div class="metric"><div class="mlbl">Pending</div><div class="mval">${pend}d</div></div>`;
   const rows=PTO.filter(r=>r.empId===e.id).sort((a,b)=>b.start.localeCompare(a.start));
   document.getElementById("myrows").innerHTML=rows.length?rows.map(r=>`<tr>
@@ -2720,8 +3157,8 @@ function renderMyPTO(){
     <td style="font-size:12px">${fmt(r.start)} - ${fmt(r.end)}</td>
     <td style="font-size:12px">${r.days}d</td>
     <td><span class="badge b-${r.status==="Approved"?"appr":r.status==="Denied"?"deni":"pend"}">${r.status}</span></td>
-    <td style="font-size:11px;color:#888">${r.notes||"—"}</td></tr>`).join("")
-    :'<tr><td colspan="5" style="text-align:center;color:#888;font-size:12px;padding:1.25rem">No PTO requests yet — click "Request PTO" to get started.</td></tr>';
+    <td style="font-size:11px;color:var(--c888888)">${r.notes||"—"}</td></tr>`).join("")
+    :'<tr><td colspan="5" style="text-align:center;color:var(--c888888);font-size:12px;padding:1.25rem">No PTO requests yet — click "Request PTO" to get started.</td></tr>';
 }
 function openPTOForm(){document.getElementById("ptoform").classList.remove("hidden")}
 async function submitPTO(){
@@ -2841,9 +3278,9 @@ function renderMyRequests(){
   const inProgCount = allMine.filter(r=>r.status==="In Progress").length;
   const resolvedCount = allMine.filter(r=>r.status==="Resolved").length;
   document.getElementById("req-metrics").innerHTML = `
-    <div class="metric"><div class="mlbl">Open</div><div class="mval" style="color:#854d0e">${openCount}</div></div>
-    <div class="metric"><div class="mlbl">In progress</div><div class="mval" style="color:#1e40af">${inProgCount}</div></div>
-    <div class="metric"><div class="mlbl">Resolved</div><div class="mval" style="color:#166534">${resolvedCount}</div></div>
+    <div class="metric"><div class="mlbl">Open</div><div class="mval" style="color:var(--c854d0e)">${openCount}</div></div>
+    <div class="metric"><div class="mlbl">In progress</div><div class="mval" style="color:var(--c1e40af)">${inProgCount}</div></div>
+    <div class="metric"><div class="mlbl">Resolved</div><div class="mval" style="color:var(--c166534)">${resolvedCount}</div></div>
     <div class="metric"><div class="mlbl">Total</div><div class="mval">${allMine.length}</div></div>
   `;
 
@@ -2869,11 +3306,11 @@ function renderMyRequests(){
       </div>
       ${r.description ? `<div class="req-desc">${esc(r.description)}</div>` : ""}
       ${r.linkUrl ? `<div style="margin-top:.5rem"><a href="${esc(r.linkUrl)}" target="_blank" rel="noopener" class="req-link">🔗 ${esc(r.linkUrl.length>50 ? r.linkUrl.slice(0,50)+"…" : r.linkUrl)}</a></div>` : ""}
-      ${r.imageData ? `<div style="margin-top:.5rem"><img src="${r.imageData}" alt="Screenshot" style="max-width:280px;max-height:180px;border-radius:8px;border:1px solid #eee;cursor:pointer" onclick="openImgModal(this.src)"><div style="font-size:10px;color:#888;margin-top:2px">Click to enlarge</div></div>` : ""}
-      ${r.status==="Resolved" && resolver ? `<div style="margin-top:.5rem;font-size:11px;color:#166534;background:#f0fdf4;padding:6px 10px;border-radius:6px">✅ Resolved by ${resolver.name} on ${resolvedDate}${r.adminNotes ? " — " + esc(r.adminNotes) : ""}</div>` : ""}
-      ${r.status==="In Progress" ? `<div style="margin-top:.5rem;font-size:11px;color:#1e40af;background:#eff6ff;padding:6px 10px;border-radius:6px">⏳ Being worked on${r.adminNotes ? " — " + esc(r.adminNotes) : ""}</div>` : ""}
+      ${r.imageData ? `<div style="margin-top:.5rem"><img src="${r.imageData}" alt="Screenshot" style="max-width:280px;max-height:180px;border-radius:8px;border:1px solid var(--ceeeeee);cursor:pointer" onclick="openImgModal(this.src)"><div style="font-size:10px;color:var(--c888888);margin-top:2px">Click to enlarge</div></div>` : ""}
+      ${r.status==="Resolved" && resolver ? `<div style="margin-top:.5rem;font-size:11px;color:var(--c166534);background:var(--cf0fdf4);padding:6px 10px;border-radius:6px">✅ Resolved by ${resolver.name} on ${resolvedDate}${r.adminNotes ? " — " + esc(r.adminNotes) : ""}</div>` : ""}
+      ${r.status==="In Progress" ? `<div style="margin-top:.5rem;font-size:11px;color:var(--c1e40af);background:var(--ceff6ff);padding:6px 10px;border-radius:6px">⏳ Being worked on${r.adminNotes ? " — " + esc(r.adminNotes) : ""}</div>` : ""}
     </div>`;
-  }).join("") : `<div style="text-align:center;padding:2rem;color:#888;font-size:13px">No requests yet. Click <strong>+ New request</strong> to submit one.</div>`;
+  }).join("") : `<div style="text-align:center;padding:2rem;color:var(--c888888);font-size:13px">No requests yet. Click <strong>+ New request</strong> to submit one.</div>`;
 }
 
 function esc(s){ const d=document.createElement("div"); d.textContent=s; return d.innerHTML; }
@@ -2979,7 +3416,7 @@ async function submitRequest(){
     // Show success feedback
     const btn = event.currentTarget;
     const orig = btn.textContent;
-    btn.textContent = "✓ Submitted!"; btn.style.background = "#dcfce7"; btn.style.borderColor = "#86efac"; btn.style.color = "#166534";
+    btn.textContent = "✓ Submitted!"; btn.style.background = "var(--cdcfce7)"; btn.style.borderColor = "var(--c86efac)"; btn.style.color = "var(--c166534)";
     setTimeout(()=>{ btn.textContent = orig; btn.style.background = ""; btn.style.borderColor = ""; btn.style.color = ""; }, 1500);
   } catch(e){
     alert("Could not submit request. Please try again.");
@@ -3045,14 +3482,14 @@ function renderReqCards(reqs, targetId, showAdmin){
 
     let adminActions = "";
     if(showAdmin && r.status !== "Resolved"){
-      adminActions = `<div style="margin-top:.6rem;padding-top:.6rem;border-top:1px solid #f0f0f0;display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+      adminActions = `<div style="margin-top:.6rem;padding-top:.6rem;border-top:1px solid var(--cf0f0f0);display:flex;gap:6px;align-items:center;flex-wrap:wrap">
         <input type="text" id="req-note-${r.id}" class="fc" placeholder="Add a note (optional)" style="margin:0;flex:1;min-width:120px;font-size:12px;padding:6px 10px">
-        ${r.status==="Open" ? `<button class="bsm" style="color:#1e40af;border-color:#93c5fd" onclick="updateReqStatus(${r.id},'In Progress')">▶ In Progress</button>` : ""}
+        ${r.status==="Open" ? `<button class="bsm" style="color:var(--c1e40af);border-color:var(--c93c5fd)" onclick="updateReqStatus(${r.id},'In Progress')">▶ In Progress</button>` : ""}
         <button class="bsm bapp" onclick="updateReqStatus(${r.id},'Resolved')">✓ Resolve</button>
       </div>`;
     }
 
-    return `<div class="req-card" ${r.priority==="Urgent"&&r.status!=="Resolved"?'style="border-left:3px solid #dc2626"':""}>
+    return `<div class="req-card" ${r.priority==="Urgent"&&r.status!=="Resolved"?'style="border-left:3px solid var(--cdc2626)"':""}>
       <div class="req-header">
         <div>
           <div class="req-subj">${catIcon[r.category]||"📋"} ${esc(r.subject)}</div>
@@ -3070,11 +3507,11 @@ function renderReqCards(reqs, targetId, showAdmin){
       </div>
       ${r.description ? `<div class="req-desc">${esc(r.description)}</div>` : ""}
       ${r.linkUrl ? `<div style="margin-top:.5rem"><a href="${esc(r.linkUrl)}" target="_blank" rel="noopener" class="req-link">🔗 ${esc(r.linkUrl.length>50 ? r.linkUrl.slice(0,50)+"…" : r.linkUrl)}</a></div>` : ""}
-      ${r.imageData ? `<div style="margin-top:.5rem"><img src="${r.imageData}" alt="Screenshot" style="max-width:280px;max-height:180px;border-radius:8px;border:1px solid #eee;cursor:pointer" onclick="openImgModal(this.src)"><div style="font-size:10px;color:#888;margin-top:2px">Click to enlarge</div></div>` : ""}
-      ${r.status==="Resolved" && resolver ? `<div style="margin-top:.5rem;font-size:11px;color:#166534;background:#f0fdf4;padding:6px 10px;border-radius:6px">✅ Resolved by ${resolver.name} on ${resolvedDate}${r.adminNotes ? " — " + esc(r.adminNotes) : ""}</div>` : ""}
+      ${r.imageData ? `<div style="margin-top:.5rem"><img src="${r.imageData}" alt="Screenshot" style="max-width:280px;max-height:180px;border-radius:8px;border:1px solid var(--ceeeeee);cursor:pointer" onclick="openImgModal(this.src)"><div style="font-size:10px;color:var(--c888888);margin-top:2px">Click to enlarge</div></div>` : ""}
+      ${r.status==="Resolved" && resolver ? `<div style="margin-top:.5rem;font-size:11px;color:var(--c166534);background:var(--cf0fdf4);padding:6px 10px;border-radius:6px">✅ Resolved by ${resolver.name} on ${resolvedDate}${r.adminNotes ? " — " + esc(r.adminNotes) : ""}</div>` : ""}
       ${adminActions}
     </div>`;
-  }).join("") : `<div style="text-align:center;padding:2rem;color:#888;font-size:13px">No requests match your filters.</div>`;
+  }).join("") : `<div style="text-align:center;padding:2rem;color:var(--c888888);font-size:13px">No requests match your filters.</div>`;
 }
 
 async function updateReqStatus(reqId, newStatus){
@@ -3161,8 +3598,8 @@ function renderWhosIn(){
   grid.innerHTML=TEAMS.map(team=>{
     const members=EMP.filter(e=>e.team===team).sort((a,b)=>a.name.localeCompare(b.name));
     if(!members.length)return"";
-    const tbg=TEAM_COLORS[team]||"#f5f4f0";
-    const ttx=TEAM_TEXT[team]||"#1a1a1a";
+    const tbg=TEAM_COLORS[team]||"var(--cf5f4f0)";
+    const ttx=TEAM_TEXT[team]||"var(--c1a1a1a)";
 
     // Count statuses for header summary
     const counts={in:0,lunch:0,wfh:0,pto:0,out:0};
@@ -3172,8 +3609,8 @@ function renderWhosIn(){
     const rows=members.map(e=>{
       const st=getEmpStatus(e.id);
       const avIdx=(e.id-1)%5;
-      const avBgs=["#EEEDFE","#E1F5EE","#FAECE7","#E6F1FB","#FAEEDA"];
-      const avTxs=["#3C3489","#085041","#712B13","#0C447C","#633806"];
+      const avBgs=["var(--ceeedfe)","var(--ce1f5ee)","var(--cfaece7)","var(--ce6f1fb)","var(--cfaeeda)"];
+      const avTxs=["var(--c3c3489)","var(--c085041)","var(--c712b13)","var(--c0c447c)","var(--c633806)"];
       const initStr=e.name.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
       return`<div class="wi-member">
         <span class="wi-status-dot ${st.dotCls}"></span>
@@ -3203,18 +3640,18 @@ function renderMyMileage(){
   const pendingAmt=myTrips.filter(m=>m.status==="Pending").reduce((s,m)=>s+m.amount,0);
   document.getElementById("mileage-metrics").innerHTML=`
     <div class="metric"><div class="mlbl">Total trips</div><div class="mval">${myTrips.length}</div></div>
-    <div class="metric"><div class="mlbl">Approved reimbursement</div><div class="mval" style="color:#166534">$${approvedTotal.toFixed(2)}</div></div>
+    <div class="metric"><div class="mlbl">Approved reimbursement</div><div class="mval" style="color:var(--c166534)">$${approvedTotal.toFixed(2)}</div></div>
     <div class="metric"><div class="mlbl">Pending miles</div><div class="mval">${pendingMiles.toFixed(1)}</div></div>
-    <div class="metric"><div class="mlbl">Pending amount</div><div class="mval" style="color:#854d0e">$${pendingAmt.toFixed(2)}</div></div>`;
+    <div class="metric"><div class="mlbl">Pending amount</div><div class="mval" style="color:var(--c854d0e)">$${pendingAmt.toFixed(2)}</div></div>`;
   document.getElementById("my-mileage-rows").innerHTML=myTrips.length?myTrips.map(m=>`<tr>
     <td style="font-size:12px">${fmt(m.date)}</td>
     <td style="font-size:12px">${m.from}</td>
     <td style="font-size:12px">${m.to}</td>
     <td style="font-size:12px">${m.miles.toFixed(1)}</td>
-    <td style="font-size:12px;font-weight:600;color:#166534">$${m.amount.toFixed(2)}</td>
+    <td style="font-size:12px;font-weight:600;color:var(--c166534)">$${m.amount.toFixed(2)}</td>
     <td><span class="badge b-${m.status==="Approved"?"appr":m.status==="Denied"?"deni":"pend"}">${m.status}</span></td>
-    <td style="font-size:11px;color:#888">${m.notes||"—"}</td></tr>`).join("")
-    :`<tr><td colspan="7" style="text-align:center;color:#888;font-size:12px;padding:1.25rem">No trips logged yet — click "Log a trip" to get started.</td></tr>`;
+    <td style="font-size:11px;color:var(--c888888)">${m.notes||"—"}</td></tr>`).join("")
+    :`<tr><td colspan="7" style="text-align:center;color:var(--c888888);font-size:12px;padding:1.25rem">No trips logged yet — click "Log a trip" to get started.</td></tr>`;
 }
 
 function openMileageForm(){
@@ -3227,7 +3664,7 @@ function updateMileagePreview(){
   const miles=parseFloat(document.getElementById("mf-miles").value)||0;
   const amt=(miles*mileageRate).toFixed(2);
   document.getElementById("mf-preview").textContent=`$${amt}`;
-  document.getElementById("mf-preview").style.color=miles>0?"#166534":"#888";
+  document.getElementById("mf-preview").style.color=miles>0?"var(--c166534)":"var(--c888888)";
 }
 
 function submitMileage(){
@@ -3286,12 +3723,12 @@ function calculateMileage(){
   var calcBtn=document.getElementById("mf-calc-btn");
   if(!fromVal||!toVal){
     statusEl.textContent="Please enter both locations first.";
-    statusEl.style.display="block";statusEl.style.color="#dc2626";
+    statusEl.style.display="block";statusEl.style.color="var(--cdc2626)";
     return;
   }
   if(!mapsReady||typeof google==="undefined"||!google.maps){
     statusEl.textContent="Google Maps is still loading — try again in a moment.";
-    statusEl.style.display="block";statusEl.style.color="#854d0e";
+    statusEl.style.display="block";statusEl.style.color="var(--c854d0e)";
     return;
   }
   calcBtn.disabled=true;
@@ -3310,14 +3747,14 @@ function calculateMileage(){
     if(status!=="OK"){
       calcBtn.textContent="📍 Calculate driving distance";
       statusEl.textContent="Distance lookup failed — you can enter miles manually.";
-      statusEl.style.display="block";statusEl.style.color="#dc2626";
+      statusEl.style.display="block";statusEl.style.color="var(--cdc2626)";
       return;
     }
     var el=resp.rows[0]&&resp.rows[0].elements[0];
     if(!el||el.status!=="OK"){
       calcBtn.textContent="📍 Calculate driving distance";
       statusEl.textContent="Could not find a route between those locations. Check the addresses and try again, or enter miles manually.";
-      statusEl.style.display="block";statusEl.style.color="#dc2626";
+      statusEl.style.display="block";statusEl.style.color="var(--cdc2626)";
       return;
     }
     var meters=el.distance.value;
@@ -3326,12 +3763,12 @@ function calculateMileage(){
     updateMileagePreview();
     var duration=el.duration.text;
     calcBtn.textContent="✓ " + miles.toFixed(1) + " miles calculated";
-    calcBtn.style.background="#dcfce7";calcBtn.style.color="#166534";calcBtn.style.borderColor="#bbf7d0";
+    calcBtn.style.background="var(--cdcfce7)";calcBtn.style.color="var(--c166534)";calcBtn.style.borderColor="var(--cbbf7d0)";
     statusEl.textContent="Driving distance: "+el.distance.text+" (approx. "+duration+"). You can adjust the miles if needed.";
-    statusEl.style.display="block";statusEl.style.color="#166534";
+    statusEl.style.display="block";statusEl.style.color="var(--c166534)";
     setTimeout(function(){
       calcBtn.textContent="📍 Recalculate driving distance";
-      calcBtn.style.background="#EEEDFE";calcBtn.style.color="#534AB7";calcBtn.style.borderColor="#d5d3f0";
+      calcBtn.style.background="var(--ceeedfe)";calcBtn.style.color="var(--c534ab7)";calcBtn.style.borderColor="var(--cd5d3f0)";
     },3000);
   });
 }
@@ -3352,17 +3789,17 @@ function renderAdminMileage(){
       <td style="font-size:12px">${m.from}</td>
       <td style="font-size:12px">${m.to}</td>
       <td style="font-size:12px">${m.miles.toFixed(1)} mi</td>
-      <td style="font-size:12px;font-weight:600;color:#166534">$${m.amount.toFixed(2)}</td>
+      <td style="font-size:12px;font-weight:600;color:var(--c166534)">$${m.amount.toFixed(2)}</td>
       <td><span class="badge b-${m.status==="Approved"?"appr":m.status==="Denied"?"deni":"pend"}">${m.status}</span></td>
-      <td style="font-size:11px;color:#888">${m.notes||"—"}</td>
+      <td style="font-size:11px;color:var(--c888888)">${m.notes||"—"}</td>
       <td style="display:flex;gap:4px;padding:8px 10px">
         ${m.status==="Pending"
           ?`<button class="bsm bapp" onclick="approveMileage(${m.id},'Approved')">✓ Approve</button>
              <button class="bsm bdny" onclick="approveMileage(${m.id},'Denied')">✕ Deny</button>`
-          :`<span style="font-size:11px;color:#888">${m.status}</span>`}
+          :`<span style="font-size:11px;color:var(--c888888)">${m.status}</span>`}
       </td></tr>`;
   }).join("")
-  :`<tr><td colspan="9" style="text-align:center;padding:1.25rem;color:#888;font-size:12px">No mileage requests match.</td></tr>`;
+  :`<tr><td colspan="9" style="text-align:center;padding:1.25rem;color:var(--c888888);font-size:12px">No mileage requests match.</td></tr>`;
 }
 
 function approveMileage(id,status){
@@ -3382,7 +3819,7 @@ async function updateRate(){
       m.rate=newRate;m.amount=parseFloat((m.miles*newRate).toFixed(2));
     });
     const btn=event.currentTarget;
-    btn.textContent="✓ Updated!";btn.style.background="#dcfce7";
+    btn.textContent="✓ Updated!";btn.style.background="var(--cdcfce7)";
     setTimeout(()=>{btn.textContent="Update rate";btn.style.background=""},1500);
     renderAdminMileage();
   }catch(err){alert("Could not update rate.");console.error(err);}
@@ -3430,35 +3867,35 @@ function renderAnnivPanel(){
   if(!panel)return;
   const upcoming=getAnniversariesInRange(30);
   if(!upcoming.length){
-    panel.innerHTML=`<div style="background:#f9fafb;border:1px solid #f0f0f0;border-radius:10px;padding:.75rem 1rem;font-size:12px;color:#888">🎂 No employee anniversaries in the next 30 days.</div>`;
+    panel.innerHTML=`<div style="background:var(--cf9fafb);border:1px solid var(--cf0f0f0);border-radius:10px;padding:.75rem 1rem;font-size:12px;color:var(--c888888)">🎂 No employee anniversaries in the next 30 days.</div>`;
     return;
   }
   const rows=upcoming.map(a=>{
-    const tbg=TEAM_COLORS[a.emp.team]||"#f0f0f0";
-    const ttx=TEAM_TEXT[a.emp.team]||"#666";
+    const tbg=TEAM_COLORS[a.emp.team]||"var(--cf0f0f0)";
+    const ttx=TEAM_TEXT[a.emp.team]||"var(--c666666)";
     const isToday=a.diffDays===0;
     const isSoon=a.diffDays<=7;
-    const highlight=isToday?"background:#fdf2f8;border-color:#f0abda":isSoon?"background:#fffbeb;border-color:#fde68a":"background:#fff";
-    return`<div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-bottom:1px solid #f5f4f0;${isToday?"background:#fdf2f8":""}">
+    const highlight=isToday?"background:var(--cfdf2f8);border-color:var(--cf0abda)":isSoon?"background:var(--cfffbeb);border-color:var(--cfde68a)":"background:var(--cffffff)";
+    return`<div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-bottom:1px solid var(--cf5f4f0);${isToday?"background:var(--cfdf2f8)":""}">
       <div class="av ${["av0","av1","av2","av3","av4"][(a.emp.id-1)%5]}" style="flex-shrink:0">${a.emp.name.split(" ").map(w=>w[0]).join("").slice(0,2)}</div>
       <div style="flex:1">
         <div style="font-size:13px;font-weight:600">${a.emp.name} ${isToday?"🎉":""}</div>
-        <div style="font-size:11px;color:#888">${a.emp.title||""} &middot; <span style="font-size:10px;font-weight:600;padding:1px 6px;border-radius:20px;background:${tbg};color:${ttx}">${a.emp.team}</span></div>
+        <div style="font-size:11px;color:var(--c888888)">${a.emp.title||""} &middot; <span style="font-size:10px;font-weight:600;padding:1px 6px;border-radius:20px;background:${tbg};color:${ttx}">${a.emp.team}</span></div>
       </div>
       <div style="text-align:right">
-        <div style="font-size:13px;font-weight:700;color:#831843">${a.years}${a.suffix} anniversary</div>
-        <div style="font-size:11px;color:#888">${isToday?"Today! 🎂":a.diffDays===1?"Tomorrow":a.dateStr}</div>
+        <div style="font-size:13px;font-weight:700;color:var(--c831843)">${a.years}${a.suffix} anniversary</div>
+        <div style="font-size:11px;color:var(--c888888)">${isToday?"Today! 🎂":a.diffDays===1?"Tomorrow":a.dateStr}</div>
       </div>
       <div style="min-width:44px;text-align:center">
-        <div style="font-size:18px;font-weight:700;color:${isToday?"#831843":isSoon?"#92400e":"#aaa"}">${isToday?"🎂":a.diffDays}</div>
-        ${!isToday?`<div style="font-size:9px;color:#aaa">days</div>`:""}
+        <div style="font-size:18px;font-weight:700;color:${isToday?"var(--c831843)":isSoon?"var(--c92400e)":"var(--caaaaaa)"}">${isToday?"🎂":a.diffDays}</div>
+        ${!isToday?`<div style="font-size:9px;color:var(--caaaaaa)">days</div>`:""}
       </div>
     </div>`;
   }).join("");
-  panel.innerHTML=`<div style="background:#fff;border:1px solid #fce7f3;border-radius:10px;overflow:hidden">
-    <div style="background:#fdf2f8;padding:8px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #fce7f3">
-      <span style="font-size:13px;font-weight:700;color:#831843">🎂 Upcoming anniversaries — next 30 days</span>
-      <span style="font-size:11px;color:#888;margin-left:auto">${upcoming.length} employee${upcoming.length>1?"s":""}</span>
+  panel.innerHTML=`<div style="background:var(--cffffff);border:1px solid var(--cfce7f3);border-radius:10px;overflow:hidden">
+    <div style="background:var(--cfdf2f8);padding:8px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--cfce7f3)">
+      <span style="font-size:13px;font-weight:700;color:var(--c831843)">🎂 Upcoming anniversaries — next 30 days</span>
+      <span style="font-size:11px;color:var(--c888888);margin-left:auto">${upcoming.length} employee${upcoming.length>1?"s":""}</span>
     </div>
     ${rows}
   </div>`;
@@ -3482,9 +3919,9 @@ function renderApprovals(){
       <td style="display:flex;gap:4px;padding:8px 10px">
         ${r.status==="Pending"
           ?`<button class="bsm bapp" onclick="approvePTO(${r.id},'Approved')">✓ Approve</button><button class="bsm bdny" onclick="approvePTO(${r.id},'Denied')">✕ Deny</button>`
-          :`<span style="font-size:11px;color:#888">${r.status}</span>`}
+          :`<span style="font-size:11px;color:var(--c888888)">${r.status}</span>`}
       </td></tr>`;}).join("")
-    :'<tr><td colspan="6" style="text-align:center;padding:1.25rem;color:#888;font-size:12px">No requests match.</td></tr>';
+    :'<tr><td colspan="6" style="text-align:center;padding:1.25rem;color:var(--c888888);font-size:12px">No requests match.</td></tr>';
 }
 async function approvePTO(id,status){
   const r=PTO.find(p=>p.id===id);if(!r)return;
@@ -3534,10 +3971,10 @@ function renderTS(){
     const workTot=days.reduce((s,d)=>s+ENTRIES.filter(r=>r.empId===e.id&&r.date===d&&r.ci&&r.co).reduce((ss,r)=>ss+toM(r.co)-toM(r.ci),0),0);
     const lunchTot=days.reduce((s,d)=>s+LUNCH.filter(r=>r.empId===e.id&&r.date===d&&r.start&&r.end).reduce((ss,r)=>ss+toM(r.end)-toM(r.start),0),0);
     const netTot=Math.max(0,workTot-lunchTot);
-    const tbg2=TEAM_COLORS[e.team]||"#f0f0f0",ttx2=TEAM_TEXT[e.team]||"#666";
+    const tbg2=TEAM_COLORS[e.team]||"var(--cf0f0f0)",ttx2=TEAM_TEXT[e.team]||"var(--c666666)";
     return`<tr><td><div class="er"><div class="av ${avc(e.id)}">${ini(e.name)}</div>${e.name}</div></td>
       <td><span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:${tbg2};color:${ttx2}">${e.team}</span></td>${cells.join("")}
-      <td style="font-size:12px;color:#92400e">${lunchTot?mH(lunchTot)+"h":"—"}</td>
+      <td style="font-size:12px;color:var(--c92400e)">${lunchTot?mH(lunchTot)+"h":"—"}</td>
       <td style="font-weight:700;font-size:12px">${netTot?mH(netTot)+"h":"—"}</td></tr>`;
   }).join("");
 }
@@ -3603,7 +4040,7 @@ function renderWFH(){
   const days=wD(ws);
   const emps=EMP.filter(e=>!dept||e.team===dept);
   document.getElementById("wfhrows").innerHTML=emps.map(e=>{
-    const tbg3=TEAM_COLORS[e.team]||"#f0f0f0",ttx3=TEAM_TEXT[e.team]||"#666";
+    const tbg3=TEAM_COLORS[e.team]||"var(--cf0f0f0)",ttx3=TEAM_TEXT[e.team]||"var(--c666666)";
     return`<tr>
     <td><div class="er"><div class="av ${avc(e.id)}">${ini(e.name)}</div>${e.name}</div></td>
     <td><span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:${tbg3};color:${ttx3}">${e.team}</span></td>
@@ -3611,7 +4048,7 @@ function renderWFH(){
       const onPTO=PTO.find(r=>r.empId===e.id&&r.status==="Approved"&&r.start<=d&&r.end>=d);
       const onWFH=WFH.find(r=>r.empId===e.id&&r.date===d);
       if(onPTO)return'<td><span class="badge b-pto" style="font-size:10px">PTO</span></td>';
-      if(onWFH)return`<td><button class="bsm" style="color:#166534;border-color:#86efac" onclick="togWFH(${e.id},'${d}')">WFH ✓</button></td>`;
+      if(onWFH)return`<td><button class="bsm" style="color:var(--c166534);border-color:var(--c86efac)" onclick="togWFH(${e.id},'${d}')">WFH ✓</button></td>`;
       return`<td><button class="bsm" onclick="togWFH(${e.id},'${d}')">+ WFH</button></td>`;
     }).join("")}</tr>`;}).join("");
 }
@@ -3635,11 +4072,11 @@ function renderEmps(){
   const f=EMP.filter(e=>!s||e.name.toLowerCase().includes(s.toLowerCase()));
   document.getElementById("emprows").innerHTML=f.map(e=>{
     const rem=e.ptoTotal-e.ptoUsed,pct=Math.round((rem/e.ptoTotal)*100);
-    const tbg=TEAM_COLORS[e.team]||"#f0f0f0",ttx=TEAM_TEXT[e.team]||"#666";
+    const tbg=TEAM_COLORS[e.team]||"var(--cf0f0f0)",ttx=TEAM_TEXT[e.team]||"var(--c666666)";
     return`<tr>
       <td><div class="er"><div class="av ${avc(e.id)}">${ini(e.name)}</div>${e.name}</div></td>
       <td><span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:${tbg};color:${ttx}">${e.team}</span></td>
-      <td style="font-size:11px;color:#888">${e.title||"—"}</td>
+      <td style="font-size:11px;color:var(--c888888)">${e.title||"—"}</td>
       <td>${e.role==="admin"?'<span class="badge b-admin">Admin</span>':'<span class="badge b-emp">Employee</span>'}</td>
       <td><div style="display:flex;align-items:center;gap:5px">
         <div class="pbb"><div class="pbf ${pct<30?"pbl":""}" style="width:${pct}%"></div></div>
@@ -3806,8 +4243,8 @@ if(window.location.protocol === 'file:'){
     'To use TimeTrack, you need to either:<br>' +
     '1. Upload it to GitHub Pages (recommended)<br>' +
     '2. Or run a local server<br><br>' +
-    '<span style="font-size:11px;color:#888">See setup instructions below or ask your admin.</span>';
-  document.getElementById('loading-msg').style.color='#dc2626';
+    '<span style="font-size:11px;color:var(--c888888)">See setup instructions below or ask your admin.</span>';
+  document.getElementById('loading-msg').style.color='var(--cdc2626)';
   document.getElementById('loading-msg').style.lineHeight='1.6';
 } else {
   loadAllData();
