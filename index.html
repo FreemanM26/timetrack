@@ -81,6 +81,9 @@ document.documentElement.setAttribute("data-theme",t);})();
   --cffedd5:#ffedd5;
   --cfffbeb:#fffbeb;
   --cffffff:#ffffff;
+  --ce2e8f0:#e2e8f0;
+  --c334155:#334155;
+  --c64748b:#64748b;
   --accent-hover:#3c3489;
   --overlay:rgba(245,244,240,.95);
   --glass:rgba(255,255,255,.6);
@@ -160,6 +163,9 @@ document.documentElement.setAttribute("data-theme",t);})();
   --cffedd5:#3d2716;
   --cfffbeb:#2c2714;
   --cffffff:#1d1e24;
+  --ce2e8f0:#2a3342;
+  --c334155:#cbd5e1;
+  --c64748b:#94a3b8;
   --accent-hover:#5d54c9;
   --overlay:rgba(19,20,24,.95);
   --glass:rgba(0,0,0,.28);
@@ -197,6 +203,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .b-deni{background:var(--cfee2e2);color:var(--c991b1b)}
 .b-lunch{background:var(--cfde68a);color:var(--c78350f)}
 .b-anniv{background:var(--cfce7f3);color:var(--c831843)}
+.b-ooo{background:var(--ce2e8f0);color:var(--c334155)}
 .btn-theme{margin-left:auto;padding:6px 10px;font-size:12px;border:1px solid var(--cdddddd);border-radius:7px;background:var(--cffffff);color:var(--c666666);cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:5px}
 .btn-theme:hover{background:var(--cf5f4f0)}
 .btn-theme:focus-visible,.btn-so:focus-visible,.nb:focus-visible{outline:2px solid var(--c534ab7);outline-offset:2px}
@@ -247,18 +254,22 @@ tr:hover td{background:var(--cfafaf8)}
 .dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex-shrink:0}
 .cg{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
 .ch{text-align:center;font-size:10px;font-weight:600;color:var(--c888888);padding:4px 0}
-.cd{min-height:60px;border:1px solid var(--cf0f0f0);border-radius:8px;padding:3px;cursor:pointer;background:var(--cffffff);transition:background .1s}
+.cd{min-height:108px;border:1px solid var(--cf0f0f0);border-radius:8px;padding:3px;cursor:pointer;background:var(--cffffff);transition:background .1s}
 .cd:hover{background:var(--cf5f4f0)}
 .cd.oth{opacity:.3}
 .cd.tod{border-color:var(--c534ab7);background:var(--ceeedfe)}
 .cd.wkn{background:var(--cfafaf8)}
-.cdn{font-size:10px;font-weight:600;color:var(--c888888);margin-bottom:2px}
-.ev{font-size:8px;padding:1px 3px;border-radius:3px;margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.5}
+.cdn{font-size:12px;font-weight:600;color:var(--c888888);margin-bottom:2px}
+.ev{font-size:10.5px;padding:2px 5px;border-radius:3px;margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.5}
 .ep{background:var(--cbfdbfe);color:var(--c1e3a8a)}
 .ew{background:var(--cbbf7d0);color:var(--c14532d)}
 .eh{background:var(--cfed7aa);color:var(--c7c2d12)}
 .el{background:var(--cfde68a);color:var(--c78350f)}
 .ea{background:var(--cfce7f3);color:var(--c831843)}
+.eo{background:var(--ce2e8f0);color:var(--c334155)}
+.main.wide{max-width:1480px}
+.cmore{font-size:10px;color:var(--c888888);padding-left:2px}
+@media(max-width:700px){.cd{min-height:64px;padding:2px}.ev{font-size:8px;padding:1px 3px}.cdn{font-size:10px}.cmore{font-size:8px}}
 .cnav{display:flex;align-items:center;gap:10px;margin-bottom:.75rem;flex-wrap:wrap}
 .mlb{font-size:15px;font-weight:700;min-width:130px;text-align:center}
 .cdet{display:none;background:var(--cf5f4f0);border-radius:12px;padding:.85rem 1rem;margin-top:.6rem}
@@ -283,6 +294,7 @@ tr:hover td{background:var(--cfafaf8)}
 .wi-dot-wfh{background:var(--c0891b2)}
 .wi-dot-pto{background:var(--c7c3aed)}
 .wi-dot-out{background:var(--cd1d5db)}
+.wi-dot-ooo{background:var(--c64748b)}
 .wi-name{font-size:13px;color:var(--c1a1a1a);flex:1}
 .wi-status-lbl{font-size:11px;font-weight:500;padding:2px 8px;border-radius:20px}
 .wi-lbl-in{background:var(--cdcfce7);color:var(--c166534)}
@@ -290,6 +302,7 @@ tr:hover td{background:var(--cfafaf8)}
 .wi-lbl-wfh{background:var(--ccffafe);color:var(--c0e7490)}
 .wi-lbl-pto{background:var(--cede9fe);color:var(--c6d28d9)}
 .wi-lbl-out{background:var(--cf3f4f6);color:var(--c6b7280)}
+.wi-lbl-ooo{background:var(--ce2e8f0);color:var(--c334155)}
 .wi-since{font-size:10px;color:var(--caaaaaa);margin-left:4px}
 /* Org Chart */
 .oc-card{background:var(--cffffff);border:1.5px solid var(--ce5e5e5);border-radius:10px;padding:10px 12px;text-align:center;transition:box-shadow .15s,transform .15s;user-select:none;box-sizing:border-box}
@@ -385,7 +398,7 @@ tr:hover td{background:var(--cfafaf8)}
     <button class="nb" onclick="showTab('clock',this)">⏱ Time Clock</button>
     <button class="nb" onclick="showTab('cal',this)">📅 Calendar</button>
     <button class="nb" onclick="showTab('whosin',this)">👥 Who's In</button>
-    <button class="nb" onclick="showTab('mypto',this)">🏖 My PTO</button>
+    <button class="nb" onclick="showTab('mypto',this)">🏖 Time Off</button>
     <button class="nb" onclick="showTab('mileage',this)">🚗 Mileage</button>
     <button class="nb" onclick="showTab('myclio',this)">⚖️ My Clio</button>
     <button id="navreqs" class="nb notif-dot" data-count="0" onclick="showTab('requests',this)">🔧 Requests</button>
@@ -393,7 +406,7 @@ tr:hover td{background:var(--cfafaf8)}
     <button id="navadmin" class="nb adm hidden" onclick="showTab('admin',this)">🛡 Admin</button>
     <button class="nb" onclick="showTab('orgchart',this)">🏢 Org Chart</button>
   </nav>
-  <div class="main">
+  <div class="main" id="mainwrap">
 
     <!-- TIME CLOCK -->
     <div id="Tclock" class="hidden">
@@ -429,6 +442,7 @@ tr:hover td{background:var(--cfafaf8)}
           <div style="margin-left:auto;display:flex;gap:10px;font-size:11px;align-items:center;flex-wrap:wrap">
             <span><span style="display:inline-block;width:9px;height:9px;background:var(--cbfdbfe);border-radius:2px;vertical-align:middle"></span> PTO</span>
             <span><span style="display:inline-block;width:9px;height:9px;background:var(--cbbf7d0);border-radius:2px;vertical-align:middle"></span> WFH</span>
+            <span><span style="display:inline-block;width:9px;height:9px;background:var(--ce2e8f0);border-radius:2px;vertical-align:middle"></span> Out of office</span>
             <span><span style="display:inline-block;width:9px;height:9px;background:var(--cfed7aa);border-radius:2px;vertical-align:middle"></span> Holiday</span>
             <span><span style="display:inline-block;width:9px;height:9px;background:var(--cfde68a);border-radius:2px;vertical-align:middle"></span> On Lunch (live)</span>
             <span><span style="display:inline-block;width:9px;height:9px;background:var(--cfce7f3);border-radius:2px;vertical-align:middle"></span> Anniversary 🎂</span>
@@ -438,10 +452,6 @@ tr:hover td{background:var(--cfafaf8)}
         <div class="cg" id="caldays" style="margin-top:2px"></div>
       </div>
       <div class="cdet" id="caldet"><div id="caldetinner"></div></div>
-      <div id="cal-team-panel" class="" style="margin-top:.75rem">
-        <div style="font-size:12px;font-weight:600;color:var(--c888888);text-transform:uppercase;letter-spacing:.5px;margin-bottom:.6rem">Today's team breakdown — <span id="cal-team-date">Thursday, June 11</span></div>
-        <div id="cal-team-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.75rem"></div>
-      </div>
     </div>
 
     <!-- WHO'S IN -->
@@ -456,6 +466,7 @@ tr:hover td{background:var(--cfafaf8)}
           <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px"><span style="width:10px;height:10px;border-radius:50%;background:var(--c92400e);display:inline-block"></span>On lunch</span>
           <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px"><span style="width:10px;height:10px;border-radius:50%;background:var(--c0891b2);display:inline-block"></span>WFH</span>
           <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px"><span style="width:10px;height:10px;border-radius:50%;background:var(--c7c3aed);display:inline-block"></span>On PTO</span>
+          <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px"><span style="width:10px;height:10px;border-radius:50%;background:var(--c64748b);display:inline-block"></span>Out of office</span>
           <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px"><span style="width:10px;height:10px;border-radius:50%;background:var(--cd1d5db);display:inline-block"></span>Not in</span>
         </div>
       </div>
@@ -467,11 +478,14 @@ tr:hover td{background:var(--cfafaf8)}
       <div class="metrics" id="ptometrics"></div>
       <div class="card">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem">
-          <h3 style="margin:0">My PTO requests</h3>
-          <button class="btn bp" onclick="openPTOForm()">+ Request PTO</button>
+          <h3 style="margin:0">My time off requests</h3>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <button class="btn bp" onclick="openPTOForm()">+ Request PTO</button>
+            <button class="btn" onclick="openOOOForm()">+ Out of office</button>
+          </div>
         </div>
-        <table><thead><tr><th>Type</th><th>Dates</th><th>Days</th><th>Status</th><th>Notes</th></tr></thead>
-        <tbody id="myrows"></tbody></table>
+        <div style="overflow-x:auto"><table><thead><tr><th>Request</th><th>When</th><th>Length</th><th>Status</th><th>Notes</th></tr></thead>
+        <tbody id="myrows"></tbody></table></div>
       </div>
       <div id="ptoform" class="card hidden">
         <h3 style="margin-bottom:.75rem">New PTO request</h3>
@@ -484,6 +498,21 @@ tr:hover td{background:var(--cfafaf8)}
         <div style="display:flex;gap:8px">
           <button class="btn bp" onclick="submitPTO()">Submit request</button>
           <button class="bsm" onclick="document.getElementById('ptoform').classList.add('hidden')">Cancel</button>
+        </div>
+      </div>
+      <div id="oooform" class="card hidden">
+        <h3 style="margin-bottom:.25rem">New out of office request</h3>
+        <div style="font-size:12px;color:var(--c888888);margin-bottom:.75rem">For coming in late, leaving early, or stepping out during the day. This doesn't count as PTO.</div>
+        <div class="r3" style="margin-bottom:.75rem">
+          <div><div class="stl" style="margin-top:0">Date</div><input type="date" id="oodate" class="fc" style="margin:0;width:100%"></div>
+          <div><div class="stl" style="margin-top:0">Type</div><select id="ootype" class="fc" style="margin:0;width:100%" onchange="oooTypeChanged()"><option>Arriving late</option><option>Leaving early</option><option>Out part of the day</option><option>Out all day</option></select></div>
+          <div id="oofromwrap"><div class="stl" style="margin-top:0" id="oofromlbl">Arriving at</div><input type="time" id="oofrom" class="fc" style="margin:0;width:100%"></div>
+          <div id="ootowrap" class="hidden"><div class="stl" style="margin-top:0">Back at</div><input type="time" id="ooto" class="fc" style="margin:0;width:100%"></div>
+        </div>
+        <div style="margin-bottom:.75rem"><div class="stl" style="margin-top:0">Reason (optional)</div><input type="text" id="oonotes" class="fc" placeholder="e.g. doctor's appointment, court, off-site meeting" style="margin:0;width:100%"></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn bp" onclick="submitOOO()">Submit request</button>
+          <button class="bsm" onclick="document.getElementById('oooform').classList.add('hidden')">Cancel</button>
         </div>
       </div>
     </div>
@@ -558,7 +587,7 @@ tr:hover td{background:var(--cfafaf8)}
         <div id="anniv-panel" style="margin-bottom:1rem"></div>
 
         <div class="ptabs">
-          <button class="pt" onclick="aTab('approvals',this)">PTO Approvals</button>
+          <button class="pt" onclick="aTab('approvals',this)">Time Off Approvals</button>
           <button class="pt" onclick="aTab('timesheets',this)">Timesheets</button>
           <button class="pt" onclick="aTab('wfh',this)">WFH Schedule</button>
           <button class="pt" onclick="aTab('emps',this)">Employees</button>
@@ -571,11 +600,12 @@ tr:hover td{background:var(--cfafaf8)}
         <div id="Aapprovals" class="hidden">
           <div class="tb">
             <select id="afstat" onchange="renderApprovals()" class="fc" style="margin:0;width:auto"><option value="">All statuses</option><option value="Pending">Pending</option><option value="Approved">Approved</option><option value="Denied">Denied</option></select>
+            <select id="afcat" onchange="renderApprovals()" class="fc" style="margin:0;width:auto"><option value="">PTO + out of office</option><option value="PTO">PTO only</option><option value="OOO">Out of office only</option></select>
             <input type="text" id="afsearch" class="fc" placeholder="Search employee..." oninput="renderApprovals()" style="margin:0;flex:1;min-width:120px">
           </div>
           <div class="card" style="padding:0;overflow:hidden">
-            <table><thead><tr><th>Employee</th><th>Type</th><th>Dates</th><th>Days</th><th>Status</th><th>Action</th></tr></thead>
-            <tbody id="approws"></tbody></table>
+            <div style="overflow-x:auto"><table><thead><tr><th>Employee</th><th>Request</th><th>When</th><th>Length</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody id="approws"></tbody></table></div>
           </div>
         </div>
 
@@ -604,13 +634,32 @@ tr:hover td{background:var(--cfafaf8)}
         </div>
 
         <div id="Awfh" class="hidden">
-          <div class="tb">
-            <select id="wwweek" onchange="renderWFH()" class="fc" style="margin:0;width:auto"></select>
-            <select id="wwdept" onchange="renderWFH()" class="fc" style="margin:0;width:auto"><option value="">All teams</option></select>
+          <div class="card">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:.75rem">
+              <div>
+                <h3 style="margin:0">Weekly WFH schedule</h3>
+                <div style="font-size:12px;color:var(--c888888);margin-top:2px">Pick each person's regular WFH days. They repeat every week until you change them or turn schedules off.</div>
+              </div>
+              <div id="wfhmaster"></div>
+            </div>
+            <div class="tb" style="margin-bottom:.5rem">
+              <select id="wwdept" onchange="renderWFH()" class="fc" style="margin:0;width:auto"><option value="">All teams</option></select>
+            </div>
+            <div style="overflow-x:auto">
+              <table><thead><tr><th>Employee</th><th>Team</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th></th></tr></thead>
+              <tbody id="wfhschedrows"></tbody></table>
+            </div>
           </div>
-          <div class="card" style="padding:0;overflow:hidden;overflow-x:auto">
-            <table><thead><tr><th>Employee</th><th>Team</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th></tr></thead>
-            <tbody id="wfhrows"></tbody></table>
+          <div class="card">
+            <h3 style="margin:0">One-off WFH days</h3>
+            <div style="font-size:12px;color:var(--c888888);margin:2px 0 .75rem">For an extra WFH day outside someone's regular schedule. Scheduled days show as <span class="badge b-wfh" style="font-size:10px">Scheduled</span>.</div>
+            <div class="tb" style="margin-bottom:.5rem">
+              <select id="wwweek" onchange="renderWFH()" class="fc" style="margin:0;width:auto"></select>
+            </div>
+            <div style="overflow-x:auto">
+              <table><thead><tr><th>Employee</th><th>Team</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th></tr></thead>
+              <tbody id="wfhrows"></tbody></table>
+            </div>
           </div>
         </div>
 
@@ -620,7 +669,7 @@ tr:hover td{background:var(--cfafaf8)}
             <button class="btn bp" onclick="openEmpForm(null)">+ Add employee</button>
           </div>
           <div class="card" style="padding:0;overflow:hidden">
-            <table><thead><tr><th>Employee</th><th>Team</th><th>Title</th><th>Role</th><th>PTO left</th><th></th></tr></thead>
+            <table><thead><tr><th>Employee</th><th>Team</th><th>Title</th><th>Role</th><th></th></tr></thead>
             <tbody id="emprows"></tbody></table>
           </div>
           <div id="empform" class="card">
@@ -635,7 +684,6 @@ tr:hover td{background:var(--cfafaf8)}
               <div><div class="stl" style="margin-top:0">Email</div><input type="email" id="efemail" class="fc" style="margin:0;width:100%"></div>
               <div><div class="stl" style="margin-top:0">Phone</div><input type="tel" id="efphone" class="fc" style="margin:0;width:100%"></div>
               <div><div class="stl" style="margin-top:0">PIN (enter to set/change)</div><input type="text" id="efpin" class="fc" maxlength="20" style="margin:0;width:100%"></div>
-              <div><div class="stl" style="margin-top:0">PTO days / year</div><input type="number" id="efpto" class="fc" value="15" min="0" style="margin:0;width:100%"></div>
               <div><div class="stl" style="margin-top:0">Role</div><select id="efrole" class="fc" style="margin:0;width:100%"><option value="employee">Employee</option><option value="admin">Admin</option></select></div>
           <div style="display:flex;align-items:center;gap:8px;padding:8px 0">
             <input type="checkbox" id="efclio" style="width:16px;height:16px;cursor:pointer">
@@ -1559,7 +1607,7 @@ async function loadAllData(){
   );
 
   try {
-    const [emps, ptoR, wfhR, entriesR, lunchR, holsR, mileageR, settingsR, reqsR, notifsR] = await Promise.race([
+    const [emps, ptoR, wfhR, entriesR, lunchR, holsR, mileageR, settingsR, reqsR, notifsR, wfhSchedR] = await Promise.race([
       Promise.all([
         sbGet("employees","select=*&order=id"),
         sbGet("pto_requests","select=*&order=id"),
@@ -1571,6 +1619,7 @@ async function loadAllData(){
         sbGet("settings","select=*"),
         sbGet("office_requests","select=*&order=id.desc").catch(()=>[]),
         sbGet("notifications","select=*&order=id.desc").catch(()=>[]),
+        sbGet("wfh_schedules","select=*&order=emp_id").catch(()=>[]),
       ]),
       timeout
     ]);
@@ -1586,11 +1635,15 @@ async function loadAllData(){
 
     PTO = ptoR.map(r=>({
       id: r.id, empId: r.emp_id, type: r.type,
+      cat: r.category==="OOO"?"OOO":"PTO",
       start: r.start_date, end: r.end_date,
+      startTime: r.start_time ? r.start_time.slice(0,5) : "",
+      endTime: r.end_time ? r.end_time.slice(0,5) : "",
       days: r.days, status: r.status, notes: r.notes||""
     }));
 
     WFH = wfhR.map(r=>({id: r.id, empId: r.emp_id, date: r.work_date}));
+    WFH_SCHED = wfhSchedR.map(r=>({empId: r.emp_id, days: [!!r.mon,!!r.tue,!!r.wed,!!r.thu,!!r.fri]}));
 
     ENTRIES = entriesR.map(r=>({
       id: r.id, empId: r.emp_id, date: r.entry_date,
@@ -1629,6 +1682,10 @@ async function loadAllData(){
 
     const rateSetting = settingsR.find(s=>s.key==="mileage_rate");
     if(rateSetting) mileageRate = parseFloat(rateSetting.value);
+    const wfhOnSetting = settingsR.find(s=>s.key==="wfh_schedules_on");
+    wfhSchedOn = !!(wfhOnSetting && wfhOnSetting.value==="true");
+    const wfhSinceSetting = settingsR.find(s=>s.key==="wfh_schedules_since");
+    wfhSchedSince = (wfhSinceSetting && wfhSinceSetting.value) || "";
 
     hideLoading();
     initLogin();
@@ -2553,6 +2610,36 @@ const mH=m=>(m/60).toFixed(1);
 const dS=d=>d.toISOString().slice(0,10);
 const isAdm=()=>CU&&CU.role==="admin";
 function wD(s){return[0,1,2,3,4].map(i=>{const d=new Date(s+"T12:00:00");d.setDate(d.getDate()+i);return dS(d)})}
+// ---- Time off / WFH helpers ----
+let WFH_SCHED=[],wfhSchedOn=false,wfhSchedSince="";
+const localDS=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+function mondayOf(ds){const d=new Date(ds+"T12:00:00");const w=d.getDay();d.setDate(d.getDate()-(w===0?6:w-1));return localDS(d)}
+// Approved PTO (not out-of-office) covering a date
+function onPTO(empId,d){return PTO.find(r=>r.empId===empId&&r.cat!=="OOO"&&r.status==="Approved"&&r.start<=d&&r.end>=d)}
+// Approved out-of-office request on a date
+function oooOn(empId,d){return PTO.find(r=>r.empId===empId&&r.cat==="OOO"&&r.status==="Approved"&&r.start<=d&&r.end>=d)}
+// Is the date one of this person's recurring WFH days (and schedules are switched on)?
+function wfhScheduled(empId,d){
+  if(!wfhSchedOn)return false;
+  if(wfhSchedSince&&d<wfhSchedSince)return false;
+  const sc=WFH_SCHED.find(x=>x.empId===empId);if(!sc)return false;
+  const dow=new Date(d+"T12:00:00").getDay();
+  return dow>=1&&dow<=5&&sc.days[dow-1];
+}
+function isWFH(empId,d){return !!WFH.find(r=>r.empId===empId&&r.date===d)||wfhScheduled(empId,d)}
+function t12(t){if(!t)return"";let[h,m]=t.split(":").map(Number);const ap=h>=12?"PM":"AM";h=h%12||12;return h+":"+String(m).padStart(2,"0")+" "+ap}
+function oooWhen(r){
+  if(r.type==="Arriving late")return"Arriving "+t12(r.startTime);
+  if(r.type==="Leaving early")return"Leaving at "+t12(r.startTime);
+  if(r.type==="Out part of the day")return"Out "+t12(r.startTime)+(r.endTime?" – "+t12(r.endTime):"");
+  return"Out all day";
+}
+function oooShort(r){
+  if(r.type==="Arriving late")return"in "+t12(r.startTime).replace(":00","");
+  if(r.type==="Leaving early")return"out "+t12(r.startTime).replace(":00","");
+  if(r.type==="Out part of the day")return"out "+t12(r.startTime).replace(":00","");
+  return"out";
+}
 function bdays(s,e){let d=0,c=new Date(s+"T12:00:00");const en=new Date(e+"T12:00:00");while(c<=en){if(c.getDay()!==0&&c.getDay()!==6)d++;c.setDate(c.getDate()+1)}return d}
 
 // ---- ORG CHART ----
@@ -2757,7 +2844,7 @@ function saveAndDownload(){
   // Clear all dynamically-rendered elements so they render fresh on reload
   const toClear=[
     {id:"calhdrs",type:"inner"},{id:"caldays",type:"inner"},
-    {id:"cal-team-grid",type:"inner"},{id:"tclog",type:"inner"},
+    {id:"tclog",type:"inner"},
     {id:"tcweek",type:"inner"},{id:"tcsince",type:"text"},
     {id:"tctotal",type:"text"},{id:"ptometrics",type:"inner"},
     {id:"myrows",type:"inner"},{id:"approws",type:"inner"},
@@ -2909,7 +2996,8 @@ function showTab(name,btn){
   document.getElementById("T"+name).classList.remove("hidden");
   if(btn)btn.classList.add("active");
   if(name==="clock")renderClock();
-  if(name==="cal"){renderCal();renderTeamPanel();}
+  document.getElementById("mainwrap").classList.toggle("wide",name==="cal");
+  if(name==="cal"){renderCal();}
   if(name==="whosin")renderWhosIn();
   if(name==="mypto")renderMyPTO();
   if(name==="mileage"){renderMyMileage();}
@@ -2983,10 +3071,10 @@ function renderClock(){
     const ents=ENTRIES.filter(r=>r.empId===CU.id&&r.date===d&&r.ci&&r.co);
     const dayLunchM=LUNCH.filter(r=>r.empId===CU.id&&r.date===d&&r.start&&r.end).reduce((s,r)=>s+toM(r.end)-toM(r.start),0);
     const mins=Math.max(0,ents.reduce((s,r)=>s+toM(r.co)-toM(r.ci),0)-dayLunchM);
-    const onPTO=PTO.find(r=>r.empId===CU.id&&r.status==="Approved"&&r.start<=d&&r.end>=d);
+    const onPTOd=onPTO(CU.id,d);
     return`<div style="text-align:center;background:var(--cf5f4f0);border-radius:8px;padding:5px 3px">
       <div style="font-size:10px;color:var(--c888888)">${["Mon","Tue","Wed","Thu","Fri"][i]}</div>
-      <div style="font-size:12px;font-weight:700;margin-top:2px">${onPTO?'<span class="badge b-pto" style="font-size:9px">PTO</span>':mins?mH(mins)+"h":"—"}</div>
+      <div style="font-size:12px;font-weight:700;margin-top:2px">${onPTOd?'<span class="badge b-pto" style="font-size:9px">PTO</span>':mins?mH(mins)+"h":"—"}</div>
     </div>`;}).join("")+"</div>";
 }
 
@@ -3052,13 +3140,18 @@ function renderCal(){
     const ds=`${yr2}-${String(mo2+1).padStart(2,"0")}-${String(dn).padStart(2,"0")}`;
     const isT=ds===TODAY,dow=new Date(ds+"T12:00:00").getDay(),isW=dow===0||dow===6;
     const evs=[];
-    PTO.filter(r=>r.status==="Approved"&&r.start<=ds&&r.end>=ds).forEach(r=>{
-      const e=ge(r.empId);evs.push({cls:"ep",lbl:e.name.split(" ")[0]+" PTO"});
-    });
-    WFH.filter(r=>r.date===ds).forEach(r=>{
-      const e=ge(r.empId);evs.push({cls:"ew",lbl:e.name.split(" ")[0]+" WFH"});
-    });
     HOLS.filter(h=>h.date===ds).forEach(h=>evs.push({cls:"eh",lbl:h.name}));
+    PTO.filter(r=>r.cat!=="OOO"&&r.status==="Approved"&&r.start<=ds&&r.end>=ds).forEach(r=>{
+      const e=ge(r.empId);if(e)evs.push({cls:"ep",lbl:e.name.split(" ")[0]+" PTO",det:e.name+(r.type?" · "+r.type:"")});
+    });
+    PTO.filter(r=>r.cat==="OOO"&&r.status==="Approved"&&r.start<=ds&&r.end>=ds).forEach(r=>{
+      const e=ge(r.empId);if(e)evs.push({cls:"eo",lbl:e.name.split(" ")[0]+" "+oooShort(r),det:e.name+" · "+oooWhen(r)});
+    });
+    // WFH: one-off days plus recurring schedules. Collapsed into one chip when many people are home.
+    const wfhPeople=isW?[]:EMP.filter(e=>isWFH(e.id,ds)&&!onPTO(e.id,ds));
+    if(wfhPeople.length>2){
+      evs.push({cls:"ew",lbl:"🏠 "+wfhPeople.length+" WFH",det:wfhPeople.map(e=>e.name).join(", "),group:true});
+    } else wfhPeople.forEach(e=>evs.push({cls:"ew",lbl:e.name.split(" ")[0]+" WFH",det:e.name}));
     if(isT){
       LUNCH.filter(r=>r.empId&&r.date===TODAY&&r.start&&!r.end).forEach(r=>{
         const e=ge(r.empId);if(e)evs.push({cls:"el",lbl:e.name.split(" ")[0]+" Lunch"});
@@ -3079,88 +3172,43 @@ function renderCal(){
     });
     const day=document.createElement("div");
     day.className="cd"+(oth?" oth":"")+(isT?" tod":"")+(isW&&!isT?" wkn":"");
-    day.innerHTML=`<div class="cdn">${dn}</div>`+evs.slice(0,3).map(ev=>`<div class="ev ${ev.cls}">${ev.lbl}</div>`).join("")+(evs.length>3?`<div style="font-size:8px;color:var(--c888888)">+${evs.length-3} more</div>`:"");
+    const MAXEV=5,shown=evs.length>MAXEV?evs.slice(0,MAXEV-1):evs;
+    day.innerHTML=`<div class="cdn">${dn}</div>`+shown.map(ev=>`<div class="ev ${ev.cls}" title="${esc(ev.det||ev.lbl).replace(/"/g,"&quot;")}">${esc(ev.lbl)}</div>`).join("")+(evs.length>shown.length?`<div class="cmore">+${evs.length-shown.length} more</div>`:"");
     day.onclick=()=>{
       const p=document.getElementById("caldet");
       if(!evs.length){p.classList.remove("open");return}
       p.classList.add("open");
       document.getElementById("caldetinner").innerHTML=
         `<div style="font-weight:700;font-size:13px;margin-bottom:.5rem">${new Date(ds+"T12:00:00").toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric"})}</div>`
-        +evs.map(ev=>`<div style="display:flex;align-items:center;gap:7px;padding:3px 0">
-          <span class="badge ${ev.cls==="ep"?"b-pto":ev.cls==="ew"?"b-wfh":ev.cls==="el"?"b-lunch":ev.cls==="ea"?"b-anniv":"b-hol"}">${ev.cls==="ep"?"PTO":ev.cls==="ew"?"WFH":ev.cls==="el"?"Lunch":ev.cls==="ea"?"Anniversary":"Holiday"}</span>
-          <span style="font-size:12px">${ev.lbl}</span></div>`).join("");
+        +evs.map(ev=>{
+          const b={ep:["b-pto","PTO"],ew:["b-wfh","WFH"],el:["b-lunch","Lunch"],ea:["b-anniv","Anniversary"],eo:["b-ooo","Out of office"]}[ev.cls]||["b-hol","Holiday"];
+          return`<div style="display:flex;align-items:flex-start;gap:7px;padding:3px 0">
+          <span class="badge ${b[0]}" style="flex-shrink:0">${b[1]}</span>
+          <span style="font-size:12px;padding-top:2px">${esc(ev.det||ev.lbl)}</span></div>`;}).join("");
     };
     el.appendChild(day);
   }
 }
-function chMo(d){calMo+=d;if(calMo>11){calMo=0;calYr++}if(calMo<0){calMo=11;calYr--}renderCal();document.getElementById("caldet").classList.remove("open");renderTeamPanel();}
-
-function renderTeamPanel(){
-  const panel=document.getElementById("cal-team-panel");
-  if(!isAdm()){panel.classList.add("hidden");return;}
-  panel.classList.remove("hidden");
-  const d=new Date(TODAY+"T12:00:00");
-  document.getElementById("cal-team-date").textContent=d.toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric"});
-  const grid=document.getElementById("cal-team-grid");
-  grid.innerHTML=TEAMS.map(team=>{
-    const members=EMP.filter(e=>e.team===team);
-    const total=members.length;
-    const onPTO=members.filter(e=>PTO.find(r=>r.empId===e.id&&r.status==="Approved"&&r.start<=TODAY&&r.end>=TODAY));
-    const onWFH=members.filter(e=>WFH.find(r=>r.empId===e.id&&r.date===TODAY)&&!PTO.find(r=>r.empId===e.id&&r.status==="Approved"&&r.start<=TODAY&&r.end>=TODAY));
-    const onLunch=members.filter(e=>LUNCH.find(r=>r.empId===e.id&&r.date===TODAY&&r.start&&!r.end));
-    const inOffice=members.filter(e=>
-      !PTO.find(r=>r.empId===e.id&&r.status==="Approved"&&r.start<=TODAY&&r.end>=TODAY)&&
-      !WFH.find(r=>r.empId===e.id&&r.date===TODAY)
-    );
-    const bg=TEAM_COLORS[team]||"var(--cf5f4f0)";
-    const tc=TEAM_TEXT[team]||"var(--c1a1a1a)";
-    return`<div style="background:${bg};border-radius:12px;padding:1rem">
-      <div style="font-size:13px;font-weight:700;color:${tc};margin-bottom:.6rem">${team} <span style="font-weight:400;font-size:11px;opacity:.7">(${total} people)</span></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
-        <div style="background:var(--glass);border-radius:8px;padding:6px 8px">
-          <div style="font-size:10px;color:var(--c666666);font-weight:600;text-transform:uppercase;letter-spacing:.4px">In office</div>
-          <div style="font-size:20px;font-weight:700;color:var(--c1a1a1a)">${inOffice.length}</div>
-          <div style="font-size:10px;color:var(--c888888);margin-top:1px">${inOffice.map(e=>e.first).join(", ")||"—"}</div>
-        </div>
-        <div style="background:var(--glass);border-radius:8px;padding:6px 8px">
-          <div style="font-size:10px;color:var(--c166534);font-weight:600;text-transform:uppercase;letter-spacing:.4px">WFH</div>
-          <div style="font-size:20px;font-weight:700;color:var(--c166534)">${onWFH.length}</div>
-          <div style="font-size:10px;color:var(--c888888);margin-top:1px">${onWFH.map(e=>e.first).join(", ")||"—"}</div>
-        </div>
-        <div style="background:var(--glass);border-radius:8px;padding:6px 8px">
-          <div style="font-size:10px;color:var(--c1e40af);font-weight:600;text-transform:uppercase;letter-spacing:.4px">On PTO</div>
-          <div style="font-size:20px;font-weight:700;color:var(--c1e40af)">${onPTO.length}</div>
-          <div style="font-size:10px;color:var(--c888888);margin-top:1px">${onPTO.map(e=>e.first).join(", ")||"—"}</div>
-        </div>
-        <div style="background:var(--glass);border-radius:8px;padding:6px 8px">
-          <div style="font-size:10px;color:var(--c92400e);font-weight:600;text-transform:uppercase;letter-spacing:.4px">On Lunch</div>
-          <div style="font-size:20px;font-weight:700;color:var(--c92400e)">${onLunch.length}</div>
-          <div style="font-size:10px;color:var(--c888888);margin-top:1px">${onLunch.map(e=>e.first).join(", ")||"—"}</div>
-        </div>
-      </div>
-    </div>`;
-  }).join("");
-}
+function chMo(d){calMo+=d;if(calMo>11){calMo=0;calYr++}if(calMo<0){calMo=11;calYr--}renderCal();document.getElementById("caldet").classList.remove("open");}
 
 function renderMyPTO(){
   if(!CU)return;
-  const e=CU,rem=e.ptoTotal-e.ptoUsed;
-  const pend=PTO.filter(r=>r.empId===e.id&&r.status==="Pending").reduce((s,r)=>s+r.days,0);
+  const mine=PTO.filter(r=>r.empId===CU.id);
+  const pend=mine.filter(r=>r.status==="Pending").length;
+  const upcoming=mine.filter(r=>r.status==="Approved"&&r.end>=TODAY).length;
   document.getElementById("ptometrics").innerHTML=`
-    <div class="metric"><div class="mlbl">Total PTO</div><div class="mval">${e.ptoTotal}d</div></div>
-    <div class="metric"><div class="mlbl">Used</div><div class="mval">${e.ptoUsed}d</div></div>
-    <div class="metric"><div class="mlbl">Remaining</div><div class="mval" style="color:${rem<5?"var(--cdc2626)":"var(--c16a34a)"}">${rem}d</div></div>
-    <div class="metric"><div class="mlbl">Pending</div><div class="mval">${pend}d</div></div>`;
-  const rows=PTO.filter(r=>r.empId===e.id).sort((a,b)=>b.start.localeCompare(a.start));
+    <div class="metric"><div class="mlbl">Pending requests</div><div class="mval">${pend}</div></div>
+    <div class="metric"><div class="mlbl">Upcoming time off</div><div class="mval">${upcoming}</div></div>`;
+  const rows=mine.slice().sort((a,b)=>b.start.localeCompare(a.start));
   document.getElementById("myrows").innerHTML=rows.length?rows.map(r=>`<tr>
-    <td style="font-size:12px">${r.type}</td>
-    <td style="font-size:12px">${fmt(r.start)} - ${fmt(r.end)}</td>
-    <td style="font-size:12px">${r.days}d</td>
+    <td style="font-size:12px">${r.cat==="OOO"?'<span class="badge b-ooo" style="font-size:10px">Out of office</span> ':'<span class="badge b-pto" style="font-size:10px">PTO</span> '}${esc(r.type||"")}</td>
+    <td style="font-size:12px">${r.cat==="OOO"?fmt(r.start):fmt(r.start)+(r.end!==r.start?" - "+fmt(r.end):"")}</td>
+    <td style="font-size:12px">${r.cat==="OOO"?oooWhen(r):r.days+(r.days===1?" day":" days")}</td>
     <td><span class="badge b-${r.status==="Approved"?"appr":r.status==="Denied"?"deni":"pend"}">${r.status}</span></td>
-    <td style="font-size:11px;color:var(--c888888)">${r.notes||"—"}</td></tr>`).join("")
-    :'<tr><td colspan="5" style="text-align:center;color:var(--c888888);font-size:12px;padding:1.25rem">No PTO requests yet — click "Request PTO" to get started.</td></tr>';
+    <td style="font-size:11px;color:var(--c888888)">${esc(r.notes||"—")}</td></tr>`).join("")
+    :'<tr><td colspan="5" style="text-align:center;color:var(--c888888);font-size:12px;padding:1.25rem">No requests yet. Use "Request PTO" or "Out of office" to get started.</td></tr>';
 }
-function openPTOForm(){document.getElementById("ptoform").classList.remove("hidden")}
+function openPTOForm(){document.getElementById("oooform").classList.add("hidden");document.getElementById("ptoform").classList.remove("hidden")}
 async function submitPTO(){
   const type=document.getElementById("pftype").value;
   const start=document.getElementById("pfstart").value;
@@ -3168,16 +3216,56 @@ async function submitPTO(){
   const notes=document.getElementById("pfnotes").value;
   if(!start||!end){alert("Please pick start and end dates.");return}
   if(end<start){alert("End date must be after start date.");return}
-  const days=bdays(start,end),rem=CU.ptoTotal-CU.ptoUsed;
-  if(days>rem){alert("Only "+rem+" days remaining — this request needs "+days+".");return}
+  const days=bdays(start,end);
   try{
-    const rows=await sbPost("pto_requests",{emp_id:CU.id,type,start_date:start,end_date:end,days,status:"Pending",notes});
+    const rows=await sbPost("pto_requests",{emp_id:CU.id,type,category:"PTO",start_date:start,end_date:end,days,status:"Pending",notes});
     const saved=rows[0];
-    PTO.push({id:saved.id,empId:CU.id,type,start,end,days,status:"Pending",notes});
+    PTO.push({id:saved.id,empId:CU.id,type,cat:"PTO",start,end,startTime:"",endTime:"",days,status:"Pending",notes});
     document.getElementById("ptoform").classList.add("hidden");
     ["pfstart","pfend","pfnotes"].forEach(id=>document.getElementById(id).value="");
     renderMyPTO();
+    showToast("PTO request sent");
   }catch(e){alert("Could not save PTO request. Please try again.");console.error(e);}
+}
+function openOOOForm(){
+  document.getElementById("ptoform").classList.add("hidden");
+  document.getElementById("oooform").classList.remove("hidden");
+  if(!document.getElementById("oodate").value)document.getElementById("oodate").value=TODAY;
+  oooTypeChanged();
+}
+function oooTypeChanged(){
+  const t=document.getElementById("ootype").value;
+  const lbl={"Arriving late":"Arriving at","Leaving early":"Leaving at","Out part of the day":"Leaving at"}[t];
+  document.getElementById("oofromwrap").classList.toggle("hidden",!lbl);
+  document.getElementById("ootowrap").classList.toggle("hidden",t!=="Out part of the day");
+  if(lbl)document.getElementById("oofromlbl").textContent=lbl;
+}
+async function submitOOO(){
+  const date=document.getElementById("oodate").value;
+  const type=document.getElementById("ootype").value;
+  const from=document.getElementById("oofrom").value;
+  const to=document.getElementById("ooto").value;
+  const notes=document.getElementById("oonotes").value.trim();
+  if(!date){alert("Please pick a date.");return}
+  if(type!=="Out all day"&&!from){alert("Please enter a time.");return}
+  if(type==="Out part of the day"&&to&&to<=from){alert("The time you're back should be after the time you leave.");return}
+  const startTime=type==="Out all day"?"":from;
+  const endTime=type==="Out part of the day"?to:"";
+  try{
+    const rows=await sbPost("pto_requests",{emp_id:CU.id,type,category:"OOO",start_date:date,end_date:date,
+      start_time:startTime||null,end_time:endTime||null,days:0,status:"Pending",notes});
+    const saved=rows[0];
+    PTO.push({id:saved.id,empId:CU.id,type,cat:"OOO",start:date,end:date,startTime,endTime,days:0,status:"Pending",notes});
+    document.getElementById("oooform").classList.add("hidden");
+    ["oofrom","ooto","oonotes"].forEach(id=>document.getElementById(id).value="");
+    renderMyPTO();
+    showToast("Out of office request sent");
+  }catch(e){
+    console.error(e);
+    alert(String(e.message||"").includes("category")||String(e.message||"").includes("start_time")
+      ?"Out of office requests need a quick database update first. Please let an admin know."
+      :"Could not save request. Please try again.");
+  }
 }
 
 function aTab(name,btn){
@@ -3568,10 +3656,11 @@ async function updateReqStatus(reqId, newStatus){
 function getEmpStatus(empId){
   // Returns one of: 'in', 'lunch', 'wfh', 'pto', 'out'
   // Check PTO first
-  if(PTO.find(r=>r.empId===empId&&r.status==="Approved"&&r.start<=TODAY&&r.end>=TODAY))
+  if(onPTO(empId,TODAY))
     return{status:"pto",label:"On PTO",dotCls:"wi-dot-pto",lblCls:"wi-lbl-pto"};
-  // Check WFH
-  const isWFH=WFH.find(r=>r.empId===empId&&r.date===TODAY);
+  // Check WFH (one-off day or recurring schedule)
+  const wfhToday=isWFH(empId,TODAY);
+  const ooo=oooOn(empId,TODAY);
   // Check clocked in today
   const todayEntries=ENTRIES.filter(r=>r.empId===empId&&r.date===TODAY);
   const openEntry=todayEntries.find(r=>r.ci&&!r.co);
@@ -3582,9 +3671,9 @@ function getEmpStatus(empId){
     return{status:"lunch",label:"On lunch",dotCls:"wi-dot-lunch",lblCls:"wi-lbl-lunch",since:onLunch.start};
   if(openEntry)
     return{status:"in",label:"Clocked in",dotCls:"wi-dot-in",lblCls:"wi-lbl-in",since:openEntry.ci};
-  if(isWFH&&hasWorkedToday)
-    return{status:"wfh",label:"WFH",dotCls:"wi-dot-wfh",lblCls:"wi-lbl-wfh"};
-  if(isWFH)
+  if(ooo)
+    return{status:"ooo",label:"Out of office",dotCls:"wi-dot-ooo",lblCls:"wi-lbl-ooo",note:oooWhen(ooo)};
+  if(wfhToday)
     return{status:"wfh",label:"WFH",dotCls:"wi-dot-wfh",lblCls:"wi-lbl-wfh"};
   return{status:"out",label:"Not in",dotCls:"wi-dot-out",lblCls:"wi-lbl-out"};
 }
@@ -3602,7 +3691,7 @@ function renderWhosIn(){
     const ttx=TEAM_TEXT[team]||"var(--c1a1a1a)";
 
     // Count statuses for header summary
-    const counts={in:0,lunch:0,wfh:0,pto:0,out:0};
+    const counts={in:0,lunch:0,wfh:0,pto:0,ooo:0,out:0};
     members.forEach(e=>{counts[getEmpStatus(e.id).status]++});
     const inCount=counts.in+counts.wfh; // WFH counts as "working"
 
@@ -3617,14 +3706,14 @@ function renderWhosIn(){
         <div style="width:28px;height:28px;border-radius:50%;background:${avBgs[avIdx]};color:${avTxs[avIdx]};display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">${initStr}</div>
         <span class="wi-name">${e.name}</span>
         <span class="wi-status-lbl ${st.lblCls}">${st.label}</span>
-        ${st.since?`<span class="wi-since">since ${st.since}</span>`:""}
+        ${st.since?`<span class="wi-since">since ${st.since}</span>`:st.note?`<span class="wi-since">${st.note}</span>`:""}
       </div>`;
     }).join("");
 
     return`<div class="wi-card">
       <div class="wi-team-header" style="background:${tbg};color:${ttx}">
         <span>${team}</span>
-        <span class="wi-team-count">${inCount} of ${members.length} working &nbsp;·&nbsp; ${counts.out+counts.pto} out</span>
+        <span class="wi-team-count">${inCount} of ${members.length} working &nbsp;·&nbsp; ${counts.out+counts.pto+counts.ooo} out</span>
       </div>
       ${rows}
     </div>`;
@@ -3904,17 +3993,18 @@ function renderAnnivPanel(){
 function renderApprovals(){
   const f=document.getElementById("afstat").value;
   const s=document.getElementById("afsearch").value.toLowerCase();
+  const c=(document.getElementById("afcat")||{}).value||"";
   const rows=PTO.filter(r=>{
-    const e=ge(r.empId);
-    return(!f||r.status===f)&&(!s||e.name.toLowerCase().includes(s));
+    const e=ge(r.empId);if(!e)return false;
+    return(!f||r.status===f)&&(!c||r.cat===c)&&(!s||e.name.toLowerCase().includes(s));
   }).sort((a,b)=>b.start.localeCompare(a.start));
   document.getElementById("approws").innerHTML=rows.length?rows.map(r=>{
     const e=ge(r.empId);
     return`<tr>
       <td><div class="er"><div class="av ${avc(e.id)}">${ini(e.name)}</div>${e.name}</div></td>
-      <td style="font-size:12px">${r.type}</td>
-      <td style="font-size:12px">${fmt(r.start)} - ${fmt(r.end)}</td>
-      <td style="font-size:12px">${r.days}d</td>
+      <td style="font-size:12px">${r.cat==="OOO"?'<span class="badge b-ooo" style="font-size:10px">Out of office</span>':'<span class="badge b-pto" style="font-size:10px">PTO</span>'} ${esc(r.type||"")}${r.notes?`<div style="font-size:11px;color:var(--c888888);margin-top:2px">${esc(r.notes)}</div>`:""}</td>
+      <td style="font-size:12px">${r.cat==="OOO"?fmt(r.start):fmt(r.start)+(r.end!==r.start?" - "+fmt(r.end):"")}</td>
+      <td style="font-size:12px">${r.cat==="OOO"?oooWhen(r):r.days+(r.days===1?" day":" days")}</td>
       <td><span class="badge b-${r.status==="Approved"?"appr":r.status==="Denied"?"deni":"pend"}">${r.status}</span></td>
       <td style="display:flex;gap:4px;padding:8px 10px">
         ${r.status==="Pending"
@@ -3927,19 +4017,15 @@ async function approvePTO(id,status){
   const r=PTO.find(p=>p.id===id);if(!r)return;
   try{
     await sbPatch("pto_requests",`id=eq.${id}`,{status});
-    if(status==="Approved"&&r.status!=="Approved"){
-      const e=ge(r.empId);e.ptoUsed+=r.days;
-      await sbPatch("employees",`id=eq.${r.empId}`,{pto_used:e.ptoUsed});
-    }
     r.status=status;renderApprovals();
-  }catch(err){alert("Could not update PTO status. Please try again.");console.error(err);}
+  }catch(err){alert("Could not update request status. Please try again.");console.error(err);}
 }
 
 function initTS(){
   const ws=document.getElementById("tsweek");
   if(!ws.children.length){
-    const b=new Date(2026,5,8);
-    for(let i=-1;i<5;i++){
+    const b=new Date(mondayOf(TODAY)+"T12:00:00");
+    for(let i=-8;i<=1;i++){
       const d=new Date(b);d.setDate(d.getDate()+i*7);
       const e=new Date(d);e.setDate(e.getDate()+4);
       const o=document.createElement("option");o.value=dS(d);
@@ -3954,15 +4040,14 @@ function initTS(){
   renderTS();
 }
 function renderTS(){
-  const ws=document.getElementById("tsweek").value||"2026-06-08";
+  const ws=document.getElementById("tsweek").value||mondayOf(TODAY);
   const dept=document.getElementById("tsdept").value;
   const days=wD(ws);
   const emps=EMP.filter(e=>!dept||e.team===dept);
   document.getElementById("tsrows").innerHTML=emps.map(e=>{
     const cells=days.map(d=>{
       const ents=ENTRIES.filter(r=>r.empId===e.id&&r.date===d);
-      const onPTO=PTO.find(r=>r.empId===e.id&&r.status==="Approved"&&r.start<=d&&r.end>=d);
-      if(onPTO)return'<td><span class="badge b-pto" style="font-size:10px">PTO</span></td>';
+      if(onPTO(e.id,d))return'<td><span class="badge b-pto" style="font-size:10px">PTO</span></td>';
       const workM=ents.filter(r=>r.ci&&r.co).reduce((s,r)=>s+toM(r.co)-toM(r.ci),0);
       const dayLunchM=LUNCH.filter(r=>r.empId===e.id&&r.date===d&&r.start&&r.end).reduce((s,r)=>s+toM(r.end)-toM(r.start),0);
       const netM=Math.max(0,workM-dayLunchM);
@@ -3999,7 +4084,7 @@ async function manualEntry(){
   }catch(err){alert("Could not save entry.");console.error(err);}
 }
 function exportCSV(){
-  const ws=document.getElementById("tsweek").value||"2026-06-08";
+  const ws=document.getElementById("tsweek").value||mondayOf(TODAY);
   const days=wD(ws);
   let csv="Employee,Team,"+days.join(",")+",Lunch Hours,Net Total Hours,Mileage Reimbursement\n";
   csv+=EMP.map(e=>{
@@ -4022,11 +4107,11 @@ function exportCSV(){
 function initWFH(){
   const ws=document.getElementById("wwweek");
   if(!ws.children.length){
-    const b=new Date(2026,5,8);
-    for(let i=-1;i<5;i++){
+    const b=new Date(mondayOf(TODAY)+"T12:00:00");
+    for(let i=-2;i<=8;i++){
       const d=new Date(b);d.setDate(d.getDate()+i*7);
-      const o=document.createElement("option");o.value=dS(d);
-      o.textContent="Week of "+d.toLocaleDateString("en-US",{month:"short",day:"numeric"});
+      const o=document.createElement("option");o.value=localDS(d);
+      o.textContent=(i===0?"This week — ":i===1?"Next week — ":"Week of ")+d.toLocaleDateString("en-US",{month:"short",day:"numeric"});
       ws.appendChild(o);if(i===0)o.selected=true;
     }
   }
@@ -4035,22 +4120,93 @@ function initWFH(){
   renderWFH();
 }
 function renderWFH(){
-  const ws=document.getElementById("wwweek").value||"2026-06-08";
+  renderWFHMaster();
+  const ws=document.getElementById("wwweek").value||mondayOf(TODAY);
   const dept=document.getElementById("wwdept").value;
   const days=wD(ws);
   const emps=EMP.filter(e=>!dept||e.team===dept);
-  document.getElementById("wfhrows").innerHTML=emps.map(e=>{
-    const tbg3=TEAM_COLORS[e.team]||"var(--cf0f0f0)",ttx3=TEAM_TEXT[e.team]||"var(--c666666)";
+  const teamPill=e=>{const bg=TEAM_COLORS[e.team]||"var(--cf0f0f0)",tx=TEAM_TEXT[e.team]||"var(--c666666)";
+    return`<span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:${bg};color:${tx}">${e.team}</span>`};
+  // Recurring weekly schedule
+  document.getElementById("wfhschedrows").innerHTML=emps.map(e=>{
+    const sc=WFH_SCHED.find(x=>x.empId===e.id);
+    const any=sc&&sc.days.some(Boolean);
     return`<tr>
     <td><div class="er"><div class="av ${avc(e.id)}">${ini(e.name)}</div>${e.name}</div></td>
-    <td><span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:${tbg3};color:${ttx3}">${e.team}</span></td>
+    <td>${teamPill(e)}</td>
+    ${[0,1,2,3,4].map(i=>{
+      const on=sc&&sc.days[i];
+      return on
+        ?`<td><button class="bsm" style="color:var(--c166534);border-color:var(--c86efac);background:var(--cdcfce7)" onclick="togSched(${e.id},${i})">🏠 WFH</button></td>`
+        :`<td><button class="bsm" style="color:var(--caaaaaa)" onclick="togSched(${e.id},${i})">Office</button></td>`;
+    }).join("")}
+    <td>${any?`<button class="bsm" onclick="clearSched(${e.id})">Clear</button>`:""}</td></tr>`;}).join("");
+  // One-off days for the chosen week
+  document.getElementById("wfhrows").innerHTML=emps.map(e=>`<tr>
+    <td><div class="er"><div class="av ${avc(e.id)}">${ini(e.name)}</div>${e.name}</div></td>
+    <td>${teamPill(e)}</td>
     ${days.map(d=>{
-      const onPTO=PTO.find(r=>r.empId===e.id&&r.status==="Approved"&&r.start<=d&&r.end>=d);
-      const onWFH=WFH.find(r=>r.empId===e.id&&r.date===d);
-      if(onPTO)return'<td><span class="badge b-pto" style="font-size:10px">PTO</span></td>';
-      if(onWFH)return`<td><button class="bsm" style="color:var(--c166534);border-color:var(--c86efac)" onclick="togWFH(${e.id},'${d}')">WFH ✓</button></td>`;
+      if(onPTO(e.id,d))return'<td><span class="badge b-pto" style="font-size:10px">PTO</span></td>';
+      if(WFH.find(r=>r.empId===e.id&&r.date===d))return`<td><button class="bsm" style="color:var(--c166534);border-color:var(--c86efac)" onclick="togWFH(${e.id},'${d}')">WFH ✓</button></td>`;
+      if(wfhScheduled(e.id,d))return'<td><span class="badge b-wfh" style="font-size:10px">Scheduled</span></td>';
       return`<td><button class="bsm" onclick="togWFH(${e.id},'${d}')">+ WFH</button></td>`;
-    }).join("")}</tr>`;}).join("");
+    }).join("")}</tr>`).join("");
+}
+function renderWFHMaster(){
+  const el=document.getElementById("wfhmaster");if(!el)return;
+  const since=wfhSchedSince?new Date(wfhSchedSince+"T12:00:00").toLocaleDateString("en-US",{month:"short",day:"numeric"}):"";
+  el.innerHTML=wfhSchedOn
+    ?`<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span class="badge b-appr">Schedules ON${since?" since "+since:""}</span>
+        <button class="bsm" onclick="setWFHSchedOn(false)">Turn off</button></div>`
+    :`<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span class="badge b-emp">Schedules OFF</span>
+        <button class="btn bp" onclick="setWFHSchedOn(true)">Turn on</button></div>`;
+}
+async function saveSetting(key,value){
+  const existing=await sbGet("settings","select=key&key=eq."+key);
+  if(existing.length)await sbPatch("settings","key=eq."+key,{value:String(value)});
+  else await sbPost("settings",{key,value:String(value)});
+}
+async function setWFHSchedOn(on){
+  let since=wfhSchedSince;
+  if(on){
+    const nextMon=(()=>{const d=new Date(mondayOf(TODAY)+"T12:00:00");d.setDate(d.getDate()+7);return localDS(d)})();
+    const ans=prompt("Show WFH schedules starting on which date? (YYYY-MM-DD)\nToday is "+TODAY+". Leave as-is to start next Monday.",nextMon);
+    if(ans===null)return;
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(ans.trim())){alert("Please use the format YYYY-MM-DD, e.g. "+nextMon+".");return}
+    since=ans.trim();
+  } else if(!confirm("Turn off WFH schedules? Scheduled days will stop showing on the calendar and Who's In. Everyone's schedule is kept, so you can turn them back on later.")){return}
+  try{
+    await saveSetting("wfh_schedules_on",on?"true":"false");
+    if(on)await saveSetting("wfh_schedules_since",since);
+    wfhSchedOn=on;if(on)wfhSchedSince=since;
+    renderWFH();
+    showToast(on?"WFH schedules turned on":"WFH schedules turned off");
+  }catch(err){alert("Could not update the setting. Please try again.");console.error(err);}
+}
+async function saveSched(empId,days){
+  const cols={mon:days[0],tue:days[1],wed:days[2],thu:days[3],fri:days[4]};
+  const had=WFH_SCHED.find(x=>x.empId===empId);
+  if(had)await sbPatch("wfh_schedules",`emp_id=eq.${empId}`,cols);
+  else await sbPost("wfh_schedules",{emp_id:empId,...cols});
+  if(had)had.days=days;else WFH_SCHED.push({empId,days});
+}
+async function togSched(empId,i){
+  const sc=WFH_SCHED.find(x=>x.empId===empId);
+  const days=sc?sc.days.slice():[false,false,false,false,false];
+  days[i]=!days[i];
+  try{await saveSched(empId,days);renderWFH();}
+  catch(err){
+    console.error(err);
+    alert(String(err.message||"").includes("wfh_schedules")
+      ?"The WFH schedule table hasn't been set up yet. Run add_wfh_schedule_and_ooo.sql in Supabase first."
+      :"Could not update the schedule. Please try again.");
+  }
+}
+async function clearSched(empId){
+  try{await saveSched(empId,[false,false,false,false,false]);renderWFH();}
+  catch(err){alert("Could not update the schedule. Please try again.");console.error(err);}
 }
 async function togWFH(empId,date){
   const i=WFH.findIndex(r=>r.empId===empId&&r.date===date);
@@ -4071,16 +4227,12 @@ function renderEmps(){
   const s=(document.getElementById("empsearch")||{}).value||"";
   const f=EMP.filter(e=>!s||e.name.toLowerCase().includes(s.toLowerCase()));
   document.getElementById("emprows").innerHTML=f.map(e=>{
-    const rem=e.ptoTotal-e.ptoUsed,pct=Math.round((rem/e.ptoTotal)*100);
     const tbg=TEAM_COLORS[e.team]||"var(--cf0f0f0)",ttx=TEAM_TEXT[e.team]||"var(--c666666)";
     return`<tr>
       <td><div class="er"><div class="av ${avc(e.id)}">${ini(e.name)}</div>${e.name}</div></td>
       <td><span style="font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:${tbg};color:${ttx}">${e.team}</span></td>
       <td style="font-size:11px;color:var(--c888888)">${e.title||"—"}</td>
       <td>${e.role==="admin"?'<span class="badge b-admin">Admin</span>':'<span class="badge b-emp">Employee</span>'}</td>
-      <td><div style="display:flex;align-items:center;gap:5px">
-        <div class="pbb"><div class="pbf ${pct<30?"pbl":""}" style="width:${pct}%"></div></div>
-        <span style="font-size:11px">${rem}d</span></div></td>
       <td><button class="bsm" onclick="openEmpForm(${e.id})">✏ Edit</button></td></tr>`;
   }).join("");
 }
@@ -4107,13 +4259,11 @@ function openEmpForm(id){
     document.getElementById("efphone").value=e.phone||"";
     document.getElementById("efpin").value=""; // Never pre-fill PIN for security
     document.getElementById("efclio").checked=e.tracksClio||false;
-    document.getElementById("efpto").value=e.ptoTotal;
     document.getElementById("efrole").value=e.role||"employee";
     document.getElementById("efecname").value=e.ecName||"";
     document.getElementById("efecphone").value=e.ecPhone||"";
   } else {
     ["effirst","eflast","eftitle","efemail","efphone","efpin","efhire","efecname","efecphone"].forEach(i=>document.getElementById(i).value="");
-    document.getElementById("efpto").value=15;
     document.getElementById("efrole").value="employee";
     document.getElementById("efclio").checked=false;
   }
@@ -4131,7 +4281,7 @@ async function saveEmp(){
     hire:document.getElementById("efhire").value,
     email:document.getElementById("efemail").value,
     phone:document.getElementById("efphone").value,
-    pin,ptoTotal:parseInt(document.getElementById("efpto").value)||15,
+    pin,
     role:document.getElementById("efrole").value,
     tracksClio:document.getElementById("efclio").checked,
     ecName:document.getElementById("efecname").value.trim(),
@@ -4140,7 +4290,7 @@ async function saveEmp(){
     first_name:data.first,last_name:data.last,full_name:data.name,
     team:data.team,title:data.title,manager_id:data.manager||null,
     hire_date:data.hire||null,email:data.email,phone:data.phone,
-    pto_total:data.ptoTotal,role:data.role,tracks_clio:data.tracksClio||false,
+    role:data.role,tracks_clio:data.tracksClio||false,
     ec_name:data.ecName||null,ec_phone:data.ecPhone||null
   };
   // Always hash and update PIN when saving (PIN field is never pre-filled)
