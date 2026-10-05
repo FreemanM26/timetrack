@@ -1,7 +1,7 @@
 <html lang="en"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TimeTrack</title>
+<title>Time Served</title>
 <script>
 (function(){var t=null;try{t=localStorage.getItem("tt-theme")}catch(e){}
 if(!t){t=(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)?"dark":"light"}
@@ -374,7 +374,7 @@ tr:hover td{background:var(--cfafaf8)}
   <button class="btn-theme login-theme" onclick="toggleTheme()" title="Switch between light and dark mode"><span class="theme-ico"></span><span class="theme-lbl"></span></button>
   <div class="login-box">
     <div class="logo">🕐</div>
-    <div class="login-title">TimeTrack</div>
+    <div class="login-title">Time Served</div>
     <div class="login-sub">Clock in, request time off, and stay in the loop.</div>
     <label class="lbl" for="lnsel">Your name</label>
     <select id="lnsel" class="fc"><option value="">— Select your name —</option></select>
@@ -559,7 +559,7 @@ tr:hover td{background:var(--cfafaf8)}
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:1rem">
         <div>
           <div style="font-size:17px;font-weight:700">My Clio Hours</div>
-          <div style="font-size:12px;color:var(--c888888);margin-top:2px">Your billed hours in Clio vs time clocked in TimeTrack</div>
+          <div style="font-size:12px;color:var(--c888888);margin-top:2px">Your billed hours in Clio vs time clocked in Time Served</div>
         </div>
         <select id="clio-my-period" onchange="renderClioEmployee()" class="fc" style="margin:0;width:auto;font-size:12px"></select>
       </div>
@@ -1228,11 +1228,11 @@ async function buildClioComparison(startDate, endDate, targetEmpId=null, teamFil
     console.log("Loaded", clioEntries.length, "entries from Supabase");
   }
 
-  // Match Clio users to TimeTrack employees by email or name
+  // Match Clio users to Time Served employees by email or name
   const matchedUsers = [];
   // empsToShow already defined above
 
-  console.log("TimeTrack emails:");
+  console.log("Time Served emails:");
   empsToShow.forEach(e => console.log("  TT:", e.name, "|", e.email));
   console.log("Clio users:", clioUsers.length);
 
@@ -1247,7 +1247,7 @@ async function buildClioComparison(startDate, endDate, targetEmpId=null, teamFil
     if(clioUser) console.log("MATCHED:", emp.name, "->", clioUser.name, clioUser.email);
     else console.log("NO MATCH:", emp.name, emp.email);
 
-    // Get TimeTrack hours for this period
+    // Get Time Served hours for this period
     const ttEntries = ENTRIES.filter(e =>
       e.empId === emp.id && e.date >= startDate && e.date <= endDate && e.ci && e.co
     );
@@ -1305,7 +1305,7 @@ async function loadClioData(){
   const periodIdx = parseInt((perSel && perSel.value) || 0);
   const period = periods[periodIdx];
 
-  showLoading("Comparing Clio vs TimeTrack hours...");
+  showLoading("Comparing Clio vs Time Served hours...");
   const data = await buildClioComparison(period.start, period.end, null, selectedTeam);
   hideLoading();
 
@@ -1346,7 +1346,7 @@ function renderClioTable(data){
   const totColor = totDiff<1 ? "var(--c16a34a)" : "var(--c854d0e)";
   document.getElementById("clio-table-wrap").innerHTML =
     "<table>"
-    + "<thead><tr><th>Employee</th><th>Team</th><th>TimeTrack hrs</th><th>Clio hrs</th><th>Comparison</th><th>Status</th></tr></thead>"
+    + "<thead><tr><th>Employee</th><th>Team</th><th>Time Served hrs</th><th>Clio hrs</th><th>Comparison</th><th>Status</th></tr></thead>"
     + "<tbody>" + rows + "</tbody>"
     + "<tfoot style='background:var(--cf5f4f0);font-weight:700'>"
     + "<tr><td colspan='2' style='padding:8px 10px'>Totals</td>"
@@ -1357,7 +1357,7 @@ function renderClioTable(data){
 
   document.getElementById("clio-table-wrap").innerHTML =
     "<table>"
-    + "<thead><tr><th>Employee</th><th>Team</th><th>TimeTrack hrs</th><th>Clio hrs</th><th>Comparison</th><th>Status</th></tr></thead>"
+    + "<thead><tr><th>Employee</th><th>Team</th><th>Time Served hrs</th><th>Clio hrs</th><th>Comparison</th><th>Status</th></tr></thead>"
     + "<tbody>" + rows + "</tbody>"
     + "<tfoot style='background:var(--cf5f4f0);font-weight:700'>"
     + "<tr><td colspan='2' style='padding:8px 10px'>Totals</td>"
@@ -1519,7 +1519,7 @@ async function renderClioEmployee(){
 
   container.innerHTML = `
     <div class="metrics" style="margin-bottom:1rem">
-      <div class="metric"><div class="mlbl">TimeTrack hours</div><div class="mval">${d.ttHours.toFixed(1)}h</div></div>
+      <div class="metric"><div class="mlbl">Time Served hours</div><div class="mval">${d.ttHours.toFixed(1)}h</div></div>
       <div class="metric"><div class="mlbl">Clio hours</div><div class="mval">${d.clioHours.toFixed(1)}h</div></div>
       <div class="metric"><div class="mlbl">Difference</div><div class="mval" style="color:${diffColor}">${Math.abs(diff).toFixed(1)}h</div></div>
       <div class="metric"><div class="mlbl">Clio utilization</div><div class="mval">${d.ttHours>0?Math.round((d.clioHours/d.ttHours)*100):0}%</div></div>
@@ -1527,14 +1527,14 @@ async function renderClioEmployee(){
     <div class="card" style="padding:1rem">
       <div style="font-size:13px;margin-bottom:.5rem;font-weight:600">Hours breakdown</div>
       <div style="margin-bottom:.75rem">
-        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>TimeTrack (clocked in)</span><span style="font-weight:600">${d.ttHours.toFixed(1)}h</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Time Served (clocked in)</span><span style="font-weight:600">${d.ttHours.toFixed(1)}h</span></div>
         <div style="height:8px;background:var(--cf0f0f0);border-radius:4px"><div style="width:100%;height:8px;background:var(--c534ab7);border-radius:4px"></div></div>
       </div>
       <div>
         <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Clio (billed/tracked)</span><span style="font-weight:600">${d.clioHours.toFixed(1)}h</span></div>
         <div style="height:8px;background:var(--cf0f0f0);border-radius:4px"><div style="width:${d.ttHours>0?Math.min(100,Math.round((d.clioHours/d.ttHours)*100)):0}%;height:8px;background:var(--c16a34a);border-radius:4px"></div></div>
       </div>
-      ${!d.matched?'<p style="font-size:11px;color:var(--cdc2626);margin-top:.75rem">⚠ Your TimeTrack account could not be matched to a Clio user. Please ask your admin to verify your email matches in both systems.</p>':""}
+      ${!d.matched?'<p style="font-size:11px;color:var(--cdc2626);margin-top:.75rem">⚠ Your Time Served account could not be matched to a Clio user. Please ask your admin to verify your email matches in both systems.</p>':""}
     </div>`;
 }
 
@@ -2944,7 +2944,7 @@ function saveAndDownload(){
   const blob=new Blob([src],{type:"text/html"});
   const url=URL.createObjectURL(blob);
   const a=document.createElement("a");
-  a.href=url;a.download="timetrack.html";a.click();
+  a.href=url;a.download="timeserved.html";a.click();
   URL.revokeObjectURL(url);
 
   const btn=event.currentTarget;
@@ -3027,7 +3027,9 @@ function renderClock(){
   if(clockEntry){
     ring.classList.add("on");pill.className="spill sin";pill.innerHTML='<span class="dot"></span> Clocked in';
     btn.textContent="⏹ Clock Out";document.getElementById("tcsince").textContent="Since "+clockEntry.ci;
-    if(!clockTick){clockStart=clockStart||Date.now();clockTick=setInterval(tick,1000);tick()}
+    clockStart=clockStartFor(clockEntry);
+    if(!clockTick){clockTick=setInterval(tick,1000)}
+    tick();
     lbtn.classList.remove("hidden");
   } else {
     ring.classList.remove("on");pill.className="spill sout";pill.innerHTML='<span class="dot"></span> Clocked out';
@@ -3078,9 +3080,20 @@ function renderClock(){
     </div>`;}).join("")+"</div>";
 }
 
+// When did the open clock-in start? Uses the exact second saved on this device at
+// clock-in; otherwise (refresh on another device, cleared browser) the saved HH:MM time.
+function clockStartFor(entry){
+  if(!entry)return null;
+  try{const v=parseInt(localStorage.getItem("tt-clockstart-"+entry.id),10);if(v)return v}catch(e){}
+  const p=String(entry.ci||"").split(":");
+  const d=new Date(entry.date+"T12:00:00");
+  d.setHours(parseInt(p[0],10)||0,parseInt(p[1],10)||0,0,0);
+  return d.getTime();
+}
+
 function tick(){
   if(!clockStart)return;
-  const s=Math.floor((Date.now()-clockStart)/1000);
+  const s=Math.max(0,Math.floor((Date.now()-clockStart)/1000));
   document.getElementById("tcdigs").textContent=`${String(Math.floor(s/3600)).padStart(2,"0")}:${String(Math.floor((s%3600)/60)).padStart(2,"0")}:${String(s%60).padStart(2,"0")}`;
 }
 
@@ -3092,6 +3105,7 @@ async function toggleClock(){
     clockEntry.co=t;
     try{ await sbPatch("time_entries",`id=eq.${clockEntry.id}`,{clock_out:t}); }
     catch(e){console.error("Clock out save failed",e);}
+    try{localStorage.removeItem("tt-clockstart-"+clockEntry.id)}catch(e){}
     clockEntry=null;clockStart=null;
     if(clockTick){clearInterval(clockTick);clockTick=null}
   } else {
@@ -3100,6 +3114,7 @@ async function toggleClock(){
       const saved=rows[0];
       const entry={id:saved.id,empId:CU.id,date:TODAY,ci:t,co:null,manual:false,note:""};
       ENTRIES.push(entry);clockEntry=entry;clockStart=Date.now();
+      try{localStorage.setItem("tt-clockstart-"+entry.id,String(clockStart))}catch(e){}
     }catch(e){console.error("Clock in save failed",e);}
   }
   renderClock();
@@ -3667,10 +3682,11 @@ function getEmpStatus(empId){
   const hasWorkedToday=todayEntries.some(r=>r.ci&&r.co)||openEntry;
   // Check on lunch
   const onLunch=LUNCH.find(r=>r.empId===empId&&r.date===TODAY&&r.start&&!r.end);
+  // wfh:true lets Who's In show a WFH tag next to the active status
   if(onLunch)
-    return{status:"lunch",label:"On lunch",dotCls:"wi-dot-lunch",lblCls:"wi-lbl-lunch",since:onLunch.start};
+    return{status:"lunch",label:"On lunch",dotCls:"wi-dot-lunch",lblCls:"wi-lbl-lunch",since:onLunch.start,wfh:wfhToday};
   if(openEntry)
-    return{status:"in",label:"Clocked in",dotCls:"wi-dot-in",lblCls:"wi-lbl-in",since:openEntry.ci};
+    return{status:"in",label:"Clocked in",dotCls:"wi-dot-in",lblCls:"wi-lbl-in",since:openEntry.ci,wfh:wfhToday};
   if(ooo)
     return{status:"ooo",label:"Out of office",dotCls:"wi-dot-ooo",lblCls:"wi-lbl-ooo",note:oooWhen(ooo)};
   if(wfhToday)
@@ -3701,12 +3717,15 @@ function renderWhosIn(){
       const avBgs=["var(--ceeedfe)","var(--ce1f5ee)","var(--cfaece7)","var(--ce6f1fb)","var(--cfaeeda)"];
       const avTxs=["var(--c3c3489)","var(--c085041)","var(--c712b13)","var(--c0c447c)","var(--c633806)"];
       const initStr=e.name.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
+      // Clock-in and lunch times are visible to admins only (and to you, for your own row)
+      const showTime=isAdm()||(CU&&CU.id===e.id);
       return`<div class="wi-member">
         <span class="wi-status-dot ${st.dotCls}"></span>
         <div style="width:28px;height:28px;border-radius:50%;background:${avBgs[avIdx]};color:${avTxs[avIdx]};display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0">${initStr}</div>
         <span class="wi-name">${e.name}</span>
         <span class="wi-status-lbl ${st.lblCls}">${st.label}</span>
-        ${st.since?`<span class="wi-since">since ${st.since}</span>`:st.note?`<span class="wi-since">${st.note}</span>`:""}
+        ${st.wfh?'<span class="wi-status-lbl wi-lbl-wfh">WFH</span>':""}
+        ${st.since&&showTime?`<span class="wi-since">since ${st.since}</span>`:st.note?`<span class="wi-since">${st.note}</span>`:""}
       </div>`;
     }).join("");
 
@@ -4390,7 +4409,7 @@ if(window.location.protocol === 'file:'){
   document.getElementById('loading-overlay').classList.remove('hidden');
   document.getElementById('loading-msg').innerHTML = 
     '&#9888; <strong>Cannot connect from a local file.</strong><br><br>' +
-    'To use TimeTrack, you need to either:<br>' +
+    'To use Time Served, you need to either:<br>' +
     '1. Upload it to GitHub Pages (recommended)<br>' +
     '2. Or run a local server<br><br>' +
     '<span style="font-size:11px;color:var(--c888888)">See setup instructions below or ask your admin.</span>';
