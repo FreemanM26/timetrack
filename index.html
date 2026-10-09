@@ -186,6 +186,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .btn-login{width:100%;padding:11px;background:var(--c534ab7);border:none;border-radius:8px;color:white;font-size:14px;font-weight:600;cursor:pointer}
 .btn-login:hover{background:var(--accent-hover)}
 .lerr{color:var(--cdc2626);font-size:12px;text-align:center;margin-top:.5rem;min-height:18px}
+#lnaccess{font-size:13px;color:var(--c666666);text-align:center;line-height:1.6}
+#lnaccess strong{color:var(--c1a1a1a)}
 .lhint{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--ceeeeee);font-size:11px;color:var(--caaaaaa);text-align:center;line-height:1.8}
 #app-screen{min-height:100vh;display:flex;flex-direction:column}
 .app-bar{background:var(--cffffff);border-bottom:1px solid var(--ceeeeee);padding:.65rem 1.25rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap;position:sticky;top:0;z-index:50}
@@ -376,11 +378,14 @@ tr:hover td{background:var(--cfafaf8)}
     <div class="logo">🕐</div>
     <div class="login-title">Time Served</div>
     <div class="login-sub">Clock in, request time off, and stay in the loop.</div>
+    <div id="lnpinform">
     <label class="lbl" for="lnsel">Your name</label>
     <select id="lnsel" class="fc"><option value="">— Select your name —</option></select>
     <label class="lbl" for="lnpin">PIN</label>
     <input type="password" id="lnpin" class="fc" placeholder="Enter your PIN" autocomplete="new-password">
     <button class="btn-login" onclick="doLogin()">Sign in</button>
+    </div>
+    <div id="lnaccess" class="hidden"></div>
     <div class="lerr" id="lnerr"></div>
     
   </div>
@@ -1629,7 +1634,7 @@ async function loadAllData(){
       id: e.id, first: e.first_name, last: e.last_name, name: e.full_name,
       team: e.team, title: e.title, manager: e.manager_id||0,
       hire: e.hire_date||"", email: e.email||"", phone: e.phone||"",
-      pin_hash: e.pin_hash, ptoTotal: e.pto_total, ptoUsed: e.pto_used,
+      pin_hash: e.pin_hash,
       role: e.role, tracksClio: e.tracks_clio||false, ecName: e.ec_name||"", ecPhone: e.ec_phone||""
     }));
 
@@ -1687,8 +1692,9 @@ async function loadAllData(){
     const wfhSinceSetting = settingsR.find(s=>s.key==="wfh_schedules_since");
     wfhSchedSince = (wfhSinceSetting && wfhSinceSetting.value) || "";
 
-    hideLoading();
     initLogin();
+    await accessLogin();
+    hideLoading();
   } catch(err){
     console.error("Load error:", err);
     const overlay = document.getElementById("loading-overlay");
@@ -2875,6 +2881,10 @@ function saveAndDownload(){
   if(lnpin){lnpin.value="";lnpin.setAttribute("autocomplete","new-password");}
   const lnerr=clone.querySelector("#lnerr");
   if(lnerr)lnerr.textContent="";
+  const lnpf=clone.querySelector("#lnpinform");
+  if(lnpf)lnpf.className="";
+  const lnac=clone.querySelector("#lnaccess");
+  if(lnac){lnac.innerHTML="";lnac.className="hidden";}
 
   // Reset login/app visibility — force login screen, hide everything else
   const loginEl=clone.querySelector("#login-screen");
@@ -2971,7 +2981,13 @@ async function doLogin(){
   if(!e){err.textContent="Employee not found.";return}
   const hash=await sha256(pin);
   if(e.pin_hash!==hash){err.textContent="Incorrect PIN — please try again.";return}
-  err.textContent="";CU=e;document.getElementById("lnpin").value="";
+  err.textContent="";document.getElementById("lnpin").value="";
+  enterApp(e);
+}
+
+// Shared by PIN sign-in and Microsoft sign-in: opens the app as this employee
+function enterApp(e){
+  CU=e;
   document.getElementById("login-screen").classList.add("hidden");
   document.getElementById("app-screen").classList.remove("hidden");
   document.getElementById("abname").textContent=e.name;
@@ -2983,7 +2999,42 @@ async function doLogin(){
   showTab("clock",document.querySelector(".nb.active"));
 }
 
+// ---- MICROSOFT SIGN-IN (via Cloudflare Access) ----
+// When the app is hosted behind Cloudflare Access, Cloudflare has already
+// signed the person in with Microsoft. We ask Cloudflare who they are and
+// match that email to the employees table. Anywhere else (GitHub Pages,
+// a local server) this check fails quietly and the name + PIN login is used.
+let accessMode=false,accessEmail="";
+async function accessLogin(){
+  if(CU)return;
+  let ident=null;
+  try{
+    let timer=null,opts={credentials:"same-origin",cache:"no-store"};
+    if(typeof AbortController!=="undefined"){
+      const ctl=new AbortController();opts.signal=ctl.signal;
+      timer=setTimeout(function(){ctl.abort()},4000);
+    }
+    const r=await fetch("/cdn-cgi/access/get-identity",opts);
+    if(timer)clearTimeout(timer);
+    if(!r.ok)return;
+    if((r.headers.get("content-type")||"").indexOf("json")===-1)return;
+    ident=await r.json();
+  }catch(x){return}
+  if(!ident||!ident.email)return;
+  accessMode=true;
+  accessEmail=String(ident.email).toLowerCase().trim();
+  document.getElementById("lnpinform").classList.add("hidden");
+  const e=EMP.find(function(x){return x.email&&x.email.toLowerCase().trim()===accessEmail});
+  if(e){enterApp(e);return}
+  const box=document.getElementById("lnaccess");
+  box.innerHTML='You are signed in with Microsoft as <strong>'+esc(accessEmail)+'</strong>, '+
+    'but no Time Served employee has that email address.<br>Please ask your admin to add it to your employee record.'+
+    '<button class="btn-login" style="margin-top:1rem" onclick="doLogout()">Sign in with a different account</button>';
+  box.classList.remove("hidden");
+}
+
 function doLogout(){
+  if(accessMode){window.location.href="/cdn-cgi/access/logout";return}
   if(clockTick){clearInterval(clockTick);clockTick=null}
   clockEntry=null;clockStart=null;CU=null;
   document.getElementById("app-screen").classList.add("hidden");
@@ -3753,12 +3804,12 @@ function renderMyMileage(){
     <div class="metric"><div class="mlbl">Pending amount</div><div class="mval" style="color:var(--c854d0e)">$${pendingAmt.toFixed(2)}</div></div>`;
   document.getElementById("my-mileage-rows").innerHTML=myTrips.length?myTrips.map(m=>`<tr>
     <td style="font-size:12px">${fmt(m.date)}</td>
-    <td style="font-size:12px">${m.from}</td>
-    <td style="font-size:12px">${m.to}</td>
+    <td style="font-size:12px">${esc(m.from)}</td>
+    <td style="font-size:12px">${esc(m.to)}</td>
     <td style="font-size:12px">${m.miles.toFixed(1)}</td>
     <td style="font-size:12px;font-weight:600;color:var(--c166534)">$${m.amount.toFixed(2)}</td>
     <td><span class="badge b-${m.status==="Approved"?"appr":m.status==="Denied"?"deni":"pend"}">${m.status}</span></td>
-    <td style="font-size:11px;color:var(--c888888)">${m.notes||"—"}</td></tr>`).join("")
+    <td style="font-size:11px;color:var(--c888888)">${esc(m.notes||"—")}</td></tr>`).join("")
     :`<tr><td colspan="7" style="text-align:center;color:var(--c888888);font-size:12px;padding:1.25rem">No trips logged yet — click "Log a trip" to get started.</td></tr>`;
 }
 
@@ -3775,7 +3826,7 @@ function updateMileagePreview(){
   document.getElementById("mf-preview").style.color=miles>0?"var(--c166534)":"var(--c888888)";
 }
 
-function submitMileage(){
+async function submitMileage(){
   const date=document.getElementById("mf-date").value;
   const from=document.getElementById("mf-from").value.trim();
   const to=document.getElementById("mf-to").value.trim();
@@ -3785,11 +3836,17 @@ function submitMileage(){
   if(!from||!to){alert("Please enter both starting and ending locations.");return}
   if(!miles||miles<=0){alert("Please enter a valid mileage amount.");return}
   const amount=parseFloat((miles*mileageRate).toFixed(2));
-  MILEAGE.push({id:nM++,empId:CU.id,date,from,to,miles,amount,rate:mileageRate,notes,status:"Pending"});
+  try{
+    const rows=await sbPost("mileage_requests",{emp_id:CU.id,trip_date:date,from_location:from,to_location:to,
+      miles,rate:mileageRate,amount,status:"Pending",notes});
+    const saved=rows[0];
+    MILEAGE.push({id:saved.id,empId:CU.id,date,from,to,miles,amount,rate:mileageRate,notes,status:"Pending"});
+  }catch(e){alert("Could not save your trip. Please try again.");console.error(e);return}
   document.getElementById("mileage-form").classList.add("hidden");
   ["mf-from","mf-to","mf-miles","mf-notes"].forEach(id=>document.getElementById(id).value="");
   document.getElementById("mf-preview").textContent="$0.00";
   renderMyMileage();
+  showToast("Trip submitted");
 }
 
 // ---- GOOGLE MAPS MILEAGE INTEGRATION ----
@@ -3894,12 +3951,12 @@ function renderAdminMileage(){
     return`<tr>
       <td><div class="er"><div class="av ${avc(m.empId)}">${e?ini(e.name):"?"}</div>${e?e.name:"Unknown"}</div></td>
       <td style="font-size:12px">${fmt(m.date)}</td>
-      <td style="font-size:12px">${m.from}</td>
-      <td style="font-size:12px">${m.to}</td>
+      <td style="font-size:12px">${esc(m.from)}</td>
+      <td style="font-size:12px">${esc(m.to)}</td>
       <td style="font-size:12px">${m.miles.toFixed(1)} mi</td>
       <td style="font-size:12px;font-weight:600;color:var(--c166534)">$${m.amount.toFixed(2)}</td>
       <td><span class="badge b-${m.status==="Approved"?"appr":m.status==="Denied"?"deni":"pend"}">${m.status}</span></td>
-      <td style="font-size:11px;color:var(--c888888)">${m.notes||"—"}</td>
+      <td style="font-size:11px;color:var(--c888888)">${esc(m.notes||"—")}</td>
       <td style="display:flex;gap:4px;padding:8px 10px">
         ${m.status==="Pending"
           ?`<button class="bsm bapp" onclick="approveMileage(${m.id},'Approved')">✓ Approve</button>
@@ -3910,23 +3967,29 @@ function renderAdminMileage(){
   :`<tr><td colspan="9" style="text-align:center;padding:1.25rem;color:var(--c888888);font-size:12px">No mileage requests match.</td></tr>`;
 }
 
-function approveMileage(id,status){
+async function approveMileage(id,status){
   const m=MILEAGE.find(r=>r.id===id);
   if(!m)return;
-  m.status=status;
-  renderAdminMileage();
+  try{
+    await sbPatch("mileage_requests",`id=eq.${id}`,{status});
+    m.status=status;
+    renderAdminMileage();
+  }catch(err){alert("Could not update the trip. Please try again.");console.error(err);}
 }
 
 async function updateRate(){
+  const btn=event.currentTarget; // grab before any await; the click event is gone afterwards
   const newRate=parseFloat(document.getElementById("mileage-rate-input").value);
   if(!newRate||newRate<=0){alert("Please enter a valid rate.");return}
   try{
     await sbPatch("settings","key=eq.mileage_rate",{value:String(newRate)});
     mileageRate=newRate;
-    MILEAGE.filter(m=>m.status==="Pending").forEach(m=>{
-      m.rate=newRate;m.amount=parseFloat((m.miles*newRate).toFixed(2));
-    });
-    const btn=event.currentTarget;
+    // Pending trips are repriced at the new rate (approved/denied trips keep their rate)
+    for(const m of MILEAGE.filter(x=>x.status==="Pending")){
+      const amount=parseFloat((m.miles*newRate).toFixed(2));
+      await sbPatch("mileage_requests",`id=eq.${m.id}`,{rate:newRate,amount});
+      m.rate=newRate;m.amount=amount;
+    }
     btn.textContent="✓ Updated!";btn.style.background="var(--cdcfce7)";
     setTimeout(()=>{btn.textContent="Update rate";btn.style.background=""},1500);
     renderAdminMileage();
@@ -3939,7 +4002,8 @@ function exportMileageCSV(){
   let csv="Employee,Team,Date,From,To,Miles,Rate,Amount,Notes\n";
   csv+=approved.map(m=>{
     const e=ge(m.empId);
-    return`"${e?e.name:"Unknown"}","${e?e.team:""}","${m.date}","${m.from}","${m.to}",${m.miles.toFixed(1)},${m.rate.toFixed(2)},${m.amount.toFixed(2)},"${m.notes||""}"`;
+    const q=v=>String(v||"").replace(/"/g,'""');
+    return`"${e?e.name:"Unknown"}","${e?e.team:""}","${m.date}","${q(m.from)}","${q(m.to)}",${m.miles.toFixed(1)},${m.rate.toFixed(2)},${m.amount.toFixed(2)},"${q(m.notes)}"`;
   }).join("\n");
   const b=new Blob([csv],{type:"text/csv"}),u=URL.createObjectURL(b),a=document.createElement("a");
   a.href=u;a.download="mileage_export.csv";a.click();URL.revokeObjectURL(u);
@@ -4329,9 +4393,9 @@ async function saveEmp(){
       existing.pin_hash = dbData.pin_hash || existing.pin_hash;
       console.log("Saved", existing.name, "tracksClio:", existing.tracksClio);
     } else {
-      const rows=await sbPost("employees",{...dbData,pin_hash:await sha256(data.pin),pto_used:0});
+      const rows=await sbPost("employees",{...dbData,pin_hash:await sha256(data.pin)});
       const saved=rows[0];
-      EMP.push({id:saved.id,ptoUsed:0,pin_hash:saved.pin_hash,tracksClio:data.tracksClio||false,...data});
+      EMP.push({id:saved.id,pin_hash:saved.pin_hash,tracksClio:data.tracksClio||false,...data});
     }
     renderEmps();initLogin();
     document.getElementById("empform").classList.add("hidden");
