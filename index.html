@@ -204,6 +204,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .b-appr{background:var(--cdcfce7);color:var(--c166534)}
 .b-deni{background:var(--cfee2e2);color:var(--c991b1b)}
 .b-lunch{background:var(--cfde68a);color:var(--c78350f)}
+.b-court{background:var(--cdbeafe);color:var(--c1e40af)}
 .b-anniv{background:var(--cfce7f3);color:var(--c831843)}
 .b-ooo{background:var(--ce2e8f0);color:var(--c334155)}
 .btn-theme{margin-left:auto;padding:6px 10px;font-size:12px;border:1px solid var(--cdddddd);border-radius:7px;background:var(--cffffff);color:var(--c666666);cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:5px}
@@ -267,6 +268,7 @@ tr:hover td{background:var(--cfafaf8)}
 .ew{background:var(--cbbf7d0);color:var(--c14532d)}
 .eh{background:var(--cfed7aa);color:var(--c7c2d12)}
 .el{background:var(--cfde68a);color:var(--c78350f)}
+.ec{background:var(--cdbeafe);color:var(--c1e40af)}
 .ea{background:var(--cfce7f3);color:var(--c831843)}
 .eo{background:var(--ce2e8f0);color:var(--c334155)}
 .main.wide{max-width:1480px}
@@ -293,6 +295,7 @@ tr:hover td{background:var(--cfafaf8)}
 .wi-status-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
 .wi-dot-in{background:var(--c16a34a)}
 .wi-dot-lunch{background:var(--c92400e)}
+.wi-dot-court{background:var(--c1e40af)}
 .wi-dot-wfh{background:var(--c0891b2)}
 .wi-dot-pto{background:var(--c7c3aed)}
 .wi-dot-out{background:var(--cd1d5db)}
@@ -301,6 +304,7 @@ tr:hover td{background:var(--cfafaf8)}
 .wi-status-lbl{font-size:11px;font-weight:500;padding:2px 8px;border-radius:20px}
 .wi-lbl-in{background:var(--cdcfce7);color:var(--c166534)}
 .wi-lbl-lunch{background:var(--cfde68a);color:var(--c78350f)}
+.wi-lbl-court{background:var(--cdbeafe);color:var(--c1e40af)}
 .wi-lbl-wfh{background:var(--ccffafe);color:var(--c0e7490)}
 .wi-lbl-pto{background:var(--cede9fe);color:var(--c6d28d9)}
 .wi-lbl-out{background:var(--cf3f4f6);color:var(--c6b7280)}
@@ -344,6 +348,20 @@ tr:hover td{background:var(--cfafaf8)}
 .b-low{background:var(--cf0f0f0);color:var(--c666666)}
 .b-normal{background:var(--cdbeafe);color:var(--c1e40af)}
 .b-urgent{background:var(--cfee2e2);color:var(--c991b1b)}
+.b-canc{background:var(--cf0f0f0);color:var(--c888888);text-decoration:line-through}
+.showpast{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--c666666);cursor:pointer;white-space:nowrap;user-select:none}
+.showpast input{width:15px;height:15px;cursor:pointer;margin:0}
+.past-note{text-align:center;font-size:11px;color:var(--c888888);padding:.6rem}
+.ract{display:flex;gap:4px;flex-wrap:wrap;align-items:center}
+.em-back{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:998;display:flex;align-items:center;justify-content:center;padding:1rem}
+.em-box{background:var(--cffffff);border:1px solid var(--ceeeeee);border-radius:12px;padding:1.25rem;width:100%;max-width:520px;max-height:90vh;overflow:auto;box-shadow:0 8px 30px var(--shadow)}
+.em-box .stl{margin-top:0}
+.em-box .fc{margin:0 0 .75rem;width:100%}
+.stale-card{text-align:left;background:var(--cfef3c7);border:1px solid var(--cfde68a);border-radius:10px;padding:.85rem 1rem;margin-bottom:.5rem;font-size:13px;color:var(--c78350f)}
+.stale-card strong{color:var(--c451a03)}
+.stale-card .fc{margin:.35rem 0 .6rem;width:100%}
+.remind-bar{background:var(--cfef3c7);border:1px solid var(--cfde68a);border-radius:10px;padding:.65rem 1rem;display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:1rem;font-size:13px;color:var(--c78350f)}
+.fix-row{display:flex;align-items:center;gap:10px;padding:8px 12px;border-top:1px solid var(--cf5f4f0);flex-wrap:wrap;font-size:12px}
 :root[data-theme="dark"] .pac-container{background:#1d1e24;border:1px solid #35363e;box-shadow:0 4px 12px rgba(0,0,0,.5)}
 :root[data-theme="dark"] .pac-item{border-top-color:#2c2d34;color:#9a9ba5}
 :root[data-theme="dark"] .pac-item:hover,:root[data-theme="dark"] .pac-item-selected{background:#2a2b32}
@@ -408,10 +426,11 @@ tr:hover td{background:var(--cfafaf8)}
     <button class="nb" onclick="showTab('myclio',this)">⚖️ My Clio</button>
     <button id="navreqs" class="nb notif-dot" data-count="0" onclick="showTab('requests',this)">🔧 Requests</button>
     <button class="nb" onclick="showTab('docs',this)">📁 Documents</button>
-    <button id="navadmin" class="nb adm hidden" onclick="showTab('admin',this)">🛡 Admin</button>
+    <button id="navadmin" class="nb adm notif-dot hidden" data-count="0" onclick="showTab('admin',this)">🛡 Admin</button>
     <button class="nb" onclick="showTab('orgchart',this)">🏢 Org Chart</button>
   </nav>
   <div class="main" id="mainwrap">
+    <div id="remindbar" class="remind-bar hidden"></div>
 
     <!-- TIME CLOCK -->
     <div id="Tclock" class="hidden">
@@ -424,8 +443,10 @@ tr:hover td{background:var(--cfafaf8)}
           </div>
           <div><span id="tcpill" class="spill sout"><span class="dot"></span> Clocked out</span></div>
           <div style="font-size:12px;color:var(--c888888);margin-bottom:.75rem;min-height:16px" id="tcsince"></div>
+          <div id="tcstale" class="hidden"></div>
           <button id="tcbtn" class="btn bp" style="width:100%;justify-content:center;padding:11px;font-size:14px" onclick="toggleClock()">▶ Clock In</button>
           <button id="lunchbtn" class="btn hidden" style="width:100%;justify-content:center;padding:9px;font-size:13px;margin-top:8px;color:var(--c78350f);border-color:var(--cfde68a);background:var(--cfffbeb)" onclick="toggleLunch()">🍽 Start Lunch</button>
+          <button id="courtbtn" class="btn hidden" style="width:100%;justify-content:center;padding:9px;font-size:13px;margin-top:8px;color:var(--c1e40af);border-color:var(--cbfdbfe);background:var(--ceff6ff)" onclick="toggleCourt()">⚖️ Going to Court</button>
           <div style="margin-top:.6rem;font-size:12px;color:var(--c888888)" id="tctotal"></div>
         </div>
         <div class="card">
@@ -450,6 +471,7 @@ tr:hover td{background:var(--cfafaf8)}
             <span><span style="display:inline-block;width:9px;height:9px;background:var(--ce2e8f0);border-radius:2px;vertical-align:middle"></span> Out of office</span>
             <span><span style="display:inline-block;width:9px;height:9px;background:var(--cfed7aa);border-radius:2px;vertical-align:middle"></span> Holiday</span>
             <span><span style="display:inline-block;width:9px;height:9px;background:var(--cfde68a);border-radius:2px;vertical-align:middle"></span> On Lunch (live)</span>
+            <span><span style="display:inline-block;width:9px;height:9px;background:var(--cdbeafe);border-radius:2px;vertical-align:middle"></span> In Court (live)</span>
             <span><span style="display:inline-block;width:9px;height:9px;background:var(--cfce7f3);border-radius:2px;vertical-align:middle"></span> Anniversary 🎂</span>
           </div>
         </div>
@@ -469,6 +491,7 @@ tr:hover td{background:var(--cfafaf8)}
         <div style="display:flex;gap:6px;flex-wrap:wrap" id="whosin-legend">
           <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px"><span style="width:10px;height:10px;border-radius:50%;background:var(--c16a34a);display:inline-block"></span>Clocked in</span>
           <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px"><span style="width:10px;height:10px;border-radius:50%;background:var(--c92400e);display:inline-block"></span>On lunch</span>
+          <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px"><span style="width:10px;height:10px;border-radius:50%;background:var(--c1e40af);display:inline-block"></span>In court</span>
           <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px"><span style="width:10px;height:10px;border-radius:50%;background:var(--c0891b2);display:inline-block"></span>WFH</span>
           <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px"><span style="width:10px;height:10px;border-radius:50%;background:var(--c7c3aed);display:inline-block"></span>On PTO</span>
           <span style="display:inline-flex;align-items:center;gap:4px;font-size:11px"><span style="width:10px;height:10px;border-radius:50%;background:var(--c64748b);display:inline-block"></span>Out of office</span>
@@ -489,7 +512,8 @@ tr:hover td{background:var(--cfafaf8)}
             <button class="btn" onclick="openOOOForm()">+ Out of office</button>
           </div>
         </div>
-        <div style="overflow-x:auto"><table><thead><tr><th>Request</th><th>When</th><th>Length</th><th>Status</th><th>Notes</th></tr></thead>
+        <div style="margin:-.25rem 0 .5rem"><label class="showpast"><input type="checkbox" id="pto-showpast" onchange="renderMyPTO()"> Show past requests</label></div>
+        <div style="overflow-x:auto"><table><thead><tr><th>Request</th><th>When</th><th>Length</th><th>Status</th><th>Notes</th><th></th></tr></thead>
         <tbody id="myrows"></tbody></table></div>
       </div>
       <div id="ptoform" class="card hidden">
@@ -530,8 +554,9 @@ tr:hover td{background:var(--cfafaf8)}
           <h3 style="margin:0">My mileage requests</h3>
           <button class="btn bp" onclick="openMileageForm()">+ Log a trip</button>
         </div>
-        <table><thead><tr><th>Date</th><th>From</th><th>To</th><th>Miles</th><th>Amount</th><th>Status</th><th>Notes</th></tr></thead>
-        <tbody id="my-mileage-rows"></tbody></table>
+        <div style="margin:-.25rem 0 .5rem"><label class="showpast"><input type="checkbox" id="mm-showpast" onchange="renderMyMileage()"> Show past requests</label></div>
+        <div style="overflow-x:auto"><table><thead><tr><th>Date</th><th>From</th><th>To</th><th>Miles</th><th>Amount</th><th>Status</th><th>Notes</th><th></th></tr></thead>
+        <tbody id="my-mileage-rows"></tbody></table></div>
       </div>
       <div id="mileage-form" class="card hidden">
         <h3 style="margin-bottom:.75rem">Log a trip</h3>
@@ -589,6 +614,7 @@ tr:hover td{background:var(--cfafaf8)}
         </div>
 
         <!-- Upcoming anniversaries alert panel -->
+        <div id="fix-panel"></div>
         <div id="anniv-panel" style="margin-bottom:1rem"></div>
 
         <div class="ptabs">
@@ -604,9 +630,10 @@ tr:hover td{background:var(--cfafaf8)}
 
         <div id="Aapprovals" class="hidden">
           <div class="tb">
-            <select id="afstat" onchange="renderApprovals()" class="fc" style="margin:0;width:auto"><option value="">All statuses</option><option value="Pending">Pending</option><option value="Approved">Approved</option><option value="Denied">Denied</option></select>
+            <select id="afstat" onchange="renderApprovals()" class="fc" style="margin:0;width:auto"><option value="">All statuses</option><option value="Pending">Pending</option><option value="Approved">Approved</option><option value="Denied">Denied</option><option value="Cancelled">Cancelled</option></select>
             <select id="afcat" onchange="renderApprovals()" class="fc" style="margin:0;width:auto"><option value="">PTO + out of office</option><option value="PTO">PTO only</option><option value="OOO">Out of office only</option></select>
             <input type="text" id="afsearch" class="fc" placeholder="Search employee..." oninput="renderApprovals()" style="margin:0;flex:1;min-width:120px">
+            <label class="showpast"><input type="checkbox" id="af-showpast" onchange="renderApprovals()"> Show past requests</label>
           </div>
           <div class="card" style="padding:0;overflow:hidden">
             <div style="overflow-x:auto"><table><thead><tr><th>Employee</th><th>Request</th><th>When</th><th>Length</th><th>Status</th><th>Action</th></tr></thead>
@@ -738,14 +765,15 @@ tr:hover td{background:var(--cfafaf8)}
             <span style="font-size:11px;color:var(--c888888)">Current IRS standard rate: $0.67/mile</span>
             <button class="btn" onclick="exportMileageCSV()" style="margin-left:auto;font-size:12px;padding:5px 12px">⬇ Export CSV</button>
           </div>
-          <div class="toolbar">
+          <div class="tb">
             <select id="am-filter" onchange="renderAdminMileage()" class="fc" style="margin:0;width:auto">
               <option value="">All statuses</option><option value="Pending">Pending</option>
-              <option value="Approved">Approved</option><option value="Denied">Denied</option>
+              <option value="Approved">Approved</option><option value="Denied">Denied</option><option value="Cancelled">Cancelled</option>
             </select>
             <input type="text" id="am-search" class="fc" placeholder="Search employee..." oninput="renderAdminMileage()" style="margin:0;flex:1;min-width:120px">
+            <label class="showpast"><input type="checkbox" id="am-showpast" onchange="renderAdminMileage()"> Show past requests</label>
           </div>
-          <div class="card" style="padding:0;overflow:hidden">
+          <div class="card" style="padding:0;overflow:hidden;overflow-x:auto">
             <table><thead><tr><th>Employee</th><th>Date</th><th>From</th><th>To</th><th>Miles</th><th>Amount</th><th>Status</th><th>Notes</th><th>Action</th></tr></thead>
             <tbody id="admin-mileage-rows"></tbody></table>
           </div>
@@ -756,7 +784,7 @@ tr:hover td{background:var(--cfafaf8)}
         <div id="Arequestsadmin" class="hidden">
           <div class="tb">
             <select id="areq-status" onchange="renderAdminReqPanel()" class="fc" style="margin:0;width:auto">
-              <option value="">All statuses</option><option value="Open">Open</option><option value="In Progress">In Progress</option><option value="Resolved">Resolved</option>
+              <option value="">All statuses</option><option value="Open">Open</option><option value="In Progress">In Progress</option><option value="Resolved">Resolved</option><option value="Cancelled">Cancelled</option>
             </select>
             <select id="areq-cat" onchange="renderAdminReqPanel()" class="fc" style="margin:0;width:auto">
               <option value="">All categories</option><option value="Office Supplies">Office Supplies</option><option value="Facilities">Facilities</option><option value="Kitchen">Kitchen</option><option value="Clio">Clio</option><option value="Other">Other</option>
@@ -765,6 +793,7 @@ tr:hover td{background:var(--cfafaf8)}
               <option value="">All priorities</option><option value="Low">Low</option><option value="Normal">Normal</option><option value="Urgent">Urgent</option>
             </select>
             <input type="text" id="areq-search" class="fc" placeholder="Search employee or subject..." oninput="renderAdminReqPanel()" style="margin:0;flex:1;min-width:120px">
+            <label class="showpast"><input type="checkbox" id="areq-showpast" onchange="renderAdminReqPanel()"> Show past requests</label>
           </div>
           <div id="areq-list"></div>
         </div>
@@ -815,11 +844,12 @@ tr:hover td{background:var(--cfafaf8)}
         </div>
         <div class="tb">
           <select id="req-filter-status" onchange="renderMyRequests()" class="fc" style="margin:0;width:auto">
-            <option value="">All statuses</option><option value="Open">Open</option><option value="In Progress">In Progress</option><option value="Resolved">Resolved</option>
+            <option value="">All statuses</option><option value="Open">Open</option><option value="In Progress">In Progress</option><option value="Resolved">Resolved</option><option value="Cancelled">Cancelled</option>
           </select>
           <select id="req-filter-cat" onchange="renderMyRequests()" class="fc" style="margin:0;width:auto">
             <option value="">All categories</option><option value="Office Supplies">Office Supplies</option><option value="Facilities">Facilities</option><option value="Kitchen">Kitchen</option><option value="Clio">Clio</option><option value="Other">Other</option>
           </select>
+          <label class="showpast"><input type="checkbox" id="req-showpast" onchange="renderMyRequests()"> Show past requests</label>
         </div>
         <div id="my-req-list"></div>
       </div>
@@ -878,7 +908,7 @@ tr:hover td{background:var(--cfafaf8)}
           <div class="abar" style="margin-bottom:.75rem">🔧 Manage all requests</div>
           <div class="tb">
             <select id="req-admin-status" onchange="renderAdminRequests()" class="fc" style="margin:0;width:auto">
-              <option value="">All statuses</option><option value="Open">Open</option><option value="In Progress">In Progress</option><option value="Resolved">Resolved</option>
+              <option value="">All statuses</option><option value="Open">Open</option><option value="In Progress">In Progress</option><option value="Resolved">Resolved</option><option value="Cancelled">Cancelled</option>
             </select>
             <select id="req-admin-cat" onchange="renderAdminRequests()" class="fc" style="margin:0;width:auto">
               <option value="">All categories</option><option value="Office Supplies">Office Supplies</option><option value="Facilities">Facilities</option><option value="Kitchen">Kitchen</option><option value="Clio">Clio</option><option value="Other">Other</option>
@@ -887,6 +917,7 @@ tr:hover td{background:var(--cfafaf8)}
               <option value="">All priorities</option><option value="Low">Low</option><option value="Normal">Normal</option><option value="Urgent">Urgent</option>
             </select>
             <input type="text" id="req-admin-search" class="fc" placeholder="Search..." oninput="renderAdminRequests()" style="margin:0;flex:1;min-width:120px">
+            <label class="showpast"><input type="checkbox" id="req-admin-showpast" onchange="renderAdminRequests()"> Show past requests</label>
           </div>
           <div id="admin-req-list"></div>
         </div>
@@ -1612,7 +1643,7 @@ async function loadAllData(){
   );
 
   try {
-    const [emps, ptoR, wfhR, entriesR, lunchR, holsR, mileageR, settingsR, reqsR, notifsR, wfhSchedR] = await Promise.race([
+    const [emps, ptoR, wfhR, entriesR, lunchR, holsR, mileageR, settingsR, reqsR, notifsR, wfhSchedR, courtR] = await Promise.race([
       Promise.all([
         sbGet("employees","select=*&order=id"),
         sbGet("pto_requests","select=*&order=id"),
@@ -1625,6 +1656,7 @@ async function loadAllData(){
         sbGet("office_requests","select=*&order=id.desc").catch(()=>[]),
         sbGet("notifications","select=*&order=id.desc").catch(()=>[]),
         sbGet("wfh_schedules","select=*&order=emp_id").catch(()=>[]),
+        sbGet("court_sessions","select=*&order=id").catch(()=>[]),
       ]),
       timeout
     ]);
@@ -1654,11 +1686,18 @@ async function loadAllData(){
       id: r.id, empId: r.emp_id, date: r.entry_date,
       ci: r.clock_in ? r.clock_in.slice(0,5) : null,
       co: r.clock_out ? r.clock_out.slice(0,5) : null,
-      manual: r.is_manual, note: r.note||""
+      manual: r.is_manual, note: r.note||"",
+      fixStatus: r.fix_status||"", fixNote: r.fix_note||""
     }));
 
     LUNCH = lunchR.map(r=>({
       id: r.id, empId: r.emp_id, date: r.break_date,
+      start: r.start_time ? r.start_time.slice(0,5) : null,
+      end: r.end_time ? r.end_time.slice(0,5) : null
+    }));
+
+    COURT = courtR.map(r=>({
+      id: r.id, empId: r.emp_id, date: r.court_date,
       start: r.start_time ? r.start_time.slice(0,5) : null,
       end: r.end_time ? r.end_time.slice(0,5) : null
     }));
@@ -1949,10 +1988,15 @@ function toggleTheme(){
   paintThemeButtons();
 }
 document.addEventListener("DOMContentLoaded",paintThemeButtons);
+document.addEventListener("keydown",function(e){if(e.key==="Escape")closeEditModal()});
 
 const _now=new Date(),TODAY=`${_now.getFullYear()}-${String(_now.getMonth()+1).padStart(2,"0")}-${String(_now.getDate()).padStart(2,"0")}`;
 let calMo=_now.getMonth(),calYr=_now.getFullYear(),CU=null,clockEntry=null,clockTick=null,clockStart=null;
-let lunchEntry=null;
+let lunchEntry=null,courtEntry=null;
+let COURT=[];
+// Attorneys and paralegals get the Court button (based on job title)
+function canCourt(e){return !!(e&&/attorney|paralegal/i.test(e.title||""))}
+function nowHM(){const n=new Date();return String(n.getHours()).padStart(2,"0")+":"+String(n.getMinutes()).padStart(2,"0")}
 let nP=8,nH=12,nE=26,nEn=20,nL=3,nM=1,editId=null;
 
 let EMP=[
@@ -2996,7 +3040,10 @@ function enterApp(e){
   document.getElementById("abbadge").className="badge "+(e.role==="admin"?"b-admin":"b-emp");
   document.getElementById("navadmin").classList.toggle("hidden",!isAdm());
   updateNotifBadge();
+  updateFixBadge();
   showTab("clock",document.querySelector(".nb.active"));
+  if(!remindTimer)remindTimer=setInterval(checkReminders,30000);
+  checkReminders();
 }
 
 // ---- MICROSOFT SIGN-IN (via Cloudflare Access) ----
@@ -3058,7 +3105,7 @@ function showTab(name,btn){
   if(name==="docs"){openDocs();}
   if(name==="admin"){
     if(!isAdm()){document.getElementById("adminlock").classList.remove("hidden");document.getElementById("adminbody").classList.add("hidden")}
-    else{document.getElementById("adminlock").classList.add("hidden");document.getElementById("adminbody").classList.remove("hidden");renderApprovals();renderAnnivPanel()}
+    else{document.getElementById("adminlock").classList.add("hidden");document.getElementById("adminbody").classList.remove("hidden");renderApprovals();renderAnnivPanel();renderFixPanel()}
   }
 }
 
@@ -3070,18 +3117,22 @@ function renderClock(){
   clockEntry=te.find(r=>r.ci&&!r.co)||null;
   const tl=LUNCH.filter(r=>r.empId===CU.id&&r.date===TODAY);
   lunchEntry=tl.find(r=>r.start&&!r.end)||null;
+  const tco=COURT.filter(r=>r.empId===CU.id&&r.date===TODAY);
+  courtEntry=tco.find(r=>r.start&&!r.end)||null;
   const lunchM=tl.filter(r=>r.start&&r.end).reduce((s,r)=>s+toM(r.end)-toM(r.start),0);
   const workM=te.filter(r=>r.ci&&r.co).reduce((s,r)=>s+toM(r.co)-toM(r.ci),0);
   const totM=Math.max(0,workM-lunchM);
   const ring=document.getElementById("tcring"),pill=document.getElementById("tcpill"),btn=document.getElementById("tcbtn");
   const lbtn=document.getElementById("lunchbtn");
+  const cbtn=document.getElementById("courtbtn");
+  const stale=staleEntry(CU.id);
   if(clockEntry){
     ring.classList.add("on");pill.className="spill sin";pill.innerHTML='<span class="dot"></span> Clocked in';
     btn.textContent="⏹ Clock Out";document.getElementById("tcsince").textContent="Since "+clockEntry.ci;
     clockStart=clockStartFor(clockEntry);
     if(!clockTick){clockTick=setInterval(tick,1000)}
     tick();
-    lbtn.classList.remove("hidden");
+    lbtn.classList.toggle("hidden",!!courtEntry);   // no lunch while in court
   } else {
     ring.classList.remove("on");pill.className="spill sout";pill.innerHTML='<span class="dot"></span> Clocked out';
     btn.textContent="▶ Clock In";document.getElementById("tcsince").textContent="";
@@ -3089,6 +3140,26 @@ function renderClock(){
     if(clockTick){clearInterval(clockTick);clockTick=null;clockStart=null}
     lbtn.classList.add("hidden");
   }
+  // Court: shown to attorneys/paralegals; works before clock-in (clocks them in too). Hidden while on lunch.
+  cbtn.classList.toggle("hidden",!canCourt(CU)||!!lunchEntry);
+  if(courtEntry){
+    cbtn.textContent="⚖️ Back from Court ("+courtEntry.start+")";
+    cbtn.style.background="var(--cdbeafe)";
+  } else {
+    cbtn.textContent=clockEntry?"⚖️ Going to Court":"⚖️ Going to Court (clocks you in)";
+    cbtn.style.background="var(--ceff6ff)";
+  }
+  if(courtEntry){
+    pill.className="spill";pill.style.cssText="background:var(--cdbeafe);color:var(--c1e40af)";
+    pill.innerHTML='<span class="dot"></span> In court';
+  } else pill.style.cssText="";
+  // Missed clock-out on an earlier day: they must close it before clocking in again
+  renderStale(stale);
+  if(stale){
+    btn.classList.add("hidden");lbtn.classList.add("hidden");cbtn.classList.add("hidden");
+    pill.className="spill";pill.style.cssText="background:var(--cfef3c7);color:var(--c92400e)";
+    pill.innerHTML='<span class="dot"></span> Missed clock-out';
+  } else btn.classList.remove("hidden");
   if(lunchEntry){
     lbtn.textContent="🍽 End Lunch ("+lunchEntry.start+")";
     lbtn.style.background="var(--cfde68a)";lbtn.style.color="var(--c451a03)";
@@ -3099,9 +3170,18 @@ function renderClock(){
   document.getElementById("tctotal").textContent=totM?"Today: "+mH(totM)+" hrs logged"+(lunchM?" (after "+mH(lunchM)+"h lunch)":""):"";
   const logItems=[
     ...te.map(r=>({type:"work",ci:r.ci,co:r.co,manual:r.manual})),
-    ...tl.map(r=>({type:"lunch",ci:r.start,co:r.end}))
+    ...tl.map(r=>({type:"lunch",ci:r.start,co:r.end})),
+    ...tco.map(r=>({type:"court",ci:r.start,co:r.end}))
   ].sort((a,b)=>(a.ci||"").localeCompare(b.ci||""));
   document.getElementById("tclog").innerHTML=logItems.length?logItems.map(r=>{
+    if(r.type==="court"){
+      return`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--cf5f4f0);font-size:12px;align-items:center;background:var(--ceff6ff)">
+        <span style="color:var(--c1e40af)">⚖️ ${r.ci}</span>
+        <span>${r.co?`<span style="color:var(--c1e40af)">&#8594; ${r.co}</span>`:'<span class="badge b-court" style="font-size:10px">In court</span>'}</span>
+        <span style="color:var(--c888888)">${r.co?mH(toM(r.co)-toM(r.ci))+"h":"—"}</span>
+        <span style="font-size:10px;color:var(--caaaaaa)">court</span>
+      </div>`;
+    }
     if(r.type==="lunch"){
       return`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--cf5f4f0);font-size:12px;align-items:center;background:var(--cfffbeb)">
         <span style="color:var(--c92400e)">🍽 ${r.ci}</span>
@@ -3150,9 +3230,12 @@ function tick(){
 
 async function toggleClock(){
   if(!CU)return;
+  askNotifPermission();
+  if(!clockEntry&&staleEntry(CU.id)){renderClock();return}
   if(lunchEntry){alert("Please end your lunch break before clocking out.");return}
   const now=new Date(),t=`${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`;
   if(clockEntry){
+    if(courtEntry)await endCourt(t);   // heading home from court: end court at the same time
     clockEntry.co=t;
     try{ await sbPatch("time_entries",`id=eq.${clockEntry.id}`,{clock_out:t}); }
     catch(e){console.error("Clock out save failed",e);}
@@ -3190,6 +3273,41 @@ async function toggleLunch(){
   renderClock();
 }
 
+async function endCourt(t){
+  if(!courtEntry)return;
+  courtEntry.end=t;
+  try{ await sbPatch("court_sessions",`id=eq.${courtEntry.id}`,{end_time:t}); }
+  catch(e){console.error("Court end save failed",e);}
+  courtEntry=null;
+}
+async function toggleCourt(){
+  if(!CU||!canCourt(CU))return;
+  askNotifPermission();
+  if(!clockEntry&&staleEntry(CU.id)){renderClock();return}
+  const t=nowHM();
+  if(courtEntry){await endCourt(t);renderClock();return}
+  if(lunchEntry){alert("Please end your lunch break first.");return}
+  try{
+    if(!clockEntry){
+      // Going straight to court: clock in first
+      const rows=await sbPost("time_entries",{emp_id:CU.id,entry_date:TODAY,clock_in:t,is_manual:false,note:""});
+      const entry={id:rows[0].id,empId:CU.id,date:TODAY,ci:t,co:null,manual:false,note:""};
+      ENTRIES.push(entry);clockEntry=entry;clockStart=Date.now();
+      try{localStorage.setItem("tt-clockstart-"+entry.id,String(clockStart))}catch(e){}
+    }
+    const rows=await sbPost("court_sessions",{emp_id:CU.id,court_date:TODAY,start_time:t});
+    const c={id:rows[0].id,empId:CU.id,date:TODAY,start:t,end:null};
+    COURT.push(c);courtEntry=c;
+    showToast("You're marked as in court");
+  }catch(e){
+    console.error("Court start failed",e);
+    alert(String(e.message||"").includes("court_sessions")
+      ?"Court tracking needs a quick database update first. Please let an admin know."
+      :"Could not save. Please try again.");
+  }
+  renderClock();
+}
+
 function renderCal(){
   const mo=["January","February","March","April","May","June","July","August","September","October","November","December"];
   document.getElementById("callbl").textContent=mo[calMo]+" "+calYr;
@@ -3222,6 +3340,9 @@ function renderCal(){
       LUNCH.filter(r=>r.empId&&r.date===TODAY&&r.start&&!r.end).forEach(r=>{
         const e=ge(r.empId);if(e)evs.push({cls:"el",lbl:e.name.split(" ")[0]+" Lunch"});
       });
+      COURT.filter(r=>r.date===TODAY&&r.start&&!r.end).forEach(r=>{
+        const e=ge(r.empId);if(e)evs.push({cls:"ec",lbl:e.name.split(" ")[0]+" Court",det:e.name+" · in court"});
+      });
     }
     // Anniversary events — admins see all, employees see only their own
     EMP.forEach(e=>{
@@ -3247,7 +3368,7 @@ function renderCal(){
       document.getElementById("caldetinner").innerHTML=
         `<div style="font-weight:700;font-size:13px;margin-bottom:.5rem">${new Date(ds+"T12:00:00").toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric"})}</div>`
         +evs.map(ev=>{
-          const b={ep:["b-pto","PTO"],ew:["b-wfh","WFH"],el:["b-lunch","Lunch"],ea:["b-anniv","Anniversary"],eo:["b-ooo","Out of office"]}[ev.cls]||["b-hol","Holiday"];
+          const b={ep:["b-pto","PTO"],ew:["b-wfh","WFH"],el:["b-lunch","Lunch"],ec:["b-court","In court"],ea:["b-anniv","Anniversary"],eo:["b-ooo","Out of office"]}[ev.cls]||["b-hol","Holiday"];
           return`<div style="display:flex;align-items:flex-start;gap:7px;padding:3px 0">
           <span class="badge ${b[0]}" style="flex-shrink:0">${b[1]}</span>
           <span style="font-size:12px;padding-top:2px">${esc(ev.det||ev.lbl)}</span></div>`;}).join("");
@@ -3265,14 +3386,18 @@ function renderMyPTO(){
   document.getElementById("ptometrics").innerHTML=`
     <div class="metric"><div class="mlbl">Pending requests</div><div class="mval">${pend}</div></div>
     <div class="metric"><div class="mlbl">Upcoming time off</div><div class="mval">${upcoming}</div></div>`;
-  const rows=mine.slice().sort((a,b)=>b.start.localeCompare(a.start));
-  document.getElementById("myrows").innerHTML=rows.length?rows.map(r=>`<tr>
+  const all=mine.slice().sort((a,b)=>b.start.localeCompare(a.start));
+  const rows=all.filter(r=>showPast("pto-showpast")||!isPastReq("pto",r));
+  const hid=all.length-rows.length;
+  document.getElementById("myrows").innerHTML=(rows.length?rows.map(r=>`<tr>
     <td style="font-size:12px">${r.cat==="OOO"?'<span class="badge b-ooo" style="font-size:10px">Out of office</span> ':'<span class="badge b-pto" style="font-size:10px">PTO</span> '}${esc(r.type||"")}</td>
     <td style="font-size:12px">${r.cat==="OOO"?fmt(r.start):fmt(r.start)+(r.end!==r.start?" - "+fmt(r.end):"")}</td>
     <td style="font-size:12px">${r.cat==="OOO"?oooWhen(r):r.days+(r.days===1?" day":" days")}</td>
-    <td><span class="badge b-${r.status==="Approved"?"appr":r.status==="Denied"?"deni":"pend"}">${r.status}</span></td>
-    <td style="font-size:11px;color:var(--c888888)">${esc(r.notes||"—")}</td></tr>`).join("")
-    :'<tr><td colspan="5" style="text-align:center;color:var(--c888888);font-size:12px;padding:1.25rem">No requests yet. Use "Request PTO" or "Out of office" to get started.</td></tr>';
+    <td><span class="badge b-${stCls(r.status)}">${r.status}</span></td>
+    <td style="font-size:11px;color:var(--c888888)">${esc(r.notes||"—")}</td>
+    <td>${reqButtons("pto",r)}</td></tr>`).join("")
+    :hid?"":'<tr><td colspan="6" style="text-align:center;color:var(--c888888);font-size:12px;padding:1.25rem">No requests yet. Use "Request PTO" or "Out of office" to get started.</td></tr>')
+    +pastNoteRow(hid,6);
 }
 function openPTOForm(){document.getElementById("oooform").classList.add("hidden");document.getElementById("ptoform").classList.remove("hidden")}
 async function submitPTO(){
@@ -3419,12 +3544,14 @@ function renderMyRequests(){
   if(!CU) return;
   const statusF = document.getElementById("req-filter-status").value;
   const catF = document.getElementById("req-filter-cat").value;
-  const myReqs = REQUESTS.filter(r=>{
+  const matched = REQUESTS.filter(r=>{
     if(r.empId !== CU.id) return false;
     if(statusF && r.status !== statusF) return false;
     if(catF && r.category !== catF) return false;
     return true;
   });
+  const myReqs = matched.filter(r=>statusF||showPast("req-showpast")||!isPastReq("req",r));
+  const hid = matched.length - myReqs.length;
 
   // Metrics
   const allMine = REQUESTS.filter(r=>r.empId===CU.id);
@@ -3441,8 +3568,8 @@ function renderMyRequests(){
   const catIcon = {"Office Supplies":"📦","Facilities":"🏢","Kitchen":"☕","Clio":"⚖️","Other":"📋"};
   const priIcon = {"Low":"","Normal":"","Urgent":"🔴 "};
 
-  document.getElementById("my-req-list").innerHTML = myReqs.length ? myReqs.map(r=>{
-    const statusCls = r.status==="Open"?"b-open":r.status==="In Progress"?"b-inprog":"b-resolved";
+  document.getElementById("my-req-list").innerHTML = (myReqs.length ? myReqs.map(r=>{
+    const statusCls = r.status==="Open"?"b-open":r.status==="In Progress"?"b-inprog":r.status==="Cancelled"?"b-canc":"b-resolved";
     const priCls = r.priority==="Low"?"b-low":r.priority==="Urgent"?"b-urgent":"b-normal";
     const created = r.created ? new Date(r.created).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "";
     const resolver = r.resolvedBy ? ge(r.resolvedBy) : null;
@@ -3463,8 +3590,300 @@ function renderMyRequests(){
       ${r.imageData ? `<div style="margin-top:.5rem"><img src="${r.imageData}" alt="Screenshot" style="max-width:280px;max-height:180px;border-radius:8px;border:1px solid var(--ceeeeee);cursor:pointer" onclick="openImgModal(this.src)"><div style="font-size:10px;color:var(--c888888);margin-top:2px">Click to enlarge</div></div>` : ""}
       ${r.status==="Resolved" && resolver ? `<div style="margin-top:.5rem;font-size:11px;color:var(--c166534);background:var(--cf0fdf4);padding:6px 10px;border-radius:6px">✅ Resolved by ${resolver.name} on ${resolvedDate}${r.adminNotes ? " — " + esc(r.adminNotes) : ""}</div>` : ""}
       ${r.status==="In Progress" ? `<div style="margin-top:.5rem;font-size:11px;color:var(--c1e40af);background:var(--ceff6ff);padding:6px 10px;border-radius:6px">⏳ Being worked on${r.adminNotes ? " — " + esc(r.adminNotes) : ""}</div>` : ""}
+      ${reqButtons("req",r) ? `<div class="ract" style="margin-top:.6rem">${reqButtons("req",r)}</div>` : ""}
     </div>`;
-  }).join("") : `<div style="text-align:center;padding:2rem;color:var(--c888888);font-size:13px">No requests yet. Click <strong>+ New request</strong> to submit one.</div>`;
+  }).join("") : (hid ? "" : `<div style="text-align:center;padding:2rem;color:var(--c888888);font-size:13px">No requests yet. Click <strong>+ New request</strong> to submit one.</div>`))
+  + pastNoteDiv(hid);
+}
+
+// ---- MISSED CLOCK-OUTS (time fix requests) ----
+// An open clock-in from an earlier day blocks clocking in. The employee enters
+// when they left; that closes the entry right away and flags it for admin review.
+function staleEntry(empId){
+  return ENTRIES.filter(r=>r.empId===empId&&r.date<TODAY&&r.ci&&!r.co).sort((a,b)=>a.date.localeCompare(b.date))[0]||null;
+}
+function longDate(ds){return new Date(ds+"T12:00:00").toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"})}
+function renderStale(st){
+  const box=document.getElementById("tcstale");
+  if(!st){box.classList.add("hidden");box.innerHTML="";return}
+  if(box.dataset.entry===String(st.id)&&!box.classList.contains("hidden"))return;   // keep what they're typing
+  box.dataset.entry=String(st.id);
+  box.className="stale-card";
+  box.innerHTML=`<div>You didn't clock out on <strong>${longDate(st.date)}</strong> (clocked in at ${t12(st.ci)}).</div>
+    <div style="margin-top:.35rem">Enter the time you left that day. An admin will review it, and you can clock in right after.</div>
+    <div class="stl" style="margin-top:.6rem">Time you left</div><input type="time" id="stale-out" class="fc">
+    <div class="stl" style="margin-top:0">Note for your admin (optional)</div><input type="text" id="stale-note" class="fc" placeholder="e.g. forgot to clock out before court">
+    <div class="lerr" id="stale-err" style="text-align:left;margin:0 0 .4rem;min-height:0"></div>
+    <button class="btn bp" style="width:100%;justify-content:center" onclick="submitStaleFix()">Submit time fix</button>`;
+}
+async function submitStaleFix(){
+  const st=staleEntry(CU.id);if(!st)return renderClock();
+  const out=document.getElementById("stale-out").value;
+  const note=document.getElementById("stale-note").value.trim();
+  const err=document.getElementById("stale-err");
+  if(!out){err.textContent="Please enter the time you left.";return}
+  if(out<=st.ci){err.textContent="That's before you clocked in ("+t12(st.ci)+"). Please check the time.";return}
+  try{
+    await sbPatch("time_entries","id=eq."+st.id,{clock_out:out,fix_status:"Pending",fix_note:note||null});
+    st.co=out;st.fixStatus="Pending";st.fixNote=note;
+    try{localStorage.removeItem("tt-clockstart-"+st.id)}catch(e){}
+    // Close any lunch or court left open that day
+    for(const L of [["lunch_breaks",LUNCH],["court_sessions",COURT]]){
+      for(const b of L[1].filter(x=>x.empId===CU.id&&x.date===st.date&&x.start&&!x.end)){
+        const end=out>b.start?out:b.start;
+        await sbPatch(L[0],"id=eq."+b.id,{end_time:end});b.end=end;
+      }
+    }
+    document.getElementById("tcstale").dataset.entry="";
+    showToast("Time fix sent. You can clock in now.");
+    updateFixBadge();renderClock();
+  }catch(e){
+    console.error(e);
+    err.textContent=String(e.message||"").includes("fix_")
+      ?"This needs a quick database update first. Please let an admin know."
+      :"Could not save. Please try again.";
+  }
+}
+function pendingFixes(){return ENTRIES.filter(r=>r.fixStatus==="Pending").sort((a,b)=>a.date.localeCompare(b.date))}
+function updateFixBadge(){
+  const b=document.getElementById("navadmin");if(!b)return;
+  const n=isAdm()?pendingFixes().length:0;
+  b.classList.toggle("has-notif",n>0);b.setAttribute("data-count",String(n));
+}
+function renderFixPanel(){
+  const el=document.getElementById("fix-panel");if(!el)return;
+  const list=pendingFixes();
+  if(!list.length||!isAdm()){el.innerHTML="";return}
+  el.innerHTML=`<div style="background:var(--cffffff);border:1px solid var(--cfde68a);border-radius:10px;overflow:hidden;margin-bottom:1rem">
+    <div style="background:var(--cfef3c7);padding:8px 12px;font-size:13px;font-weight:700;color:var(--c92400e)">⏱ Missed clock-outs to review (${list.length})</div>
+    ${list.map(r=>{const e=ge(r.empId);return`<div class="fix-row">
+      <div class="er" style="min-width:150px"><div class="av ${avc(r.empId)}">${e?ini(e.name):"?"}</div>${e?esc(e.name):"Unknown"}</div>
+      <span>${longDate(r.date)}</span>
+      <span>${t12(r.ci)} → <strong>${t12(r.co)}</strong></span>
+      <span style="color:var(--c888888);flex:1;min-width:120px">${r.fixNote?esc(r.fixNote):""}</span>
+      <span class="ract"><button class="bsm bapp" onclick="approveFix(${r.id})">✓ Approve</button><button class="bsm" onclick="editFix(${r.id})">✏ Change times</button></span>
+    </div>`}).join("")}</div>`;
+}
+async function approveFix(id){
+  const r=ENTRIES.find(x=>x.id===id);if(!r)return;
+  try{await sbPatch("time_entries","id=eq."+id,{fix_status:"Approved"});r.fixStatus="Approved";afterFix()}
+  catch(e){console.error(e);alert("Could not approve. Please try again.")}
+}
+function editFix(id){
+  const r=ENTRIES.find(x=>x.id===id);if(!r)return;
+  const e=ge(r.empId);
+  openEditModal("Fix time · "+(e?esc(e.name):"")+" · "+longDate(r.date),
+    `<div class="r2">${emField("Clock in",emInput("em-in","time",r.ci))}${emField("Clock out",emInput("em-out","time",r.co))}</div>
+     ${r.fixNote?`<div style="font-size:12px;color:var(--c888888);margin:-.25rem 0 .75rem">Their note: ${esc(r.fixNote)}</div>`:""}`,
+    async()=>{
+      const ci=emv("em-in"),co=emv("em-out");
+      if(!ci||!co)return emErr("Please enter both times.");
+      if(co<=ci)return emErr("Clock out must be after clock in.");
+      await sbPatch("time_entries","id=eq."+id,{clock_in:ci,clock_out:co,is_manual:true,fix_status:"Approved"});
+      Object.assign(r,{ci,co,manual:true,fixStatus:"Approved"});
+      closeEditModal();afterFix();showToast("Time fixed");
+    });
+}
+function afterFix(){
+  updateFixBadge();renderFixPanel();
+  if(!document.getElementById("Atimesheets").classList.contains("hidden"))renderTS();
+}
+
+// ---- CLOCK-OUT REMINDERS (4:00 and 5:00 PM, weekdays) ----
+// Only works while Time Served is open in a tab. Shows a banner, plus a computer
+// notification if the person allowed notifications.
+let remindTimer=null;
+function askNotifPermission(){
+  try{if(typeof Notification!=="undefined"&&Notification.permission==="default")Notification.requestPermission()}catch(e){}
+}
+function checkReminders(){
+  if(!CU)return;
+  const now=new Date(),dow=now.getDay();
+  if(dow===0||dow===6)return;
+  const open=ENTRIES.find(r=>r.empId===CU.id&&r.date===TODAY&&r.ci&&!r.co);
+  const bar=document.getElementById("remindbar");
+  if(!open){bar.classList.add("hidden");return}
+  const h=now.getHours(),slot=h>=17?17:h>=16?16:0;
+  if(!slot)return;
+  const key="tt-remind-"+CU.id+"-"+TODAY+"-"+slot;
+  let seen=false;try{seen=!!localStorage.getItem(key)}catch(e){}
+  if(seen)return;
+  try{localStorage.setItem(key,"1")}catch(e){}
+  const msg="It's "+(slot===16?"4:00":"5:00")+" and you're still clocked in. Don't forget to clock out before you leave.";
+  bar.innerHTML='<span style="font-size:16px">⏰</span><span style="flex:1;min-width:180px">'+msg+'</span>'+
+    '<button class="bsm" onclick="showTab(\'clock\',document.querySelector(\'.nav .nb\'));document.getElementById(\'remindbar\').classList.add(\'hidden\')">Go to Time Clock</button>'+
+    '<button class="bsm" onclick="document.getElementById(\'remindbar\').classList.add(\'hidden\')">Dismiss</button>';
+  bar.classList.remove("hidden");
+  try{
+    if(typeof Notification!=="undefined"&&Notification.permission==="granted"){
+      const n=new Notification("Time Served",{body:msg,tag:"tt-clockout"});
+      n.onclick=function(){window.focus();n.close()};
+    }
+  }catch(e){}
+}
+
+// ---- EDIT / CANCEL / DELETE REQUESTS + HIDE PAST ONES ----
+// kinds: "pto" (PTO + out of office), "mile" (mileage), "req" (office requests)
+function stCls(st){return st==="Approved"?"appr":st==="Denied"?"deni":st==="Cancelled"?"canc":"pend"}
+// "Past" = hidden unless "Show past requests" is ticked
+function isPastReq(kind,r){
+  if(r.status==="Cancelled")return true;
+  if(kind==="req")return r.status==="Resolved";
+  if(r.status==="Denied")return true;
+  if(kind==="pto")return r.status==="Approved"&&r.end<TODAY;   // upcoming approved time off stays visible
+  if(kind==="mile")return r.status==="Approved";
+  return false;
+}
+function showPast(id){const el=document.getElementById(id);return !!(el&&el.checked)}
+function pastNoteText(n){return n+" past request"+(n===1?"":"s")+" hidden · tick “Show past requests” to see "+(n===1?"it":"them")}
+function pastNoteRow(n,cols){return n?'<tr><td colspan="'+cols+'" class="past-note">'+pastNoteText(n)+'</td></tr>':""}
+function pastNoteDiv(n){return n?'<div class="past-note">'+pastNoteText(n)+'</div>':""}
+// Employees: edit/cancel their own requests while still pending. Admins: edit/delete anything.
+function isPendingReq(kind,r){return kind==="req"?r.status==="Open":r.status==="Pending"}
+function reqButtons(kind,r){
+  if(!CU)return"";
+  let h="";
+  const mineOpen=r.empId===CU.id&&isPendingReq(kind,r);
+  if(isAdm()||mineOpen)h+=`<button class="bsm" onclick="editReq('${kind}',${r.id})">✏ Edit</button>`;
+  if(mineOpen)h+=`<button class="bsm" onclick="cancelReq('${kind}',${r.id})">Cancel</button>`;
+  if(isAdm())h+=`<button class="bsm bdny" onclick="deleteReq('${kind}',${r.id})" title="Permanently delete">🗑</button>`;
+  return h?`<span class="ract">${h}</span>`:"";
+}
+const REQ_KINDS={
+  pto:{table:"pto_requests",list:()=>PTO,label:"request"},
+  mile:{table:"mileage_requests",list:()=>MILEAGE,label:"trip"},
+  req:{table:"office_requests",list:()=>REQUESTS,label:"request"}
+};
+function findReq(kind,id){return REQ_KINDS[kind].list().find(x=>x.id===id)}
+function refreshReqViews(){
+  [renderMyPTO,renderApprovals,renderMyMileage,renderAdminMileage,renderRequestsTab,renderAdminReqPanel]
+    .forEach(fn=>{try{fn()}catch(e){console.error(e)}});
+}
+async function cancelReq(kind,id){
+  const r=findReq(kind,id);if(!r)return;
+  if(!confirm("Cancel this "+REQ_KINDS[kind].label+"? It will move to your past requests."))return;
+  try{
+    await sbPatch(REQ_KINDS[kind].table,"id=eq."+id,{status:"Cancelled"});
+    r.status="Cancelled";refreshReqViews();showToast("Cancelled");
+  }catch(e){
+    console.error(e);
+    alert(String(e.message||"").includes("check")
+      ?"Cancelling needs a quick database update first. Please let an admin know."
+      :"Could not cancel. Please try again.");
+  }
+}
+async function deleteReq(kind,id){
+  const r=findReq(kind,id);if(!r||!isAdm())return;
+  const e=ge(r.empId);
+  if(!confirm("Permanently delete this "+REQ_KINDS[kind].label+(e?" from "+e.name:"")+"? This can't be undone."))return;
+  try{
+    if(kind==="req"){   // remove the alerts that point at this request first
+      await sbDelete("notifications","reference_id=eq."+id);
+      NOTIFS=NOTIFS.filter(n=>n.refId!==id);updateNotifBadge();
+    }
+    await sbDelete(REQ_KINDS[kind].table,"id=eq."+id);
+    const L=REQ_KINDS[kind].list(),i=L.indexOf(r);if(i>-1)L.splice(i,1);
+    refreshReqViews();showToast("Deleted");
+  }catch(err){console.error(err);alert("Could not delete. Please try again.");}
+}
+
+// Pop-up editor
+function closeEditModal(){const m=document.getElementById("editmodal");if(m)m.remove()}
+function openEditModal(title,body,onSave){
+  closeEditModal();
+  const m=document.createElement("div");
+  m.id="editmodal";m.className="em-back";
+  m.innerHTML=`<div class="em-box" role="dialog" aria-modal="true">
+    <h3 style="margin-bottom:.9rem">${title}</h3>${body}
+    <div class="lerr" id="em-err" style="text-align:left;margin:0 0 .5rem"></div>
+    <div style="display:flex;gap:8px"><button class="btn bp" id="em-save">Save changes</button><button class="bsm" onclick="closeEditModal()">Cancel</button></div></div>`;
+  m.addEventListener("click",ev=>{if(ev.target===m)closeEditModal()});
+  document.body.appendChild(m);
+  document.getElementById("em-save").onclick=async function(){
+    const btn=this;btn.disabled=true;
+    try{await onSave()}catch(e){console.error(e);document.getElementById("em-err").textContent="Could not save. Please try again."}
+    btn.disabled=false;
+  };
+}
+const emv=id=>document.getElementById(id).value;
+const emField=(lbl,html)=>`<div><div class="stl">${lbl}</div>${html}</div>`;
+const emInput=(id,type,val,extra)=>`<input type="${type}" id="${id}" class="fc" value="${docEsc(val==null?"":val)}" ${extra||""}>`;
+const emSelect=(id,opts,val,extra)=>`<select id="${id}" class="fc" ${extra||""}>${opts.map(o=>`<option${o===val?" selected":""}>${docEsc(o)}</option>`).join("")}</select>`;
+function emErr(msg){document.getElementById("em-err").textContent=msg;return false}
+function emOOOType(){
+  const t=emv("em-type");
+  document.getElementById("em-fromwrap").classList.toggle("hidden",t==="Out all day");
+  document.getElementById("em-towrap").classList.toggle("hidden",t!=="Out part of the day");
+  document.getElementById("em-fromlbl").textContent=t==="Arriving late"?"Arriving at":"Leaving at";
+}
+
+function editReq(kind,id){
+  const r=findReq(kind,id);if(!r)return;
+  if(!isAdm()&&!(r.empId===CU.id&&isPendingReq(kind,r)))return;
+  const who=r.empId!==CU.id&&ge(r.empId)?" · "+esc(ge(r.empId).name):"";
+  if(kind==="pto"&&r.cat!=="OOO"){
+    openEditModal("Edit PTO request"+who,
+      `<div class="r3">${emField("Type",emSelect("em-type",["Vacation","Sick","Personal","Bereavement"],r.type))}
+       ${emField("Start date",emInput("em-start","date",r.start))}${emField("End date",emInput("em-end","date",r.end))}</div>
+       ${emField("Notes",emInput("em-notes","text",r.notes))}`,
+      async()=>{
+        const type=emv("em-type"),start=emv("em-start"),end=emv("em-end"),notes=emv("em-notes").trim();
+        if(!start||!end)return emErr("Please pick start and end dates.");
+        if(end<start)return emErr("End date must be on or after the start date.");
+        const days=bdays(start,end);
+        await sbPatch("pto_requests","id=eq."+id,{type,start_date:start,end_date:end,days,notes});
+        Object.assign(r,{type,start,end,days,notes});
+        closeEditModal();refreshReqViews();showToast("Request updated");
+      });
+  } else if(kind==="pto"){
+    openEditModal("Edit out of office request"+who,
+      `<div class="r3">${emField("Date",emInput("em-date","date",r.start))}
+       ${emField("Type",emSelect("em-type",["Arriving late","Leaving early","Out part of the day","Out all day"],r.type,'onchange="emOOOType()"'))}
+       <div id="em-fromwrap"><div class="stl" id="em-fromlbl">Leaving at</div>${emInput("em-from","time",r.startTime)}</div>
+       <div id="em-towrap"><div class="stl">Back at</div>${emInput("em-to","time",r.endTime)}</div></div>
+       ${emField("Reason",emInput("em-notes","text",r.notes))}`,
+      async()=>{
+        const date=emv("em-date"),type=emv("em-type"),from=emv("em-from"),to=emv("em-to"),notes=emv("em-notes").trim();
+        if(!date)return emErr("Please pick a date.");
+        if(type!=="Out all day"&&!from)return emErr("Please enter a time.");
+        if(type==="Out part of the day"&&to&&to<=from)return emErr("The time you're back should be after the time you leave.");
+        const startTime=type==="Out all day"?"":from,endTime=type==="Out part of the day"?to:"";
+        await sbPatch("pto_requests","id=eq."+id,{type,start_date:date,end_date:date,start_time:startTime||null,end_time:endTime||null,notes});
+        Object.assign(r,{type,start:date,end:date,startTime,endTime,notes});
+        closeEditModal();refreshReqViews();showToast("Request updated");
+      });
+    emOOOType();
+  } else if(kind==="mile"){
+    openEditModal("Edit mileage trip"+who,
+      `<div class="r2">${emField("Date",emInput("em-date","date",r.date))}${emField("Miles",emInput("em-miles","number",r.miles,'min="0" step="0.1"'))}</div>
+       ${emField("Starting location",emInput("em-from","text",r.from))}${emField("Ending location",emInput("em-to","text",r.to))}
+       ${emField("Purpose / notes",emInput("em-notes","text",r.notes))}
+       <div style="font-size:11px;color:var(--c888888);margin:-.4rem 0 .75rem">Reimbursed at $${r.rate.toFixed(2)}/mile.</div>`,
+      async()=>{
+        const date=emv("em-date"),from=emv("em-from").trim(),to=emv("em-to").trim(),miles=parseFloat(emv("em-miles")),notes=emv("em-notes").trim();
+        if(!date)return emErr("Please select a date.");
+        if(!from||!to)return emErr("Please enter both locations.");
+        if(!miles||miles<=0)return emErr("Please enter a valid mileage amount.");
+        const amount=parseFloat((miles*r.rate).toFixed(2));
+        await sbPatch("mileage_requests","id=eq."+id,{trip_date:date,from_location:from,to_location:to,miles,amount,notes});
+        Object.assign(r,{date,from,to,miles,amount,notes});
+        closeEditModal();refreshReqViews();showToast("Trip updated");
+      });
+  } else {
+    openEditModal("Edit request"+who,
+      `<div class="r2">${emField("Category",emSelect("em-cat",["Office Supplies","Facilities","Kitchen","Clio","Other"],r.category))}
+       ${emField("Priority",emSelect("em-pri",["Low","Normal","Urgent"],r.priority))}</div>
+       ${emField("Subject",emInput("em-subj","text",r.subject))}
+       ${emField("Description",`<textarea id="em-desc" class="fc" rows="3" style="resize:vertical;font-family:inherit">${docEsc(r.description)}</textarea>`)}
+       ${emField("Link (optional)",emInput("em-link","url",r.linkUrl))}`,
+      async()=>{
+        const category=emv("em-cat"),priority=emv("em-pri"),subject=emv("em-subj").trim(),description=emv("em-desc").trim(),linkUrl=emv("em-link").trim();
+        if(!subject)return emErr("Please enter a subject.");
+        await sbPatch("office_requests","id=eq."+id,{category,priority,subject,description,link_url:linkUrl||null});
+        Object.assign(r,{category,priority,subject,description,linkUrl});
+        closeEditModal();refreshReqViews();showToast("Request updated");
+      });
+  }
 }
 
 function esc(s){ const d=document.createElement("div"); d.textContent=s; return d.innerHTML; }
@@ -3596,8 +4015,8 @@ function renderAdminRequests(){
     }
     return true;
   });
-
-  renderReqCards(reqs, "admin-req-list", true);
+  const shown = reqs.filter(r=>statusF||showPast("req-admin-showpast")||!isPastReq("req",r));
+  renderReqCards(shown, "admin-req-list", true, reqs.length-shown.length);
 }
 
 function renderAdminReqPanel(){
@@ -3618,32 +4037,35 @@ function renderAdminReqPanel(){
     }
     return true;
   });
-
-  renderReqCards(reqs, "areq-list", true);
+  const shown = reqs.filter(r=>statusF||showPast("areq-showpast")||!isPastReq("req",r));
+  renderReqCards(shown, "areq-list", true, reqs.length-shown.length);
 }
 
-function renderReqCards(reqs, targetId, showAdmin){
+function renderReqCards(reqs, targetId, showAdmin, hid){
   const catIcon = {"Office Supplies":"📦","Facilities":"🏢","Kitchen":"☕","Clio":"⚖️","Other":"📋"};
   const priIcon = {"Low":"","Normal":"","Urgent":"🔴 "};
 
-  document.getElementById(targetId).innerHTML = reqs.length ? reqs.map(r=>{
+  document.getElementById(targetId).innerHTML = (reqs.length ? reqs.map(r=>{
     const e = ge(r.empId);
-    const statusCls = r.status==="Open"?"b-open":r.status==="In Progress"?"b-inprog":"b-resolved";
+    const statusCls = r.status==="Open"?"b-open":r.status==="In Progress"?"b-inprog":r.status==="Cancelled"?"b-canc":"b-resolved";
     const priCls = r.priority==="Low"?"b-low":r.priority==="Urgent"?"b-urgent":"b-normal";
     const created = r.created ? new Date(r.created).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}) : "";
     const resolver = r.resolvedBy ? ge(r.resolvedBy) : null;
     const resolvedDate = r.resolvedAt ? new Date(r.resolvedAt).toLocaleDateString("en-US",{month:"short",day:"numeric"}) : "";
 
     let adminActions = "";
-    if(showAdmin && r.status !== "Resolved"){
+    if(showAdmin && r.status !== "Resolved" && r.status !== "Cancelled"){
       adminActions = `<div style="margin-top:.6rem;padding-top:.6rem;border-top:1px solid var(--cf0f0f0);display:flex;gap:6px;align-items:center;flex-wrap:wrap">
         <input type="text" id="req-note-${r.id}" class="fc" placeholder="Add a note (optional)" style="margin:0;flex:1;min-width:120px;font-size:12px;padding:6px 10px">
         ${r.status==="Open" ? `<button class="bsm" style="color:var(--c1e40af);border-color:var(--c93c5fd)" onclick="updateReqStatus(${r.id},'In Progress')">▶ In Progress</button>` : ""}
         <button class="bsm bapp" onclick="updateReqStatus(${r.id},'Resolved')">✓ Resolve</button>
       </div>`;
     }
+    if(showAdmin && reqButtons("req",r)){
+      adminActions += `<div class="ract" style="margin-top:.5rem;justify-content:flex-end">${reqButtons("req",r)}</div>`;
+    }
 
-    return `<div class="req-card" ${r.priority==="Urgent"&&r.status!=="Resolved"?'style="border-left:3px solid var(--cdc2626)"':""}>
+    return `<div class="req-card" ${r.priority==="Urgent"&&r.status!=="Resolved"&&r.status!=="Cancelled"?'style="border-left:3px solid var(--cdc2626)"':""}>
       <div class="req-header">
         <div>
           <div class="req-subj">${catIcon[r.category]||"📋"} ${esc(r.subject)}</div>
@@ -3665,7 +4087,8 @@ function renderReqCards(reqs, targetId, showAdmin){
       ${r.status==="Resolved" && resolver ? `<div style="margin-top:.5rem;font-size:11px;color:var(--c166534);background:var(--cf0fdf4);padding:6px 10px;border-radius:6px">✅ Resolved by ${resolver.name} on ${resolvedDate}${r.adminNotes ? " — " + esc(r.adminNotes) : ""}</div>` : ""}
       ${adminActions}
     </div>`;
-  }).join("") : `<div style="text-align:center;padding:2rem;color:var(--c888888);font-size:13px">No requests match your filters.</div>`;
+  }).join("") : (hid ? "" : `<div style="text-align:center;padding:2rem;color:var(--c888888);font-size:13px">No requests match your filters.</div>`))
+  + pastNoteDiv(hid);
 }
 
 async function updateReqStatus(reqId, newStatus){
@@ -3734,6 +4157,9 @@ function getEmpStatus(empId){
   // Check on lunch
   const onLunch=LUNCH.find(r=>r.empId===empId&&r.date===TODAY&&r.start&&!r.end);
   // wfh:true lets Who's In show a WFH tag next to the active status
+  const inCourt=COURT.find(r=>r.empId===empId&&r.date===TODAY&&r.start&&!r.end);
+  if(inCourt&&openEntry)
+    return{status:"court",label:"In court",dotCls:"wi-dot-court",lblCls:"wi-lbl-court",since:inCourt.start};
   if(onLunch)
     return{status:"lunch",label:"On lunch",dotCls:"wi-dot-lunch",lblCls:"wi-lbl-lunch",since:onLunch.start,wfh:wfhToday};
   if(openEntry)
@@ -3758,9 +4184,9 @@ function renderWhosIn(){
     const ttx=TEAM_TEXT[team]||"var(--c1a1a1a)";
 
     // Count statuses for header summary
-    const counts={in:0,lunch:0,wfh:0,pto:0,ooo:0,out:0};
+    const counts={in:0,court:0,lunch:0,wfh:0,pto:0,ooo:0,out:0};
     members.forEach(e=>{counts[getEmpStatus(e.id).status]++});
-    const inCount=counts.in+counts.wfh; // WFH counts as "working"
+    const inCount=counts.in+counts.court+counts.wfh; // court and WFH count as "working"
 
     const rows=members.map(e=>{
       const st=getEmpStatus(e.id);
@@ -3802,15 +4228,19 @@ function renderMyMileage(){
     <div class="metric"><div class="mlbl">Approved reimbursement</div><div class="mval" style="color:var(--c166534)">$${approvedTotal.toFixed(2)}</div></div>
     <div class="metric"><div class="mlbl">Pending miles</div><div class="mval">${pendingMiles.toFixed(1)}</div></div>
     <div class="metric"><div class="mlbl">Pending amount</div><div class="mval" style="color:var(--c854d0e)">$${pendingAmt.toFixed(2)}</div></div>`;
-  document.getElementById("my-mileage-rows").innerHTML=myTrips.length?myTrips.map(m=>`<tr>
+  const shown=myTrips.filter(m=>showPast("mm-showpast")||!isPastReq("mile",m));
+  const hid=myTrips.length-shown.length;
+  document.getElementById("my-mileage-rows").innerHTML=(shown.length?shown.map(m=>`<tr>
     <td style="font-size:12px">${fmt(m.date)}</td>
     <td style="font-size:12px">${esc(m.from)}</td>
     <td style="font-size:12px">${esc(m.to)}</td>
     <td style="font-size:12px">${m.miles.toFixed(1)}</td>
     <td style="font-size:12px;font-weight:600;color:var(--c166534)">$${m.amount.toFixed(2)}</td>
-    <td><span class="badge b-${m.status==="Approved"?"appr":m.status==="Denied"?"deni":"pend"}">${m.status}</span></td>
-    <td style="font-size:11px;color:var(--c888888)">${esc(m.notes||"—")}</td></tr>`).join("")
-    :`<tr><td colspan="7" style="text-align:center;color:var(--c888888);font-size:12px;padding:1.25rem">No trips logged yet — click "Log a trip" to get started.</td></tr>`;
+    <td><span class="badge b-${stCls(m.status)}">${m.status}</span></td>
+    <td style="font-size:11px;color:var(--c888888)">${esc(m.notes||"—")}</td>
+    <td>${reqButtons("mile",m)}</td></tr>`).join("")
+    :hid?"":`<tr><td colspan="8" style="text-align:center;color:var(--c888888);font-size:12px;padding:1.25rem">No trips logged yet — click "Log a trip" to get started.</td></tr>`)
+    +pastNoteRow(hid,8);
 }
 
 function openMileageForm(){
@@ -3942,11 +4372,13 @@ function renderAdminMileage(){
   const f=document.getElementById("am-filter").value;
   const s=document.getElementById("am-search").value.toLowerCase();
   document.getElementById("mileage-rate-input").value=mileageRate.toFixed(2);
-  const rows=MILEAGE.filter(m=>{
+  const matched=MILEAGE.filter(m=>{
     const e=ge(m.empId);
     return(!f||m.status===f)&&(!s||(e&&e.name.toLowerCase().includes(s)));
   }).sort((a,b)=>b.date.localeCompare(a.date));
-  document.getElementById("admin-mileage-rows").innerHTML=rows.length?rows.map(m=>{
+  const rows=matched.filter(m=>f||showPast("am-showpast")||!isPastReq("mile",m));
+  const hid=matched.length-rows.length;
+  document.getElementById("admin-mileage-rows").innerHTML=(rows.length?rows.map(m=>{
     const e=ge(m.empId);
     return`<tr>
       <td><div class="er"><div class="av ${avc(m.empId)}">${e?ini(e.name):"?"}</div>${e?e.name:"Unknown"}</div></td>
@@ -3955,16 +4387,18 @@ function renderAdminMileage(){
       <td style="font-size:12px">${esc(m.to)}</td>
       <td style="font-size:12px">${m.miles.toFixed(1)} mi</td>
       <td style="font-size:12px;font-weight:600;color:var(--c166534)">$${m.amount.toFixed(2)}</td>
-      <td><span class="badge b-${m.status==="Approved"?"appr":m.status==="Denied"?"deni":"pend"}">${m.status}</span></td>
+      <td><span class="badge b-${stCls(m.status)}">${m.status}</span></td>
       <td style="font-size:11px;color:var(--c888888)">${esc(m.notes||"—")}</td>
-      <td style="display:flex;gap:4px;padding:8px 10px">
+      <td style="display:flex;gap:4px;padding:8px 10px;flex-wrap:wrap">
         ${m.status==="Pending"
           ?`<button class="bsm bapp" onclick="approveMileage(${m.id},'Approved')">✓ Approve</button>
              <button class="bsm bdny" onclick="approveMileage(${m.id},'Denied')">✕ Deny</button>`
-          :`<span style="font-size:11px;color:var(--c888888)">${m.status}</span>`}
+          :""}
+        ${reqButtons("mile",m)}
       </td></tr>`;
   }).join("")
-  :`<tr><td colspan="9" style="text-align:center;padding:1.25rem;color:var(--c888888);font-size:12px">No mileage requests match.</td></tr>`;
+  :hid?"":`<tr><td colspan="9" style="text-align:center;padding:1.25rem;color:var(--c888888);font-size:12px">No mileage requests match.</td></tr>`)
+  +pastNoteRow(hid,9);
 }
 
 async function approveMileage(id,status){
@@ -4077,24 +4511,29 @@ function renderApprovals(){
   const f=document.getElementById("afstat").value;
   const s=document.getElementById("afsearch").value.toLowerCase();
   const c=(document.getElementById("afcat")||{}).value||"";
-  const rows=PTO.filter(r=>{
+  const matched=PTO.filter(r=>{
     const e=ge(r.empId);if(!e)return false;
     return(!f||r.status===f)&&(!c||r.cat===c)&&(!s||e.name.toLowerCase().includes(s));
   }).sort((a,b)=>b.start.localeCompare(a.start));
-  document.getElementById("approws").innerHTML=rows.length?rows.map(r=>{
+  // Picking a status in the filter shows everything with that status; otherwise past requests are hidden
+  const rows=matched.filter(r=>f||showPast("af-showpast")||!isPastReq("pto",r));
+  const hid=matched.length-rows.length;
+  document.getElementById("approws").innerHTML=(rows.length?rows.map(r=>{
     const e=ge(r.empId);
     return`<tr>
       <td><div class="er"><div class="av ${avc(e.id)}">${ini(e.name)}</div>${e.name}</div></td>
       <td style="font-size:12px">${r.cat==="OOO"?'<span class="badge b-ooo" style="font-size:10px">Out of office</span>':'<span class="badge b-pto" style="font-size:10px">PTO</span>'} ${esc(r.type||"")}${r.notes?`<div style="font-size:11px;color:var(--c888888);margin-top:2px">${esc(r.notes)}</div>`:""}</td>
       <td style="font-size:12px">${r.cat==="OOO"?fmt(r.start):fmt(r.start)+(r.end!==r.start?" - "+fmt(r.end):"")}</td>
       <td style="font-size:12px">${r.cat==="OOO"?oooWhen(r):r.days+(r.days===1?" day":" days")}</td>
-      <td><span class="badge b-${r.status==="Approved"?"appr":r.status==="Denied"?"deni":"pend"}">${r.status}</span></td>
-      <td style="display:flex;gap:4px;padding:8px 10px">
+      <td><span class="badge b-${stCls(r.status)}">${r.status}</span></td>
+      <td style="display:flex;gap:4px;padding:8px 10px;flex-wrap:wrap">
         ${r.status==="Pending"
           ?`<button class="bsm bapp" onclick="approvePTO(${r.id},'Approved')">✓ Approve</button><button class="bsm bdny" onclick="approvePTO(${r.id},'Denied')">✕ Deny</button>`
-          :`<span style="font-size:11px;color:var(--c888888)">${r.status}</span>`}
+          :""}
+        ${reqButtons("pto",r)}
       </td></tr>`;}).join("")
-    :'<tr><td colspan="6" style="text-align:center;padding:1.25rem;color:var(--c888888);font-size:12px">No requests match.</td></tr>';
+    :hid?"":'<tr><td colspan="6" style="text-align:center;padding:1.25rem;color:var(--c888888);font-size:12px">No requests match.</td></tr>')
+    +pastNoteRow(hid,6);
 }
 async function approvePTO(id,status){
   const r=PTO.find(p=>p.id===id);if(!r)return;
@@ -4134,7 +4573,8 @@ function renderTS(){
       const workM=ents.filter(r=>r.ci&&r.co).reduce((s,r)=>s+toM(r.co)-toM(r.ci),0);
       const dayLunchM=LUNCH.filter(r=>r.empId===e.id&&r.date===d&&r.start&&r.end).reduce((s,r)=>s+toM(r.end)-toM(r.start),0);
       const netM=Math.max(0,workM-dayLunchM);
-      return`<td style="font-size:12px">${ents.find(r=>r.ci&&!r.co)?'<span class="badge b-appr" style="font-size:10px">Active</span>':netM?mH(netM)+"h":"—"}</td>`;
+      const fixFlag=ents.some(r=>r.fixStatus==="Pending")?' <span title="Missed clock-out, waiting for admin review" style="color:var(--c92400e)">⚠</span>':"";
+      return`<td style="font-size:12px">${ents.find(r=>r.ci&&!r.co)?'<span class="badge b-appr" style="font-size:10px">Active</span>':netM?mH(netM)+"h":"—"}${fixFlag}</td>`;
     });
     const workTot=days.reduce((s,d)=>s+ENTRIES.filter(r=>r.empId===e.id&&r.date===d&&r.ci&&r.co).reduce((ss,r)=>ss+toM(r.co)-toM(r.ci),0),0);
     const lunchTot=days.reduce((s,d)=>s+LUNCH.filter(r=>r.empId===e.id&&r.date===d&&r.start&&r.end).reduce((ss,r)=>ss+toM(r.end)-toM(r.start),0),0);
