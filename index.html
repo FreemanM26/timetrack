@@ -1994,8 +1994,8 @@ const _now=new Date(),TODAY=`${_now.getFullYear()}-${String(_now.getMonth()+1).p
 let calMo=_now.getMonth(),calYr=_now.getFullYear(),CU=null,clockEntry=null,clockTick=null,clockStart=null;
 let lunchEntry=null,courtEntry=null;
 let COURT=[];
-// Attorneys and paralegals get the Court button (based on job title)
-function canCourt(e){return !!(e&&/attorney|paralegal/i.test(e.title||""))}
+// Attorneys, paralegals, and the Owner get the Court button (based on job title)
+function canCourt(e){return !!(e&&/attorney|paralegal|owner/i.test(e.title||""))}
 function nowHM(){const n=new Date();return String(n.getHours()).padStart(2,"0")+":"+String(n.getMinutes()).padStart(2,"0")}
 let nP=8,nH=12,nE=26,nEn=20,nL=3,nM=1,editId=null;
 
